@@ -402,9 +402,9 @@
               <FilePath>.\CH552_UART.c</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART_FIFO.c</FileName>
+              <FileName>CH552_FIFO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH552_UART_FIFO.c</FilePath>
+              <FilePath>.\CH552_FIFO.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -432,9 +432,9 @@
               <FilePath>.\CH552_UART.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART_FIFO.h</FileName>
+              <FileName>CH552_FIFO.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH552_UART_FIFO.h</FilePath>
+              <FilePath>.\CH552_FIFO.h</FilePath>
             </File>
           </Files>
         </Group>
