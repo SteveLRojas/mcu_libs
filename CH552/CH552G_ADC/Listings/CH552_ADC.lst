@@ -1,0 +1,133 @@
+C51 COMPILER V9.60.0.0   CH552_ADC                                                         04/19/2024 22:11:44 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_ADC
+OBJECT MODULE PLACED IN .\Objects\CH552_ADC.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_ADC.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\CH552_ADC.lst) OBJECT(.\Objects\CH552_ADC.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "System.h"
+   3          #include "CH552_ADC.h"
+   4          
+   5          UINT8 adc_results[4];
+   6          UINT8 adc_schedule[4];
+   7          UINT8 adc_schedule_len;
+   8          
+   9          UINT8 adc_state;
+  10          UINT8 adc_pending_samples;
+  11          
+  12          void adc_isr(void) interrupt INT_NO_ADC
+  13          {
+  14   1              adc_results[adc_state] = ADC_DATA;
+  15   1              
+  16   1              if(--adc_pending_samples)
+  17   1              {
+  18   2                      ++adc_state;
+  19   2                      if(adc_state == adc_schedule_len)
+  20   2                              adc_state = 0;
+  21   2                      
+  22   2                      ADC_CHAN1 = 0;
+  23   2                      ADC_CHAN0 = 0;
+  24   2                      ADC_CTRL |= adc_schedule[adc_state];
+  25   2                      ADC_START = 1;
+  26   2              }
+  27   1              
+  28   1              ADC_IF = 0;
+  29   1      }
+  30          
+  31          void adc_init(UINT8 adc_clk)
+  32          {
+  33   1              IE_ADC = 0;
+  34   1              ADC_CFG |= bADC_EN;
+  35   1              ADC_CFG &= ~bADC_CLK;
+  36   1              ADC_CFG |= adc_clk;
+  37   1      }
+  38          
+  39          void adc_init_schedule(void)
+  40          {
+  41   1              adc_state = 0;
+  42   1              ADC_IF = 0;
+  43   1              IE_ADC = 1;
+  44   1      }
+  45          
+  46          void adc_run_schedule(UINT8 num_samples)
+  47          {
+  48   1              ADC_CHAN1 = 0;
+  49   1              ADC_CHAN0 = 0;
+  50   1              ADC_CTRL |= adc_schedule[adc_state];
+  51   1              adc_pending_samples = num_samples;
+  52   1              ADC_START = 1;
+  53   1      }
+  54          
+C51 COMPILER V9.60.0.0   CH552_ADC                                                         04/19/2024 22:11:44 PAGE 2   
+
+  55          void adc_start_single(UINT8 channel)
+  56          {
+  57   1              ADC_CHAN1 = 0;
+  58   1              ADC_CHAN0 = 0;
+  59   1              ADC_CTRL |= channel;
+  60   1              IE_ADC = 0;
+  61   1              ADC_START = 1;
+  62   1      }
+  63          
+  64          UINT8 adc_finish_single(void)
+  65          {
+  66   1              while(ADC_START) {}
+  67   1              return ADC_DATA;
+  68   1      }
+  69          
+  70          UINT8 adc_read_single(UINT8 channel)
+  71          {
+  72   1              ADC_CHAN1 = 0;
+  73   1              ADC_CHAN0 = 0;
+  74   1              ADC_CTRL |= channel;
+  75   1              IE_ADC = 0;
+  76   1              ADC_START = 1;
+  77   1              while(ADC_START) {}
+  78   1              return ADC_DATA;
+  79   1      }
+  80          
+  81          //HINT: The comparator is mostly useless since it cannot generate interrupts...
+  82          #ifdef USE_CMP
+              void cmp_init(UINT8 pin_cfg)
+              {
+                      ADC_CTRL &= 0xF0;
+                      ADC_CTRL |= pin_cfg;
+                      ADC_CFG |= bCMP_EN;
+              }
+              
+              UINT8 cmp_get_result(void)
+              {
+                      return CMPO;
+              }
+              
+              UINT8 cmp_get_change(void)
+              {
+                      if(CMP_IF)
+                      {
+                              CMP_IF = 0;
+                              return 1;
+                      }
+                      else
+                              return 0;
+              }
+              #endif
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    177    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     11    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.60.0.0   CH552_ADC                                                         04/19/2024 22:11:44 PAGE 3   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,419 @@
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_UART_FIFO
+OBJECT MODULE PLACED IN .\Objects\CH552_UART_FIFO.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_UART_FIFO.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRIN
+                    -T(.\Listings\CH552_UART_FIFO.lst) OBJECT(.\Objects\CH552_UART_FIFO.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "CH552_UART_FIFO.h"
+   3          
+   4          #if USE_UART_0
+   5          volatile UINT8 uart0_rx_buf[UART_RX_BUF_SIZE];
+   6          volatile UINT8 uart0_tx_buf[UART_TX_BUF_SIZE];
+   7          #else
+              #define uart0_rx_buf (UINT8*)0
+              #define uart0_tx_buf (UINT8*)0
+              #endif
+  11          
+  12          #if USE_UART_1
+              volatile UINT8 uart1_rx_buf[UART_RX_BUF_SIZE];
+              volatile UINT8 uart1_tx_buf[UART_TX_BUF_SIZE];
+              #else
+  16          #define uart1_rx_buf (UINT8*)0
+  17          #define uart1_tx_buf (UINT8)0
+  18          #endif
+  19          
+  20          volatile UINT8* uart_rx_bufs[2] = {uart0_rx_buf, uart1_rx_buf};
+  21          volatile UINT16 uart_rx_counts[2] = {0};
+  22          volatile UINT16 uart_rx_fronts[2] = {0};
+  23          volatile UINT16 uart_rx_backs[2] = {0};
+  24          
+  25          volatile UINT8* uart_tx_bufs[2] = {uart0_tx_buf, uart1_tx_buf};
+  26          volatile UINT16 uart_tx_counts[2] = {0};
+  27          volatile UINT16 uart_tx_fronts[2] = {0};
+  28          volatile UINT16 uart_tx_backs[2] = {0};
+  29          
+  30          
+  31          // #############################
+  32          // ########## RECEIVE ##########
+  33          // #############################
+  34          //no need to disable interrupts before calling
+  35          /*UINT16 uart_rx_num_used(UINT8 uart_idx)
+  36          {
+  37                  return uart_rx_counts[uart_idx];
+  38          }*/
+  39          
+  40          //disable UART interrupts before calling (from user code..)
+  41          /*UINT16 uart_rx_num_free(UINT8 uart_idx)
+  42          {
+  43                  return (UART_RX_BUF_SIZE - uart_rx_counts[uart_idx]);
+  44          }*/
+  45          
+  46          //no need to disable interrupts before calling
+  47          /*UINT8 uart_rx_empty(UINT8 uart_idx)
+  48          {
+  49                  return uart_rx_counts[uart_idx] == 0;
+  50          }*/
+  51          
+  52          //disable UART interrupts before calling (from user code..)
+  53          /*UINT8 uart_rx_full(UINT8 uart_idx)
+  54          {
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 2   
+
+  55                  return uart_rx_counts[uart_idx] >= UART_RX_BUF_SIZE;
+  56          }*/
+  57          
+  58          //disable UART interrupts before calling (from user code..)
+  59          UINT8 uart_rx_push(UINT8 uart_idx, UINT8 val) reentrant
+  60          {
+  61   1              if(uart_rx_full(uart_idx))
+  62   1              {
+  63   2                      return 0; // FIFO full
+  64   2              }
+  65   1      
+  66   1              uart_rx_bufs[uart_idx][uart_rx_backs[uart_idx]] = val;
+  67   1              ++uart_rx_backs[uart_idx];
+  68   1              uart_rx_backs[uart_idx] &= (UART_RX_BUF_SIZE - 1); // Handle wrap-around
+  69   1              ++uart_rx_counts[uart_idx];
+  70   1      
+  71   1              return 1;
+  72   1      }
+  73          
+  74          //disable UART interrupts before calling (from user code..)
+  75          UINT8 uart_rx_pop(UINT8 uart_idx)
+  76          {
+  77   1              UINT8 val;
+  78   1              if(uart_rx_empty(uart_idx))
+  79   1              {
+  80   2                      return 0; // Nothing in FIFO
+  81   2              }
+  82   1      
+  83   1              val = uart_rx_bufs[uart_idx][uart_rx_fronts[uart_idx]];
+  84   1              ++uart_rx_fronts[uart_idx];
+  85   1              uart_rx_fronts[uart_idx] &= (UART_RX_BUF_SIZE - 1); // Handle wrap-around
+  86   1              --uart_rx_counts[uart_idx];
+  87   1      
+  88   1              return val;
+  89   1      }
+  90          
+  91          //no need to disable interrupts before calling
+  92          /*UINT8 uart_rx_peek(UINT8 uart_idx)
+  93          {
+  94                  if(uart_rx_empty(uart_idx))
+  95                  {
+  96                          return 0; // Nothing in FIFO
+  97                  }
+  98          
+  99                  return uart_rx_bufs[uart_idx][uart_rx_fronts[uart_idx]];
+ 100          }*/
+ 101          
+ 102          //disable UART interrupts before calling (from user code..)
+ 103          UINT8 uart_rx_read(UINT8 uart_idx, UINT8* dest, UINT16 num_bytes)
+ 104          {
+ 105   1              UINT16 to_wrap;
+ 106   1              UINT8* read_ptr;
+ 107   1              UINT16 idx;
+ 108   1              
+ 109   1              if(num_bytes > uart_rx_counts[uart_idx])
+ 110   1              {
+ 111   2                      return 0; // Not enough data to read
+ 112   2              }
+ 113   1              
+ 114   1              to_wrap = UART_RX_BUF_SIZE - uart_rx_fronts[uart_idx];
+ 115   1              if(num_bytes >= to_wrap)
+ 116   1              {
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 3   
+
+ 117   2                      // read until wrap around
+ 118   2                      read_ptr = uart_rx_bufs[uart_idx] + uart_rx_fronts[uart_idx];
+ 119   2                      for(idx = 0; idx < to_wrap; ++idx)
+ 120   2                      {
+ 121   3                              *dest = read_ptr[idx];
+ 122   3                              ++dest;
+ 123   3                      }
+ 124   2                      
+ 125   2                      uart_rx_fronts[uart_idx] = 0;
+ 126   2                      uart_rx_counts[uart_idx] -= to_wrap;
+ 127   2                      num_bytes -= to_wrap;
+ 128   2              }
+ 129   1              
+ 130   1              // read remaining - no wrap around
+ 131   1              read_ptr = uart_rx_bufs[uart_idx] + uart_rx_fronts[uart_idx];
+ 132   1              for(idx = 0; idx < num_bytes; ++idx)
+ 133   1              {
+ 134   2                      *dest = read_ptr[idx];
+ 135   2                      ++dest;
+ 136   2              }
+ 137   1              
+ 138   1              uart_rx_fronts[uart_idx] += num_bytes;
+ 139   1              uart_rx_counts[uart_idx] -= num_bytes;
+ 140   1      
+ 141   1              // Read from FIFO to dest
+ 142   1              /*uart_rx_counts[uart_idx] -= num_bytes;
+ 143   1              while(num_bytes)
+ 144   1              {
+ 145   1                      *dest = uart_rx_bufs[uart_idx][uart_rx_fronts[uart_idx]];
+ 146   1                      ++uart_rx_fronts[uart_idx];
+ 147   1                      uart_rx_fronts[uart_idx] &= (UART_RX_BUF_SIZE - 1); // Handle wrap-around
+ 148   1                      ++dest;
+ 149   1                      --num_bytes;
+ 150   1              }*/
+ 151   1      
+ 152   1              return 1;
+ 153   1      }
+ 154          
+ 155          //disable UART interrupts before calling (from user code..)
+ 156          UINT8 uart_rx_write(UINT8 uart_idx, UINT8* src, UINT16 num_bytes)
+ 157          {
+ 158   1              UINT16 to_wrap;
+ 159   1              UINT8* write_ptr;
+ 160   1              UINT16 idx;
+ 161   1              
+ 162   1              if(num_bytes > (UART_RX_BUF_SIZE - uart_rx_counts[uart_idx]))
+ 163   1              {
+ 164   2                      return 0; // Not enough space to write
+ 165   2              }
+ 166   1              
+ 167   1              to_wrap = UART_RX_BUF_SIZE - uart_rx_backs[uart_idx];
+ 168   1              if(num_bytes >= to_wrap)
+ 169   1              {
+ 170   2                      // write until wrap around
+ 171   2                      write_ptr = uart_rx_bufs[uart_idx] + uart_rx_backs[uart_idx];
+ 172   2                      for(idx = 0; idx < to_wrap; ++idx)
+ 173   2                      {
+ 174   3                              write_ptr[idx] = *src;
+ 175   3                              ++src;
+ 176   3                      }
+ 177   2                      
+ 178   2                      uart_rx_backs[uart_idx] = 0;
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 4   
+
+ 179   2                      uart_rx_counts[uart_idx] += to_wrap;
+ 180   2                      num_bytes -= to_wrap;
+ 181   2              }
+ 182   1              
+ 183   1              // write remaining - no wrap around
+ 184   1              write_ptr = uart_rx_bufs[uart_idx] + uart_rx_backs[uart_idx];
+ 185   1              for(idx = 0; idx < num_bytes; ++idx)
+ 186   1              {
+ 187   2                      write_ptr[idx] = *src;
+ 188   2                      ++src;
+ 189   2              }
+ 190   1              
+ 191   1              uart_rx_backs[uart_idx] += num_bytes;
+ 192   1              uart_rx_counts[uart_idx] += num_bytes;
+ 193   1      
+ 194   1              // Write to FIFO from src
+ 195   1              /*uart_rx_counts[uart_idx] += num_bytes;
+ 196   1              while(num_bytes)
+ 197   1              {
+ 198   1                      uart_rx_bufs[uart_idx][uart_rx_backs[uart_idx]] = *src;
+ 199   1                      ++uart_rx_backs[uart_idx];
+ 200   1                      uart_rx_backs[uart_idx] &= (UART_RX_BUF_SIZE - 1); // Handle wrap-around
+ 201   1                      ++src;
+ 202   1                      --num_bytes;
+ 203   1              }*/
+ 204   1      
+ 205   1              return 1;
+ 206   1      }
+ 207          
+ 208          // ##############################
+ 209          // ########## TRANSMIT ##########
+ 210          // ##############################
+ 211          //no need to disable interrupts before calling
+ 212          /*UINT16 uart_tx_num_used(UINT8 uart_idx)
+ 213          {
+ 214                  return uart_tx_counts[uart_idx];
+ 215          }*/
+ 216          
+ 217          //no need to disable interrupts before calling
+ 218          /*UINT16 uart_tx_num_free(UINT8 uart_idx)
+ 219          {
+ 220                  return (UART_TX_BUF_SIZE - uart_tx_counts[uart_idx]);
+ 221          }*/
+ 222          
+ 223          //no need to disable interrupts before calling
+ 224          /*UINT8 uart_tx_empty(UINT8 uart_idx)
+ 225          {
+ 226                  return uart_tx_counts[uart_idx] == 0;
+ 227          }*/
+ 228          
+ 229          //no need to disable interrupts before calling
+ 230          /*UINT8 uart_tx_full(UINT8 uart_idx)
+ 231          {
+ 232                  return uart_tx_counts[uart_idx] >= UART_TX_BUF_SIZE;
+ 233          }*/
+ 234          
+ 235          //disable UART interrupts before calling (from user code..)
+ 236          UINT8 uart_tx_push(UINT8 uart_idx, UINT8 val)
+ 237          {
+ 238   1              if(uart_tx_full(uart_idx))
+ 239   1              {
+ 240   2                      return 0; // FIFO full
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 5   
+
+ 241   2              }
+ 242   1      
+ 243   1              uart_tx_bufs[uart_idx][uart_tx_backs[uart_idx]] = val;
+ 244   1              ++uart_tx_backs[uart_idx];
+ 245   1              uart_tx_backs[uart_idx] &= (UART_TX_BUF_SIZE - 1); // Handle wrap-around
+ 246   1              ++uart_tx_counts[uart_idx];
+ 247   1      
+ 248   1              return 1;
+ 249   1      }
+ 250          
+ 251          //disable UART interrupts before calling (from user code..)
+ 252          UINT8 uart_tx_pop(UINT8 uart_idx) reentrant
+ 253          {
+ 254   1              UINT8 val;
+ 255   1              if(uart_tx_empty(uart_idx))
+ 256   1              {
+ 257   2                      return 0; // Nothing in FIFO
+ 258   2              }
+ 259   1      
+ 260   1              val = uart_tx_bufs[uart_idx][uart_tx_fronts[uart_idx]];
+ 261   1              ++uart_tx_fronts[uart_idx];
+ 262   1              uart_tx_fronts[uart_idx] &= (UART_TX_BUF_SIZE - 1); // Handle wrap-around
+ 263   1              --uart_tx_counts[uart_idx];
+ 264   1      
+ 265   1              return val;
+ 266   1      }
+ 267          
+ 268          //no need to disable interrupts before calling
+ 269          /*UINT8 uart_tx_peek(UINT8 uart_idx)
+ 270          {
+ 271                  if(uart_tx_empty(uart_idx))
+ 272                  {
+ 273                          return 0; // Nothing in FIFO
+ 274                  }
+ 275          
+ 276                  return uart_tx_bufs[uart_idx][uart_tx_fronts[uart_idx]];
+ 277          }*/
+ 278          
+ 279          //disable UART interrupts before calling (from user code..)
+ 280          UINT8 uart_tx_read(UINT8 uart_idx, UINT8* dest, UINT16 num_bytes)
+ 281          {
+ 282   1              UINT16 to_wrap;
+ 283   1              UINT8* read_ptr;
+ 284   1              UINT16 idx;
+ 285   1              
+ 286   1              if(num_bytes > uart_tx_counts[uart_idx])
+ 287   1              {
+ 288   2                      return 0; // Not enough data to read
+ 289   2              }
+ 290   1              
+ 291   1              to_wrap = UART_TX_BUF_SIZE - uart_tx_fronts[uart_idx];
+ 292   1              if(num_bytes >= to_wrap)
+ 293   1              {
+ 294   2                      // read until wrap around
+ 295   2                      read_ptr = uart_tx_bufs[uart_idx] + uart_tx_fronts[uart_idx];
+ 296   2                      for(idx = 0; idx < to_wrap; ++idx)
+ 297   2                      {
+ 298   3                              *dest = read_ptr[idx];
+ 299   3                              ++dest;
+ 300   3                      }
+ 301   2                      
+ 302   2                      uart_tx_fronts[uart_idx] = 0;
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 6   
+
+ 303   2                      uart_tx_counts[uart_idx] -= to_wrap;
+ 304   2                      num_bytes -= to_wrap;
+ 305   2              }
+ 306   1              
+ 307   1              // read remaining - no wrap around
+ 308   1              read_ptr = uart_tx_bufs[uart_idx] + uart_tx_fronts[uart_idx];
+ 309   1              for(idx = 0; idx < num_bytes; ++idx)
+ 310   1              {
+ 311   2                      *dest = read_ptr[idx];
+ 312   2                      ++dest;
+ 313   2              }
+ 314   1              
+ 315   1              uart_tx_fronts[uart_idx] += num_bytes;
+ 316   1              uart_tx_counts[uart_idx] -= num_bytes;
+ 317   1      
+ 318   1              // Read from FIFO to dest
+ 319   1              /*uart_tx_counts[uart_idx] -= num_bytes;
+ 320   1              while(num_bytes)
+ 321   1              {
+ 322   1                      *dest = uart_tx_bufs[uart_idx][uart_tx_fronts[uart_idx]];
+ 323   1                      ++uart_tx_fronts[uart_idx];
+ 324   1                      uart_tx_fronts[uart_idx] &= (UART_TX_BUF_SIZE - 1); // Handle wrap-around
+ 325   1                      ++dest;
+ 326   1                      --num_bytes;
+ 327   1              }*/
+ 328   1      
+ 329   1              return 1;
+ 330   1      }
+ 331          
+ 332          //disable UART interrupts before calling (from user code..)
+ 333          UINT8 uart_tx_write(UINT8 uart_idx, UINT8* src, UINT16 num_bytes)
+ 334          {
+ 335   1              UINT16 to_wrap;
+ 336   1              UINT8* write_ptr;
+ 337   1              UINT16 idx;
+ 338   1              
+ 339   1              if(num_bytes > (UART_TX_BUF_SIZE - uart_tx_counts[uart_idx]))
+ 340   1              {
+ 341   2                      return 0; // Not enough space to write
+ 342   2              }
+ 343   1              
+ 344   1              to_wrap = UART_TX_BUF_SIZE - uart_tx_fronts[uart_idx];
+ 345   1              if(num_bytes >= to_wrap)
+ 346   1              {
+ 347   2                      // write until wrap around
+ 348   2                      write_ptr = uart_tx_bufs[uart_idx] + uart_tx_backs[uart_idx];
+ 349   2                      for(idx = 0; idx < to_wrap; ++idx)
+ 350   2                      {
+ 351   3                              write_ptr[idx] = *src;
+ 352   3                              ++src;
+ 353   3                      }
+ 354   2                      
+ 355   2                      uart_tx_backs[uart_idx] = 0;
+ 356   2                      uart_tx_counts[uart_idx] += to_wrap;
+ 357   2                      num_bytes -= to_wrap;
+ 358   2              }
+ 359   1              
+ 360   1              // write remaining - no wrap around
+ 361   1              write_ptr = uart_tx_bufs[uart_idx] + uart_tx_backs[uart_idx];
+ 362   1              for(idx = 0; idx < num_bytes; ++idx)
+ 363   1              {
+ 364   2                      write_ptr[idx] = *src;
+C51 COMPILER V9.60.0.0   CH552_UART_FIFO                                                   05/12/2024 09:36:36 PAGE 7   
+
+ 365   2                      ++src;
+ 366   2              }
+ 367   1              
+ 368   1              uart_tx_backs[uart_idx] += num_bytes;
+ 369   1              uart_tx_counts[uart_idx] += num_bytes;
+ 370   1      
+ 371   1              // Write to FIFO from src
+ 372   1              /*uart_tx_counts[uart_idx] += num_bytes;
+ 373   1              while(num_bytes)
+ 374   1              {
+ 375   1                      uart_tx_bufs[uart_idx][uart_tx_backs[uart_idx]] = *src;
+ 376   1                      ++uart_tx_backs[uart_idx];
+ 377   1                      uart_tx_backs[uart_idx] &= (UART_TX_BUF_SIZE - 1); // Handle wrap-around
+ 378   1                      ++src;
+ 379   1                      --num_bytes;
+ 380   1              }*/
+ 381   1      
+ 382   1              return 1;
+ 383   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   2785    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    164      53
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

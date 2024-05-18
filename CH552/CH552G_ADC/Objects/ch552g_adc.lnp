@@ -1,0 +1,13 @@
+".\Objects\STARTUP.obj",
+".\Objects\CH552_GPIO.obj",
+".\Objects\CH552_TIMER.obj",
+".\Objects\CH552_UART.obj",
+".\Objects\CH552_UART_FIFO.obj",
+".\Objects\main.obj",
+".\Objects\System.obj",
+".\Objects\CH552_ADC.obj" 
+TO ".\Objects\ch552g_adc" 
+PRINT(".\Listings\ch552g_adc.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 
+CODE( 0X0000-0X37FF )
+XDATA( 0X0000-0X03FF )

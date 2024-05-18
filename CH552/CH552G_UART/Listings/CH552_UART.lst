@@ -1,0 +1,358 @@
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_UART
+OBJECT MODULE PLACED IN .\Objects\CH552_UART.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_UART.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\L
+                    -istings\CH552_UART.lst) OBJECT(.\Objects\CH552_UART.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "System.h"
+   3          #include "CH552_UART.h"
+   4          
+   5          UINT8 uart_idle[2];
+   6          
+   7          #if USE_UART_0
+   8          void uart0_isr(void) interrupt INT_NO_UART0
+   9          {
+  10   1              if(RI)
+  11   1          {
+  12   2              RI = 0;
+  13   2              uart_rx_push(UART_0, SBUF);
+  14   2          }
+  15   1          if(TI)
+  16   1          {
+  17   2              TI = 0;
+  18   2              if(uart_tx_num_used(UART_0))
+  19   2                  SBUF = uart_tx_pop(UART_0);
+  20   2              else
+  21   2                  uart_idle[UART_0] = 1;
+  22   2          }
+  23   1      }
+  24          #endif
+  25          
+  26          #if USE_UART_1
+              void uart1_isr(void) interrupt INT_NO_UART1
+              {
+                      if(U1RI)
+                  {
+                      U1RI = 0;
+                      uart_rx_push(UART_1, SBUF1);
+                  }
+                  if(U1TI)
+                  {
+                      U1TI = 0;
+                      if(uart_tx_num_used(UART_1))
+                          SBUF1 = uart_tx_pop(UART_1);
+                      else
+                          uart_idle[UART_1] = 1;
+                  }
+              }
+              #endif
+  44          
+  45          #if USE_UART_0
+  46          void uart0_init(UINT8 uart0_tim, UINT32 baud, UINT8 pin_map)
+  47          {
+  48   1              if(!baud)
+  49   1              {
+  50   2                      REN = 0;
+  51   2                      ES = 0;
+  52   2                      return;
+  53   2              }
+  54   1              
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 2   
+
+  55   1              switch(uart0_tim)
+  56   1              {
+  57   2                      case TIMER_0:
+  58   2                              //Timer 0 can not be used for the UART!
+  59   2                              return;
+  60   2                      case TIMER_1:
+  61   2                              uart_idle[UART_0] = 1;
+  62   2                              PCON |= SMOD;
+  63   2                              TMOD &= 0x0F;
+  64   2                              TMOD |= bT1_M1;
+  65   2                              TCLK = 0;
+  66   2                              RCLK = 0;
+  67   2                              T2MOD |= bTMR_CLK | bT1_CLK;
+  68   2                              TR1 = 1;
+  69   2                              TH1 = 256ul - FREQ_SYS / 16ul / baud;
+  70   2                              SCON = 0x50;    //SM0 = 0, SM1 = 1, SM2 = 0, REN = 1
+  71   2                              ES = 1; //enable interrupts
+  72   2                              break;
+  73   2                      case TIMER_2:
+  74   2                              uart_idle[UART_0] = 1;
+  75   2                              T2CON = 0x34;   //RCLK = 1, TCLK = 1, TR2 = 1
+  76   2                              T2MOD |= bTMR_CLK | bT2_CLK;
+  77   2                              RCAP2 = 65536ul - FREQ_SYS / 16ul / baud;
+  78   2                              SCON = 0x50;    //SM0 = 0, SM1 = 1, SM2 = 0, REN = 1
+  79   2                              ES = 1; //enable interrupts
+  80   2                              break;
+  81   2                      default:
+  82   2                              return;
+  83   2              }
+  84   1              
+  85   1              PIN_FUNC &= ~bUART0_PIN_X;
+  86   1              PIN_FUNC |= pin_map;
+  87   1      }
+  88          #endif
+  89          
+  90          #if USE_UART_1
+              void uart1_init(UINT32 baud, UINT8 pin_map)
+              {
+                      if(!baud)
+                      {
+                              U1REN = 0;
+                              IE_UART1 = 0;
+                              return;
+                      }
+                      
+                      uart_idle[UART_1] = 1;
+                      SCON1 = 0x30;   //U1SM0 = 0, U1SMOD = 1, U1REN = 1
+                      SBAUD1 = 256ul - FREQ_SYS / 16ul / baud;
+                      IE_UART1 = 1;   //enable interrupts
+                      
+                      PIN_FUNC &= ~bUART1_PIN_X;
+                      PIN_FUNC |= pin_map;
+              }
+              #endif
+ 109          
+ 110          // Receive
+ 111          UINT16 uart_bytes_available(UINT8 uart)
+ 112          {
+ 113   1              return uart_rx_num_used(uart);
+ 114   1      }
+ 115          
+ 116          UINT8 uart_peek(UINT8 uart)
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 3   
+
+ 117          {
+ 118   1              return uart_rx_peek(uart);
+ 119   1      }
+ 120          
+ 121          UINT8 uart_read_byte(UINT8 uart)
+ 122          {
+ 123   1              UINT8 popped;
+ 124   1      
+ 125   1              while(uart_rx_empty(uart));
+ 126   1      
+ 127   1              if(uart)
+ 128   1                      IE_UART1 = 0;
+ 129   1              else
+ 130   1                      ES = 0;
+ 131   1              popped = uart_rx_pop(uart);
+ 132   1              if(uart)
+ 133   1                      IE_UART1 = 1;
+ 134   1              else
+ 135   1                      ES = 1;
+ 136   1              return popped;
+ 137   1      }
+ 138          
+ 139          void uart_read_bytes(UINT8 uart, UINT8* dest, UINT16 num_bytes)
+ 140          {
+ 141   1              UINT16 num_remaining = num_bytes;
+ 142   1              UINT16 num_to_read = 0;
+ 143   1      
+ 144   1              while(num_remaining)
+ 145   1              {
+ 146   2                      num_to_read = uart_rx_num_used(uart);
+ 147   2                      if (num_to_read > num_remaining)
+ 148   2                      {
+ 149   3                              num_to_read = num_remaining;
+ 150   3                      }
+ 151   2      
+ 152   2                      if(uart)
+ 153   2                              IE_UART1 = 0;
+ 154   2                      else
+ 155   2                              ES = 0;
+ 156   2                      uart_rx_read(uart, dest, num_to_read);
+ 157   2                      if(uart)
+ 158   2                              IE_UART1 = 1;
+ 159   2                      else
+ 160   2                              ES = 1;
+ 161   2      
+ 162   2                      num_remaining -= num_to_read;
+ 163   2                      dest += num_to_read;
+ 164   2              }
+ 165   1      
+ 166   1              return;
+ 167   1      }
+ 168          
+ 169          UINT16 uart_read_bytes_until(UINT8 uart, UINT8 terminator, UINT8* dest, UINT16 num_bytes)
+ 170          {
+ 171   1              UINT16 num_remaining = num_bytes;
+ 172   1              UINT8 popped;
+ 173   1      
+ 174   1              while(num_remaining)
+ 175   1              {
+ 176   2                      if(uart_rx_empty(uart))
+ 177   2                              continue;
+ 178   2      
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 4   
+
+ 179   2                      if(uart)
+ 180   2                              IE_UART1 = 0;
+ 181   2                      else
+ 182   2                              ES = 0;
+ 183   2                      popped = uart_rx_pop(uart);
+ 184   2                      if(uart)
+ 185   2                              IE_UART1 = 1;
+ 186   2                      else
+ 187   2                              ES = 1;
+ 188   2      
+ 189   2                      if(popped == terminator)
+ 190   2                              break;
+ 191   2      
+ 192   2                      --num_remaining;
+ 193   2                      *dest++ = popped;
+ 194   2              }
+ 195   1      
+ 196   1              return (num_bytes - num_remaining);
+ 197   1      }
+ 198          
+ 199          UINT16 uart_get_string(UINT8 uart, char* buf, UINT16 buf_size)
+ 200          {
+ 201   1              UINT16 bytes_read = 0;
+ 202   1              char received_data;
+ 203   1      
+ 204   1              --buf_size;     //leave space for the null byte
+ 205   1              while(bytes_read < buf_size)
+ 206   1              {
+ 207   2                      while(uart_rx_empty(uart)) {};
+ 208   2                      if(uart)
+ 209   2                              IE_UART1 = 0;
+ 210   2                      else
+ 211   2                              ES = 0;
+ 212   2                      received_data = (char)uart_rx_pop(uart);
+ 213   2                      if(uart)
+ 214   2                              IE_UART1 = 1;
+ 215   2                      else
+ 216   2                              ES = 1;
+ 217   2                      buf[bytes_read++] = received_data;
+ 218   2                      if(received_data == '\r' || received_data == '\n')
+ 219   2                              break;
+ 220   2              }
+ 221   1              buf[bytes_read] = '\0';
+ 222   1              return bytes_read;
+ 223   1      }
+ 224          
+ 225          // Send
+ 226          UINT16 uart_bytes_available_for_write(UINT8 uart)
+ 227          {
+ 228   1              return uart_tx_num_free(uart);
+ 229   1      }
+ 230          
+ 231          void uart_write_byte(UINT8 uart, UINT8 val)
+ 232          {
+ 233   1              if(uart_idle[uart])     //transmit buffer empty
+ 234   1              {
+ 235   2                      //send data directly to UART
+ 236   2                      if(uart)
+ 237   2                              SBUF1 = val;
+ 238   2                      else
+ 239   2                              SBUF = val;
+ 240   2                      uart_idle[uart] = 0;
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 5   
+
+ 241   2              }
+ 242   1              else
+ 243   1              {
+ 244   2                      if(uart)
+ 245   2                              IE_UART1 = 0;
+ 246   2                      else
+ 247   2                              ES = 0;
+ 248   2                      uart_tx_push(uart, val);
+ 249   2                      if(uart)
+ 250   2                              IE_UART1 = 1;
+ 251   2                      else
+ 252   2                              ES = 1;
+ 253   2              }
+ 254   1      }
+ 255          
+ 256          UINT16 uart_write_string(UINT8 uart, char* str)
+ 257          {
+ 258   1              UINT16 len = 0;
+ 259   1      
+ 260   1              while(*str)
+ 261   1              {
+ 262   2                      if(uart_idle[uart])     //transmit buffer empty
+ 263   2                      {
+ 264   3                              //send data directly to UART
+ 265   3                              if(uart)
+ 266   3                                      SBUF1 = *str++;
+ 267   3                              else
+ 268   3                                      SBUF = *str++;
+ 269   3                              uart_idle[uart] = 0;
+ 270   3                      }
+ 271   2                      else
+ 272   2                      {
+ 273   3                              if(uart)
+ 274   3                                      IE_UART1 = 0;
+ 275   3                              else
+ 276   3                                      ES = 0;
+ 277   3                              uart_tx_push(uart, *str++);
+ 278   3                              if(uart)
+ 279   3                                      IE_UART1 = 1;
+ 280   3                              else
+ 281   3                                      ES = 1;
+ 282   3                      }
+ 283   2                      len++;
+ 284   2              }
+ 285   1              return len;
+ 286   1      }
+ 287          
+ 288          void uart_write_bytes(UINT8 uart, UINT8* src, UINT16 num_bytes)
+ 289          {
+ 290   1              UINT16 num_remaining = num_bytes;
+ 291   1              UINT16 num_to_write = 0;
+ 292   1      
+ 293   1              if(uart_idle[uart])     //transmit buffer empty
+ 294   1              {
+ 295   2                      //send data directly to UART
+ 296   2                      if(uart)
+ 297   2                              SBUF1 = *src++;
+ 298   2                      else
+ 299   2                              SBUF = *src++;
+ 300   2                      uart_idle[uart] = 0;
+ 301   2                      --num_remaining;
+ 302   2              }
+C51 COMPILER V9.60.0.0   CH552_UART                                                        05/12/2024 09:36:36 PAGE 6   
+
+ 303   1      
+ 304   1              while(num_remaining)
+ 305   1              {
+ 306   2                      num_to_write = uart_tx_num_free(uart);
+ 307   2                      if(num_to_write > num_remaining)
+ 308   2                      {
+ 309   3                              num_to_write = num_remaining;
+ 310   3                      }
+ 311   2      
+ 312   2                      if(uart)
+ 313   2                              IE_UART1 = 0;
+ 314   2                      else
+ 315   2                              ES = 0;
+ 316   2                      uart_tx_write(uart, src, num_to_write);
+ 317   2                      if(uart)
+ 318   2                              IE_UART1 = 1;
+ 319   2                      else
+ 320   2                              ES = 1;
+ 321   2                      num_remaining -= num_to_write;
+ 322   2                      src += num_to_write;
+ 323   2              }
+ 324   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1462    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2      53
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

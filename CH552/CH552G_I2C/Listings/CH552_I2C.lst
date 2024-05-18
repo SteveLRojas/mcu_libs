@@ -1,0 +1,101 @@
+C51 COMPILER V9.60.0.0   CH552_I2C                                                         04/16/2024 08:21:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_I2C
+OBJECT MODULE PLACED IN .\Objects\CH552_I2C.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_I2C.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\CH552_I2C.lst) OBJECT(.\Objects\CH552_I2C.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "System.h"
+   3          #include "CH552_GPIO.h"
+   4          #include "CH552_I2C.h"
+   5          
+   6          //HINT: user can access host_ack and agent_ack directly
+   7          UINT8 host_ack;
+   8          UINT8 agent_ack;
+   9          
+  10          UINT8 sda_port;
+  11          UINT8 sda_pin;
+  12          UINT8 scl_port;
+  13          UINT8 scl_pin;
+  14          
+  15          void i2c_init(UINT8 sda_port_sel, UINT8 sda_pin_sel, UINT8 scl_port_sel, UINT8 scl_pin_sel)
+  16          {
+  17   1              sda_port = sda_port_sel;
+  18   1              sda_pin = sda_pin_sel;
+  19   1              scl_port = scl_port_sel;
+  20   1              scl_pin = scl_pin_sel;
+  21   1              
+  22   1              gpio_set_pin(sda_port, sda_pin);
+  23   1              gpio_set_pin(scl_port, scl_pin);
+  24   1              //timer_init(i2c_timer, NULL);
+  25   1      }
+  26          
+  27          void i2c_start(void)
+  28          {
+  29   1              gpio_clear_pin(scl_port, scl_pin);      //while clock is low
+  30   1              gpio_set_pin(sda_port, sda_pin);        //make sure sda is high
+  31   1              gpio_set_pin(scl_port, scl_pin);        //while clock is high
+  32   1              gpio_clear_pin(sda_port, sda_pin);      //bring sda low
+  33   1      }
+  34          
+  35          void i2c_stop(void)
+  36          {
+  37   1              gpio_clear_pin(scl_port, scl_pin);      //while clock is low
+  38   1              gpio_clear_pin(sda_port, sda_pin);      //make sure sda is low
+  39   1              gpio_set_pin(scl_port, scl_pin);        //while sck is high
+  40   1              gpio_set_pin(sda_port, sda_pin);        //bring sda high
+  41   1      }
+  42          
+  43          void i2c_write(UINT8 val)
+  44          {
+  45   1              UINT8 d;
+  46   1              for(d = 0; d < 8; ++d)
+  47   1              {
+  48   2                      gpio_clear_pin(scl_port, scl_pin);                      //while clock is low
+  49   2                      gpio_write_pin(sda_port, sda_pin, val & 0x80);  //write sda
+  50   2                      gpio_set_pin(scl_port, scl_pin);                        //bring sck high
+  51   2                      val = val << 1;
+  52   2              }
+  53   1              gpio_clear_pin(scl_port, scl_pin);
+  54   1              gpio_set_pin(sda_port, sda_pin);        //release sda
+C51 COMPILER V9.60.0.0   CH552_I2C                                                         04/16/2024 08:21:14 PAGE 2   
+
+  55   1              gpio_set_pin(scl_port, scl_pin);        //bring sck high
+  56   1              agent_ack = gpio_read_pin(sda_port, sda_pin) ^ 0x01;
+  57   1      }
+  58          
+  59          UINT8 i2c_read(void)
+  60          {
+  61   1              UINT8 val = 0;
+  62   1              UINT8 d;
+  63   1              for(d = 0; d < 8; ++d)
+  64   1              {
+  65   2                      gpio_clear_pin(scl_port, scl_pin);
+  66   2                      gpio_set_pin(sda_port, sda_pin);        //release sda
+  67   2                      gpio_set_pin(scl_port, scl_pin);
+  68   2                      val = val << 1;
+  69   2                      val = val | gpio_read_pin(sda_port, sda_pin);
+  70   2              }
+  71   1              gpio_clear_pin(scl_port, scl_pin);
+  72   1              gpio_write_pin(sda_port, sda_pin, host_ack ^ 0x01);
+  73   1              gpio_set_pin(scl_port, scl_pin);
+  74   1              return val;
+  75   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    378    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6       8
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

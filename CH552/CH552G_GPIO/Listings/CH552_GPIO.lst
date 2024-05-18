@@ -1,0 +1,179 @@
+C51 COMPILER V9.60.0.0   CH552_GPIO                                                        03/28/2024 17:33:05 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_GPIO
+OBJECT MODULE PLACED IN .\Objects\CH552_GPIO.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_GPIO.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\CH552_GPIO.lst) OBJECT(.\Objects\CH552_GPIO.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "CH552_GPIO.h"
+   3          
+   4          UINT8 p1_last_write = 0xFF;
+   5          UINT8 p3_last_write = 0xFF;
+   6          
+   7          void gpio_set_mode(UINT8 mode, UINT8 port, UINT8 pins)
+   8          {
+   9   1              UINT8 Pn_MOD_OC;
+  10   1              UINT8 Pn_DIR_PU;
+  11   1              
+  12   1              switch(port)
+  13   1              {
+  14   2                      case GPIO_PORT_1:
+  15   2                              Pn_MOD_OC = P1_MOD_OC;
+  16   2                              Pn_DIR_PU = P1_DIR_PU;
+  17   2                              break;
+  18   2                      case GPIO_PORT_3:
+  19   2                              Pn_MOD_OC = P3_MOD_OC;
+  20   2                              Pn_DIR_PU = P3_DIR_PU;
+  21   2                              break;
+  22   2                      default:
+  23   2                              return;
+  24   2              }
+  25   1              
+  26   1              switch(mode)
+  27   1              {
+  28   2                      case GPIO_MODE_INPUT:
+  29   2                              //clear bits in Pn_MOD_OC and Pn_DIR_PU
+  30   2                              Pn_MOD_OC &= ~pins;
+  31   2                              Pn_DIR_PU &= ~pins;
+  32   2                              break;
+  33   2                      case GPIO_MODE_PP:
+  34   2                              //clear bits in Pn_MOD_OC, set bits in Pn_DIR_PU
+  35   2                              Pn_MOD_OC &= ~pins;
+  36   2                              Pn_DIR_PU |= pins;
+  37   2                              break;
+  38   2                      case GPIO_MODE_OD:
+  39   2                              //set bits in Pn_MOD_OC, clear bits in Pn_DIR_PU
+  40   2                              Pn_MOD_OC |= pins;
+  41   2                              Pn_DIR_PU &= ~pins;
+  42   2                              break;
+  43   2                      case GPIO_MODE_OD_PU:
+  44   2                              //set bits in Pn_MOD_OC and Pn_DIR_PU
+  45   2                              Pn_MOD_OC |= pins;
+  46   2                              Pn_DIR_PU |= pins;
+  47   2                              break;
+  48   2                      default:
+  49   2                              return;
+  50   2              }
+  51   1              
+  52   1              switch(port)
+  53   1              {
+  54   2                      case GPIO_PORT_1:
+C51 COMPILER V9.60.0.0   CH552_GPIO                                                        03/28/2024 17:33:05 PAGE 2   
+
+  55   2                              P1_MOD_OC = Pn_MOD_OC;
+  56   2                              P1_DIR_PU = Pn_DIR_PU;
+  57   2                              break;
+  58   2                      case GPIO_PORT_3:
+  59   2                              P3_MOD_OC = Pn_MOD_OC;
+  60   2                              P3_DIR_PU = Pn_DIR_PU;
+  61   2                              break;
+  62   2                      default:
+  63   2                              return;
+  64   2              }
+  65   1      }
+  66          
+  67          void gpio_write_port(UINT8 port, UINT8 write_data)
+  68          {
+  69   1              switch(port)
+  70   1              {
+  71   2                      case GPIO_PORT_1:
+  72   2                              P1 = (p1_last_write = write_data);
+  73   2                              break;
+  74   2                      case GPIO_PORT_3:
+  75   2                              P3 = (p3_last_write = write_data);
+  76   2                              break;
+  77   2                      default:
+  78   2                              return;
+  79   2              }
+  80   1      }
+  81          
+  82          UINT8 gpio_read_port(UINT8 port)
+  83          {
+  84   1              switch(port)
+  85   1              {
+  86   2                      case GPIO_PORT_1:
+  87   2                              return P1;
+  88   2                      case GPIO_PORT_3:
+  89   2                              return P3;
+  90   2                      default:
+  91   2                              return 0;
+  92   2              }
+  93   1      }
+  94          
+  95          void gpio_write_pin(UINT8 port, UINT8 pin, UINT8 write_data)
+  96          {
+  97   1              switch(port)
+  98   1              {
+  99   2                      case GPIO_PORT_1:
+ 100   2                              P1 = write_data ? (p1_last_write |= pin) : (p1_last_write &= ~pin);
+ 101   2                              break;
+ 102   2                      case GPIO_PORT_3:
+ 103   2                              P3 = write_data ? (p3_last_write |= pin) : (p3_last_write &= ~pin);
+ 104   2                              break;
+ 105   2                      default:
+ 106   2                              return;
+ 107   2              }
+ 108   1      }
+ 109          
+ 110          UINT8 gpio_read_pin(UINT8 port, UINT8 pin)
+ 111          {
+ 112   1              switch(port)
+ 113   1              {
+ 114   2                      case GPIO_PORT_1:
+ 115   2                              return (P1 & pin) ? 0x01 : 0x00;
+ 116   2                      case GPIO_PORT_3:
+C51 COMPILER V9.60.0.0   CH552_GPIO                                                        03/28/2024 17:33:05 PAGE 3   
+
+ 117   2                              return (P3 & pin) ? 0x01 : 0x00;
+ 118   2                      default:
+ 119   2                              return 0;
+ 120   2              }
+ 121   1      }
+ 122          
+ 123          void gpio_set_pin(UINT8 port, UINT8 pin)
+ 124          {
+ 125   1              switch(port)
+ 126   1              {
+ 127   2                      case GPIO_PORT_1:
+ 128   2                              P1 = (p1_last_write |= pin);
+ 129   2                              break;
+ 130   2                      case GPIO_PORT_3:
+ 131   2                              P3 = (p3_last_write |= pin);
+ 132   2                              break;
+ 133   2                      default:
+ 134   2                              return;
+ 135   2              }
+ 136   1      }
+ 137          
+ 138          void gpio_clear_pin(UINT8 port, UINT8 pin)
+ 139          {
+ 140   1              switch(port)
+ 141   1              {
+ 142   2                      case GPIO_PORT_1:
+ 143   2                              P1 = (p1_last_write &= ~pin);
+ 144   2                              break;
+ 145   2                      case GPIO_PORT_3:
+ 146   2                              P3 = (p3_last_write &= ~pin);
+ 147   2                              break;
+ 148   2                      default:
+ 149   2                              return;
+ 150   2              }
+ 151   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    253    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

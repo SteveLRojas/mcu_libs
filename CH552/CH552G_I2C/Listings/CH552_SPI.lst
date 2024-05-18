@@ -1,0 +1,57 @@
+C51 COMPILER V9.60.0.0   CH552_SPI                                                         04/16/2024 08:21:14 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CH552_SPI
+OBJECT MODULE PLACED IN .\Objects\CH552_SPI.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE CH552_SPI.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
+                    -stings\CH552_SPI.lst) OBJECT(.\Objects\CH552_SPI.obj)
+
+line level    source
+
+   1          #include "CH552.H"
+   2          #include "CH552_SPI.h"
+   3          
+   4          //The CH552 datsheet does not say how to set the clock divider... Nor does it say which values are valid. 
+             -Here are my findings:
+   5          //Setting clk_div to 0 sets the spi clock freq to sys_clk / 256, wrong data is output om MOSI
+   6          //Setting clk_div to 1 makes the spi module produce no output at all, MOSI and SCK are driven low. reading
+             - SPI0_DATA gives the last value that was written to it.
+   7          //Setting clk_div to 2 gives an spi frequency of sys_clk / 2.
+   8          //Setting clk_div to 3 gives an spi frequency of sys_clk / 3*. The high time is 2 sys_clk cycles, the low 
+             -time is 1 sys_clk cycle...
+   9          //Setting clk_div to 5 gives an spi frequency of sys_clk / 5*. The high time is 3 sys_clk cycles, the low 
+             -time is 2 sys_clk cycles.
+  10          //I recommend to use only even values for the clock divider. spi_freq = sys_clk / clk_div.
+  11          void spi_init(UINT8 clk_div, UINT8 spi_mode)
+  12          {
+  13   1              SPI0_CK_SE = clk_div;
+  14   1              SPI0_SETUP = 0x00;      //bS0_MODE_SLV = 0, bS0_IE_BYTE = 0, bS0_BIT_ORDER = 0
+  15   1              SPI0_CTRL = bS0_MOSI_OE | bS0_SCK_OE;
+  16   1              SPI0_CTRL |= spi_mode;
+  17   1      }
+  18          
+  19          void spi_disable()
+  20          {
+  21   1              SPI0_CTRL = bS0_CLR_ALL;
+  22   1      }
+  23          
+  24          UINT8 spi_transfer(UINT8 val)
+  25          {
+  26   1              SPI0_DATA = val;
+  27   1              while(!S0_FREE) {}
+  28   1              return SPI0_DATA;
+  29   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     24    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
