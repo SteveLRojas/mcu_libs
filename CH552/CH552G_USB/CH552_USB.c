@@ -9,15 +9,9 @@ void (*usb_rst_callback)(void) = NULL;
 void (*usb_suspend_callback)(void) = NULL;
 volatile UINT16 sof_count;
 
+// HINT: Enabling SOF interrupts makes SOF tokens trigger UIF_TRANSFER. This breaks interrupt transfers, and any other transfers that happen immediately after a SOF
 void usb_isr(void) interrupt INT_NO_USB
 {
-	//TODO: Does SOF trigger UIF_TRANSFER?
-	if ((USB_INT_ST & MASK_UIS_TOKEN) == UIS_TOKEN_SOF)
-	{
-		++sof_count;
-		if(usb_sof_callback)
-			usb_sof_callback();
-	}
 	if(UIF_TRANSFER)
 	{
 		switch(USB_INT_ST & MASK_UIS_TOKEN)
@@ -25,6 +19,11 @@ void usb_isr(void) interrupt INT_NO_USB
 			case UIS_TOKEN_OUT:
 				if(usb_out_callback)
 					usb_out_callback(USB_INT_ST & MASK_UIS_ENDP);
+				break;
+			case UIS_TOKEN_SOF:
+				++sof_count;
+				if(usb_sof_callback)
+					usb_sof_callback();
 				break;
 			case UIS_TOKEN_IN:
 				if(usb_in_callback)

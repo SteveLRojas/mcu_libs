@@ -22,8 +22,8 @@ void timer0_isr(void) interrupt INT_NO_TMR0
 
 void timer1_isr(void) interrupt INT_NO_TMR1
 {
-	TL1 = ((UINT8*)&timer1_initial_count)[0];
-	TH1 = ((UINT8*)&timer1_initial_count)[1];
+	TL1 = (UINT8)timer1_initial_count;
+	TH1 = timer1_initial_count >> 8;
 	++timer_overflow_counts[1];
 	if(timer1_callback)
 		timer1_callback();
@@ -166,7 +166,7 @@ UINT16 timer_get_ticks(UINT8 timer)
 			num_ticks -= timer0_initial_count;
 			break;
 		case TIMER_1:
-			num_ticks = ((UINT8)TH1) << 8;
+			num_ticks = ((UINT16)TH1) << 8;
 			num_ticks |= TL1;
 			num_ticks -= timer1_initial_count;
 			break;
