@@ -24,7 +24,7 @@ int main()
 	
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0 | GPIO_PIN_2);
-	uart0_init(TIMER_1, BUAD_RATE, UART_0_P30_P31);
+	uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
 	
 	adc_init(ADC_FAST);
 	adc_schedule[0] = ADC_AIN2;

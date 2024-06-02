@@ -27,7 +27,7 @@ int main()
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1 | GPIO_PIN_4);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0);
 	
-	uart0_init(TIMER_1, BUAD_RATE, UART_0_P30_P31);
+	uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
 	pwm_init(PWM_1 | PWM_2, PWM_ACTIVE_HIGH, 0, PWM_1_P15 | PWM_2_P34);
 	pwm_set_duty_cycle(PWM_1 | PWM_2, 0x7F);
 	

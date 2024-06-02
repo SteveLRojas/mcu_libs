@@ -32,7 +32,7 @@ void CfgFsys()
    Fsys = Fpll/512 =187.5KHz: 0   0   0
 */
 	CLOCK_CFG &= ~MASK_SYS_CK_SEL;
-	CLOCK_CFG |= 4; 															  
+	CLOCK_CFG |= 6; 															  
 	
 	SAFE_MOD = 0xFF;			//Turn off safe mode
 // If you modify the main frequency, you must modify FREQ_SYS at the same time, otherwise the delay function will be inaccurate

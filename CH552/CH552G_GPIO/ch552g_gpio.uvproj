@@ -348,7 +348,7 @@
             <DataOverlaying>1</DataOverlaying>
             <OverlayString></OverlayString>
             <MiscControls></MiscControls>
-            <DisableWarningNumbers></DisableWarningNumbers>
+            <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile></LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
@@ -382,6 +382,21 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
+              <FileName>CH552.H</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552.H</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_GPIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_GPIO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_GPIO.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
@@ -392,29 +407,9 @@
               <FilePath>.\System.c</FilePath>
             </File>
             <File>
-              <FileName>CH552_GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_GPIO.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Header</GroupName>
-          <Files>
-            <File>
-              <FileName>CH552.H</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552.H</FilePath>
-            </File>
-            <File>
               <FileName>System.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\System.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_GPIO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_GPIO.h</FilePath>
             </File>
           </Files>
         </Group>

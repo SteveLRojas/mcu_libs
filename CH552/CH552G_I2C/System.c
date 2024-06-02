@@ -16,10 +16,22 @@ void CfgFsys()
 {
 	SAFE_MOD = 0x55;							//Enable safe mode
 	SAFE_MOD = 0xAA;												 
-
+/*
+   Fxt = 24MHz(8MHz~25MHz for non-USB application), from external oscillator @XI&XO
+   Fosc = bOSC_EN_INT ? 24MHz : Fxt
+   Fpll = Fosc * 4 => 96MHz (32MHz~100MHz for non-USB application)
+   Fusb4x = Fpll / 2 => 48MHz (Fixed)
+              MASK_SYS_CK_SEL[2] [1] [0]
+   Fsys = Fpll/3   =  32MHz:  1   1   1
+   Fsys = Fpll/4   =  24MHz:  1   1   0
+   Fsys = Fpll/6   =  16MHz:  1   0   1
+   Fsys = Fpll/8   =  12MHz:  1   0   0
+   Fsys = Fpll/16  =   6MHz:  0   1   1
+   Fsys = Fpll/32  =   3MHz:  0   1   0
+   Fsys = Fpll/128 = 750KHz:  0   0   1
+   Fsys = Fpll/512 =187.5KHz: 0   0   0
+*/
 	CLOCK_CFG &= ~MASK_SYS_CK_SEL;
-
-	//Configure the system clock to 24MHz
 	CLOCK_CFG |= 6; 															  
 	
 	SAFE_MOD = 0xFF;			//Turn off safe mode

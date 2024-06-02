@@ -407,26 +407,6 @@
               <FilePath>.\CH552_TIMER.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_UART.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART_FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_UART_FIFO.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART_FIFO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_UART_FIFO.h</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
@@ -450,6 +430,26 @@
               <FileName>CH552_ADC.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_ADC.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_FIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_FIFO.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_FIFO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_FIFO.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_UART.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_UART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_UART.h</FilePath>
             </File>
           </Files>
         </Group>

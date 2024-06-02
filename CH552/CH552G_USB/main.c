@@ -6,7 +6,7 @@
 #include "CH552_USB.h"
 #include "FTDI_serial.h"
 	
-char code test_string[] = "Booba\n";
+char code test_string[] = "Unicorn\n";
 
 //Pins:
 // LED = P11
@@ -51,7 +51,7 @@ int main()
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0);
 	
-	uart0_init(TIMER_1, BUAD_RATE, UART_0_P30_P31);
+	uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
 	timer_init(TIMER_0, NULL);
 	timer_set_period(TIMER_0, FREQ_SYS / 1000ul);	//period is 1ms
 	EA = 1;	//enable interupts

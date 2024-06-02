@@ -382,39 +382,14 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>CH552_GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_GPIO.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>System.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_FIFO.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Header</GroupName>
-          <Files>
-            <File>
               <FileName>CH552.H</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552.H</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_GPIO.c</FilePath>
             </File>
             <File>
               <FileName>CH552_GPIO.h</FileName>
@@ -422,9 +397,24 @@
               <FilePath>.\CH552_GPIO.h</FilePath>
             </File>
             <File>
-              <FileName>System.h</FileName>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_FIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_FIFO.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_FIFO.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
+              <FilePath>.\CH552_FIFO.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_UART.c</FilePath>
             </File>
             <File>
               <FileName>CH552_UART.h</FileName>
@@ -432,9 +422,14 @@
               <FilePath>.\CH552_UART.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_FIFO.h</FileName>
+              <FileName>System.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\System.c</FilePath>
+            </File>
+            <File>
+              <FileName>System.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH552_FIFO.h</FilePath>
+              <FilePath>.\System.h</FilePath>
             </File>
           </Files>
         </Group>

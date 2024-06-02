@@ -95,7 +95,6 @@ void uart0_init(UINT8 uart0_tim, UINT32 baud, UINT8 pin_map)
 			TR1 = 1;
 			TH1 = 256ul - FREQ_SYS / 16ul / baud;
 			SCON = 0x50;	//SM0 = 0, SM1 = 1, SM2 = 0, REN = 1
-			ES = 1;	//enable interrupts
 			break;
 		case TIMER_2:
 			uart_idle[UART_0] = 1;
@@ -103,7 +102,6 @@ void uart0_init(UINT8 uart0_tim, UINT32 baud, UINT8 pin_map)
 			T2MOD |= bTMR_CLK | bT2_CLK;
 			RCAP2 = 65536ul - FREQ_SYS / 16ul / baud;
 			SCON = 0x50;	//SM0 = 0, SM1 = 1, SM2 = 0, REN = 1
-			ES = 1;	//enable interrupts
 			break;
 		default:
 			return;
@@ -114,6 +112,7 @@ void uart0_init(UINT8 uart0_tim, UINT32 baud, UINT8 pin_map)
 	
 	fifo_init(&uart0_rx_fifo, uart0_rx_buf, UART_RX_BUF_SIZE);
 	fifo_init(&uart0_tx_fifo, uart0_tx_buf, UART_TX_BUF_SIZE);
+	ES = 1;	//enable interrupts
 }
 #endif
 
@@ -130,13 +129,13 @@ void uart1_init(UINT32 baud, UINT8 pin_map)
 	uart_idle[UART_1] = 1;
 	SCON1 = 0x30;	//U1SM0 = 0, U1SMOD = 1, U1REN = 1
 	SBAUD1 = 256ul - FREQ_SYS / 16ul / baud;
-	IE_UART1 = 1;	//enable interrupts
 	
 	PIN_FUNC &= ~bUART1_PIN_X;
 	PIN_FUNC |= pin_map;
 	
 	fifo_init(&uart1_rx_fifo, uart1_rx_buf, UART_RX_BUF_SIZE);
 	fifo_init(&uart1_tx_fifo, uart1_tx_buf, UART_TX_BUF_SIZE);
+	IE_UART1 = 1;	//enable interrupts
 }
 #endif
 
@@ -263,6 +262,10 @@ UINT16 uart_bytes_available_for_write(UINT8 uart)
 
 void uart_write_byte(UINT8 uart, UINT8 val)
 {
+	if(uart)
+		IE_UART1 = 0;
+	else
+		ES = 0;
 	if(uart_idle[uart])	//transmit buffer empty
 	{
 		//send data directly to UART
@@ -274,55 +277,35 @@ void uart_write_byte(UINT8 uart, UINT8 val)
 	}
 	else
 	{
-		if(uart)
-			IE_UART1 = 0;
-		else
-			ES = 0;
 		fifo_push(uart_tx_fifos[uart], val);
-		if(uart)
-			IE_UART1 = 1;
-		else
-			ES = 1;
 	}
+	if(uart)
+		IE_UART1 = 1;
+	else
+		ES = 1;
 }
 
 UINT16 uart_write_string(UINT8 uart, char* str)
 {
 	UINT16 len = 0;
-
-	while(*str)
+	
+	while(str[len])
 	{
-		if(uart_idle[uart])	//transmit buffer empty
-		{
-			//send data directly to UART
-			if(uart)
-				SBUF1 = *str++;
-			else
-				SBUF = *str++;
-			uart_idle[uart] = 0;
-		}
-		else
-		{
-			if(uart)
-				IE_UART1 = 0;
-			else
-				ES = 0;
-			fifo_push(uart_tx_fifos[uart], *str++);
-			if(uart)
-				IE_UART1 = 1;
-			else
-				ES = 1;
-		}
-		len++;
+		++len;
 	}
+	
+	uart_write_bytes(uart, (UINT8*)str, len);
 	return len;
 }
 
 void uart_write_bytes(UINT8 uart, UINT8* src, UINT16 num_bytes)
 {
-	UINT16 num_remaining = num_bytes;
 	UINT16 num_to_write = 0;
 
+	if(uart)
+		IE_UART1 = 0;
+	else
+		ES = 0;
 	if(uart_idle[uart])	//transmit buffer empty
 	{
 		//send data directly to UART
@@ -331,15 +314,21 @@ void uart_write_bytes(UINT8 uart, UINT8* src, UINT16 num_bytes)
 		else
 			SBUF = *src++;
 		uart_idle[uart] = 0;
-		--num_remaining;
+		--num_bytes;
 	}
+	if(uart)
+		IE_UART1 = 1;
+	else
+		ES = 1;
 
-	while(num_remaining)
+	while(num_bytes)
 	{
 		num_to_write = fifo_num_free(uart_tx_fifos[uart]);
-		if(num_to_write > num_remaining)
+		if(!num_to_write)
+			continue;
+		if(num_to_write > num_bytes)
 		{
-			num_to_write = num_remaining;
+			num_to_write = num_bytes;
 		}
 
 		if(uart)
@@ -351,7 +340,7 @@ void uart_write_bytes(UINT8 uart, UINT8* src, UINT16 num_bytes)
 			IE_UART1 = 1;
 		else
 			ES = 1;
-		num_remaining -= num_to_write;
+		num_bytes -= num_to_write;
 		src += num_to_write;
 	}
 }

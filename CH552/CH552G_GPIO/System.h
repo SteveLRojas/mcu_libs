@@ -18,8 +18,8 @@
 #define  STOP    0
 #endif
 
-#define	 FREQ_SYS	12000000ul	  //The main frequency of the system is 12MHz
-#define  BUAD_RATE  115200ul
+#define	 FREQ_SYS	24000000ul	  //The main frequency of the system is 24MHz
+#define  BAUD_RATE  125000ul
 
 void CfgFsys(void);                   //CH559 clock selection and configuration
 void mDelayuS(UINT16 n);              // Delay in uS
