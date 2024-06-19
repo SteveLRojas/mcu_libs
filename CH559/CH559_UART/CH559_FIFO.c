@@ -95,7 +95,7 @@ UINT8 fifo_write(fifo_t* fifo_inst, UINT8* src, UINT16 num_bytes)
 		return 0; // Not enough space to write
 	}
 
-	to_wrap = fifo_inst->buf_size - fifo_inst->front;
+	to_wrap = fifo_inst->buf_size - fifo_inst->back;
 	if(num_bytes >= to_wrap)
 	{
 		//write until wrap around
