@@ -1,8 +1,8 @@
-#ifndef _USB_HID_H_
-#define _USB_HID_H_
+#ifndef _USB_HID_PAN_MOUSE_H_
+#define _USB_HID_PAN_MOUSE_H_
 
 #define HID_ENDP0_SIZE 8
-#define HID_ENDP1_SIZE 4
+#define HID_ENDP1_SIZE 8
 
 // CH552 has a bug in the USB hardware: the buffer can be overflown by up to 2 bytes, but never past 64 bytes...
 #define HID_ENDP0_BUF_SIZE ((HID_ENDP0_SIZE + 2) > 64) ? 64 : (HID_ENDP0_SIZE + 2)
@@ -20,6 +20,6 @@ void hid_mouse_send_report(void);
 void hid_mouse_press(UINT8 buttons);
 void hid_mouse_release(UINT8 buttons);
 void hid_mouse_move(UINT8 x_rel, UINT8 y_rel);
-void hid_mouse_scroll(UINT8 scroll_rel);
+void hid_mouse_scroll(UINT8 v_rel, UINT8 h_rel);
 
 #endif

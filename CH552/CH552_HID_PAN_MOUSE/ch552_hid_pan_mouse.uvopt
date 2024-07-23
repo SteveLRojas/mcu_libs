@@ -355,8 +355,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\usb_hid_mouse.c</PathWithFileName>
-      <FilenameWithoutPath>usb_hid_mouse.c</FilenameWithoutPath>
+      <PathWithFileName>.\usb_hid_pan_mouse.c</PathWithFileName>
+      <FilenameWithoutPath>usb_hid_pan_mouse.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -367,8 +367,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\usb_hid_mouse.h</PathWithFileName>
-      <FilenameWithoutPath>usb_hid_mouse.h</FilenameWithoutPath>
+      <PathWithFileName>.\usb_hid_pan_mouse.h</PathWithFileName>
+      <FilenameWithoutPath>usb_hid_pan_mouse.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

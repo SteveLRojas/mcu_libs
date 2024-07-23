@@ -3,13 +3,13 @@
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
 #include "CH552_TIMER.h"
-#include "usb_hid_mouse.h"
+#include "usb_hid_pan_mouse.h"
 	
 char code test_string[] = "Unicorn\n";
 
 //Pins:
-// LED = P11
-// TEST = P14
+// LED2 = P16
+// LED3 = P17
 // RXD = P30
 // TXD = P31
 // UDP = P36
@@ -46,7 +46,7 @@ int main()
 	
 	CfgFsys();	//CH559 clock selection configuration
 	
-	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_1 | GPIO_PIN_4);
+	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_6 | GPIO_PIN_7);
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0);
 	
@@ -57,9 +57,9 @@ int main()
 	E_DIS = 0;
 	
 	//Blink LED once
-	gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_1);
+	gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_6);
 	timer_long_delay(TIMER_0, 250);
-	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_1);
+	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_6);
 	timer_long_delay(TIMER_0, 250);
 	uart_write_string(UART_0, test_string);
 	
@@ -94,29 +94,37 @@ int main()
 					hid_mouse_release(HID_MOUSE_BTN_WHEEL);
 					break;
 				case 0x04:
+					//move X
 					temp = uart_read_byte(UART_0);
 					hid_mouse_move(temp, 0x00);
 					break;
 				case 0x05:
+					//move Y
 					temp = uart_read_byte(UART_0);
 					hid_mouse_move(0x00, temp);
 					break;
 				case 0x06:
+					//scroll V
 					temp = uart_read_byte(UART_0);
-					hid_mouse_scroll(temp);
+					hid_mouse_scroll(temp, 0x00);
+					break;
+				case 0x07:
+					//scroll H
+					temp = uart_read_byte(UART_0);
+					hid_mouse_scroll(0x00, temp);
 					break;
 				default:
 					break;
 			}
 
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_1));
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_1, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_1));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_7, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
 		}
 		
 		timer_long_delay(TIMER_0, 1);
 		++time;
 		
-		if(hid_idle_rate && ((time >> 2) >= hid_idle_rate))	//idle rate is in units of 4 ms
+		if(hid_idle_rate && ((time >> 2) >= hid_idle_rate))
 		{
 			hid_mouse_send_report();
 			time = 0;

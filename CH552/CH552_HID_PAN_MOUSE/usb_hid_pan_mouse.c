@@ -1,11 +1,11 @@
 #include "CH552.H"
 #include "CH552_USB.h"
-#include "usb_hid.h"
+#include "usb_hid_pan_mouse.h"
 
 #define HID_DEV_DESCR_SIZE 18
 #define HID_CONF_DESCR_SIZE 34
-#define HID_REPORT_DESCR_SIZE 52
-#define HID_MOUSE_REPORT_SIZE 4
+#define HID_REPORT_DESCR_SIZE 67
+#define HID_MOUSE_REPORT_SIZE 5
 
 UINT8 xdata ep0_buffer[HID_ENDP0_BUF_SIZE];
 UINT8 xdata ep1_buffer[HID_ENDP1_BUF_SIZE];
@@ -79,10 +79,10 @@ UINT8 code hid_config_descriptor[] =
     /* Endpoint Descriptor (Mouse) */
     0x07,                           // bLength
     0x05,                           // bDescriptorType
-    0x81,                           // bEndpointAddress: IN Endpoint 2
+    0x81,                           // bEndpointAddress: IN Endpoint 1
     0x03,                           // bmAttributes
     HID_ENDP1_SIZE & 0xFF, HID_ENDP1_SIZE >> 8, // wMaxPacketSize
-    0x01                            // bInterval: 1mS                   /* Endpoint Descriptor */
+    0x01                            // bInterval: 1mS
 };
 
 /* HID Report Descriptor */
@@ -113,6 +113,13 @@ UINT8 code hid_report_descriptor[] =
     0x75, 0x08,                     // Report Size (8)
     0x95, 0x03,                     // Report Count (3)
     0x81, 0x06,                     // Input (Data,Variable,Relative)
+	0x05, 0x0c,                     // USAGE PAGE (Consumer Devices)
+	0x0a, 0x38, 0x02,               // USAGE (AC Pan)
+	0x15, 0x81,                     // LOGICAL_MINIMUM (-127)
+	0x25, 0x7f,                     // LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                     // REPORT_SIZE (8)
+	0x95, 0x01,                     // REPORT_COUNT (1)
+	0x81, 0x06,                     // INPUT (Data, Var, Rel)
     0xC0,                           // End Collection
     0xC0                            // End Collection
 };
@@ -137,9 +144,9 @@ UINT8 code hid_string_vendor[] =
 /* USB Device String Product */
 UINT8 code hid_string_product[] =
 {
-    20,
+    28,
     0x03,
-    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'M', 0, 'o', 0, 'u', 0, 's', 0, 'e', 0
+    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'P', 0, 'a', 0, 'n', 0, ' ', 0, 'M', 0, 'o', 0, 'u', 0, 's', 0, 'e', 0
 };
 
 /* USB Device String Serial */
@@ -147,7 +154,7 @@ UINT8 code hid_string_serial[] =
 {
 	22,          
 	0x03,                   
-	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '2', 0
+	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '4', 0
 };
 
 void hid_copy_descriptor(UINT8 len)
@@ -213,6 +220,7 @@ void hid_on_in(UINT8 ep)
 		ep1_buffer[1] = 0;	//clear movement and scrolling
 		ep1_buffer[2] = 0;
 		ep1_buffer[3] = 0;
+		ep1_buffer[4] = 0;
 		hid_report_pending = 0;
 	}
 }
@@ -392,7 +400,7 @@ void hid_on_setup(UINT8 ep)
 		else
 		{
 			len = 0xFF;
-		}	// end  if((cdc_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_STANDARD)
+		}	// end  if((hid_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_STANDARD)
 		
 		if(len == 0xFF)
 		{
@@ -424,6 +432,7 @@ void hid_on_rst(void)
 	ep1_buffer[1] = 0;
 	ep1_buffer[2] = 0;
 	ep1_buffer[3] = 0;
+	ep1_buffer[4] = 0;
 	hid_report_pending = 0;
 	hid_idle_rate = 0;
 	hid_protocol = 0x01;	//default to report protocol
@@ -483,8 +492,9 @@ void hid_mouse_move(UINT8 x_rel, UINT8 y_rel)
 	hid_mouse_send_report();
 }
 
-void hid_mouse_scroll(UINT8 scroll_rel)
+void hid_mouse_scroll(UINT8 v_rel, UINT8 h_rel)
 {
-	ep1_buffer[3] += scroll_rel;
+	ep1_buffer[3] += v_rel;
+	ep1_buffer[4] += h_rel;
 	hid_mouse_send_report();
 }

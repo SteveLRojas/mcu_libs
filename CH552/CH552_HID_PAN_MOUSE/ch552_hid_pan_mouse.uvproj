@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch552_usb_hid_mouse</OutputName>
+          <OutputName>ch552_hid_pan_mouse</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -452,14 +452,14 @@
               <FilePath>.\System.h</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_mouse.c</FileName>
+              <FileName>usb_hid_pan_mouse.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\usb_hid_mouse.c</FilePath>
+              <FilePath>.\usb_hid_pan_mouse.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_mouse.h</FileName>
+              <FileName>usb_hid_pan_mouse.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\usb_hid_mouse.h</FilePath>
+              <FilePath>.\usb_hid_pan_mouse.h</FilePath>
             </File>
           </Files>
         </Group>

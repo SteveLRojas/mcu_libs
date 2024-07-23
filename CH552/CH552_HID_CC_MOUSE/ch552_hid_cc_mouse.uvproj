@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch552_usb_hid_mouse</OutputName>
+          <OutputName>ch552_hid_cc_mouse</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xffff</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -377,11 +377,6 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\STARTUP.A51</FilePath>
-            </File>
-            <File>
               <FileName>CH552.H</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552.H</FilePath>
@@ -405,6 +400,16 @@
               <FileName>CH552_GPIO.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_GPIO.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_HID_CC_MOUSE.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_HID_CC_MOUSE.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_HID_CC_MOUSE.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_HID_CC_MOUSE.h</FilePath>
             </File>
             <File>
               <FileName>CH552_TIMER.c</FileName>
@@ -442,6 +447,11 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
+              <FileName>STARTUP.A51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\STARTUP.A51</FilePath>
+            </File>
+            <File>
               <FileName>System.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\System.c</FilePath>
@@ -450,16 +460,6 @@
               <FileName>System.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\System.h</FilePath>
-            </File>
-            <File>
-              <FileName>usb_hid_mouse.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\usb_hid_mouse.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_hid_mouse.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\usb_hid_mouse.h</FilePath>
             </File>
           </Files>
         </Group>

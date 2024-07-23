@@ -3,7 +3,7 @@
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
 #include "CH552_TIMER.h"
-#include "usb_hid_mouse.h"
+#include "CH552_HID_CC_MOUSE.h"
 	
 char code test_string[] = "Unicorn\n";
 
@@ -42,9 +42,10 @@ int main()
 {
 	UINT8 temp;
 	char last_keep_str[4];
-	UINT8 time = 0;
+	UINT8 mouse_timer = 0;
+	UINT8 cc_timer = 0;
 	
-	CfgFsys();	//CH559 clock selection configuration
+	CfgFsys();
 	
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_1 | GPIO_PIN_4);
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
@@ -105,7 +106,23 @@ int main()
 					temp = uart_read_byte(UART_0);
 					hid_mouse_scroll(temp);
 					break;
+				case 0x07:
+					hid_cc_press(HID_CC_BTN_VOL_MUTE);
+					timer_long_delay(TIMER_0, 50);
+					hid_cc_press(HID_CC_BTN_NONE);
+					break;
+				case 0x08:
+					hid_cc_press(HID_CC_BTN_VOL_UP);
+					timer_long_delay(TIMER_0, 50);
+					hid_cc_press(HID_CC_BTN_NONE);
+					break;
+				case 0x09:
+					hid_cc_press(HID_CC_BTN_VOL_DOWN);
+					timer_long_delay(TIMER_0, 50);
+					hid_cc_press(HID_CC_BTN_NONE);
+					break;
 				default:
+					hid_cc_press(HID_CC_BTN_NONE);
 					break;
 			}
 
@@ -114,13 +131,19 @@ int main()
 		}
 		
 		timer_long_delay(TIMER_0, 1);
-		++time;
+		++mouse_timer;
+		++cc_timer;
 		
-		if(hid_idle_rate && ((time >> 2) >= hid_idle_rate))	//idle rate is in units of 4 ms
+		if(hid_mouse_idle_rate && ((mouse_timer >> 2) >= hid_mouse_idle_rate))
 		{
 			hid_mouse_send_report();
-			time = 0;
+			mouse_timer = 0;
+		}
+		
+		if(hid_cc_idle_rate && ((cc_timer >> 2) >= hid_cc_idle_rate))
+		{
+			hid_cc_send_report();
+			cc_timer = 0;
 		}
 	}
 }
-
