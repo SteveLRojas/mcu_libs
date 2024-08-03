@@ -2,7 +2,6 @@
 #define _USB_CDC_H_
 
 // HINT: FIFO sizes must be powers of 2
-#define CDC_RX_FIFO_SIZE 128
 #define CDC_TX_FIFO_SIZE 128
 
 #define CDC_TIMEOUT_MS 25
@@ -12,11 +11,9 @@
 #define CDC_ENDP2_SIZE 64
 #define CDC_ENDP3_SIZE 64
 
-// CH552 has a bug in the USB hardware: the buffer can be overflown by up to 2 bytes, but never past 64 bytes...
+// CH552 writes the CRC when receiving: the buffer can be overflown by up to 2 bytes, but never past 64 bytes...
 #define CDC_ENDP0_BUF_SIZE ((CDC_ENDP0_SIZE + 2) > 64) ? 64 : (CDC_ENDP0_SIZE + 2)
-#define CDC_ENDP1_BUF_SIZE ((CDC_ENDP1_SIZE + 2) > 64) ? 64 : (CDC_ENDP1_SIZE + 2)
 #define CDC_ENDP2_BUF_SIZE ((CDC_ENDP2_SIZE + 2) > 64) ? 64 : (CDC_ENDP2_SIZE + 2)
-#define CDC_ENDP3_BUF_SIZE ((CDC_ENDP3_SIZE + 2) > 64) ? 64 : (CDC_ENDP3_SIZE + 2)
 
 // All fields are single bytes because C51 is big endian... USB spec is little endian.
 typedef struct _CDC_LINE_CODING {

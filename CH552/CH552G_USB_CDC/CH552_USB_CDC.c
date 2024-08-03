@@ -13,19 +13,28 @@
 #define CDC_LINE_CODING_SIZE 7
 #define CDC_SERIAL_STATE_SIZE 9
 
-fifo_t cdc_rx_fifo;
+//TODO: remove tx_fifo, make ep3 double buffered
 fifo_t cdc_tx_fifo;
-UINT8 cdc_rx_buf[CDC_RX_FIFO_SIZE];
 UINT8 cdc_tx_buf[CDC_TX_FIFO_SIZE];
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
 UINT8 cdc_tx_busy;
 
+// t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
-UINT8 xdata ep1_buffer[CDC_ENDP1_BUF_SIZE];
-UINT8 xdata ep2_buffer[CDC_ENDP2_BUF_SIZE];
-UINT8 xdata ep3_buffer[CDC_ENDP3_BUF_SIZE];
+UINT8 xdata ep1_buffer[CDC_ENDP1_SIZE];
+volatile UINT8 xdata ep2_t0_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0000;
+volatile UINT8 xdata ep2_t1_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0040;
+UINT8 xdata ep3_buffer[CDC_ENDP3_SIZE];
+
+UINT8 ep2_read_select;
+UINT8 ep2_t0_num_bytes;
+UINT8 ep2_t0_read_offset;
+UINT8 ep2_t1_num_bytes;
+UINT8 ep2_t1_read_offset;
+//note to self: when a packet is received enable receiving again if the other buffer is empty.
+// when a packet is sent enable sending again if the other buffer is full.
 
 #define cdc_setup_buf ((PUSB_SETUP_REQ)ep0_buffer)
 
@@ -198,11 +207,18 @@ void cdc_on_sof(void)
 		}
 	}
 	
-	if(fifo_num_free(&cdc_rx_fifo) >= CDC_ENDP2_SIZE)
+	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
+	if(usb_get_ep2_out_toggle())	//TODO: can this be done by the read functions?
 	{
-		usb_set_ep2_out_res(USB_OUT_RES_ACK);
+		if(!ep2_t1_num_bytes)
+			usb_set_ep2_out_res(USB_OUT_RES_ACK);
 	}
-	
+	else
+	{
+		if(!ep2_t0_num_bytes)
+			usb_set_ep2_out_res(USB_OUT_RES_ACK);
+	}
+		
 	if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
 	{
 		usb_set_ep1_tx_len(CDC_SERIAL_STATE_SIZE);
@@ -230,10 +246,18 @@ void cdc_on_out(UINT8 ep)
 	
 	if((ep == EP_2) && usb_is_toggle_ok())
 	{
-		fifo_write(&cdc_rx_fifo, ep2_buffer, usb_get_rx_len());
-		if(fifo_num_free(&cdc_rx_fifo) < CDC_ENDP2_SIZE)
+		//auto-toggle is enabled, so here the toggle should point to the next buffer that will receive
+		if(usb_get_ep2_out_toggle())
 		{
-			usb_set_ep2_out_res(USB_OUT_RES_NAK);
+			ep2_t0_num_bytes = usb_get_rx_len();
+			if(ep2_t1_num_bytes)
+				usb_set_ep2_out_res(USB_OUT_RES_NAK);
+		}
+		else
+		{
+			ep2_t1_num_bytes = usb_get_rx_len();
+			if(ep2_t0_num_bytes)
+				usb_set_ep2_out_res(USB_OUT_RES_NAK);
 		}
 	}
 }
@@ -514,7 +538,11 @@ void cdc_on_setup(UINT8 ep)
 void cdc_on_rst(void)
 {
 	usb_disable_interrupts(USB_INT_SOF);
-	fifo_init(&cdc_rx_fifo, cdc_rx_buf, CDC_RX_FIFO_SIZE);
+	ep2_t0_num_bytes = 0;
+	ep2_t0_read_offset = 0;
+	ep2_t1_num_bytes = 0;
+	ep2_t1_read_offset = 0;
+	ep2_read_select = 0;
 	fifo_init(&cdc_tx_fifo, cdc_tx_buf, CDC_TX_FIFO_SIZE);
 	
 	usb_set_ep0_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0);
@@ -532,7 +560,7 @@ usb_config_t code usb_config =
 {
 	(UINT16)ep0_buffer,
 	(UINT16)ep1_buffer,
-	(UINT16)ep2_buffer,
+	(UINT16)ep2_t0_buffer,
 	(UINT16)ep3_buffer,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1,
@@ -540,13 +568,12 @@ usb_config_t code usb_config =
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0,
 	USB_EP1_TX_EN | USB_EP1_BUF_SINGLE,
-	USB_EP2_RX_EN | USB_EP2_BUF_SINGLE | USB_EP3_TX_EN | USB_EP3_BUF_SINGLE,
+	USB_EP2_RX_EN | USB_EP2_BUF_DOUBLE | USB_EP3_TX_EN | USB_EP3_BUF_SINGLE,
 	USB_INT_TRANSFER | USB_INT_RST
 };
 
 void cdc_init(void)
 {
-	fifo_init(&cdc_rx_fifo, cdc_rx_buf, CDC_RX_FIFO_SIZE);
 	fifo_init(&cdc_tx_fifo, cdc_tx_buf, CDC_TX_FIFO_SIZE);
 	
 	usb_sof_callback = cdc_on_sof;
@@ -575,46 +602,106 @@ void cdc_set_serial_state(UINT8 val)
 // Receive
 UINT16 cdc_bytes_available(void)
 {
-	return fifo_num_used(&cdc_rx_fifo);
+	// count the number of bytes available in both buffers
+	return (ep2_t0_num_bytes - ep2_t0_read_offset) + (ep2_t1_num_bytes - ep2_t1_read_offset);
 }
 
 UINT8 cdc_peek(void)
 {
-	return fifo_peek(&cdc_rx_fifo);
+	if(ep2_read_select)
+		return ep2_t1_buffer[ep2_t1_read_offset];
+	else
+		return ep2_t0_buffer[ep2_t0_read_offset];
 }
 
 UINT8 cdc_read_byte(void)
 {
-	UINT8 popped;
-
-	while(fifo_empty(&cdc_rx_fifo));
-
-	usb_disable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-	popped = fifo_pop(&cdc_rx_fifo);
-	usb_enable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
+	UINT8 read_val;
 	
-	return popped;
+	while(!cdc_bytes_available());
+	
+	if(ep2_read_select)
+	{
+		read_val = ep2_t1_buffer[ep2_t1_read_offset];
+		++ep2_t1_read_offset;
+		if(ep2_t1_read_offset == ep2_t1_num_bytes)
+		{
+			ep2_t1_read_offset = 0;
+			ep2_t1_num_bytes = 0;
+			ep2_read_select = 0;
+		}
+	}
+	else
+	{
+		read_val = ep2_t0_buffer[ep2_t0_read_offset];
+		++ep2_t0_read_offset;
+		if(ep2_t0_read_offset == ep2_t0_num_bytes)
+		{
+			ep2_t0_read_offset = 0;
+			ep2_t0_num_bytes = 0;
+			ep2_read_select = 1;
+		}
+	}
+	
+	return read_val;
 }
 
 void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 {
-	UINT16 num_remaining = num_bytes;
 	UINT16 num_to_read = 0;
 
-	while(num_remaining)
+	while(num_bytes)
 	{
-		num_to_read = fifo_num_used(&cdc_rx_fifo);
-		if (num_to_read > num_remaining)
+		if(ep2_read_select)
 		{
-			num_to_read = num_remaining;
+			num_to_read = ep2_t1_num_bytes - ep2_t1_read_offset;
+			if(!num_to_read)
+				continue;
+			if(num_to_read > num_bytes)
+			{
+				num_to_read = num_bytes;
+			}
+			
+			num_bytes -= num_to_read;
+			do
+			{
+				*dest = ep2_t1_buffer[ep2_t1_read_offset];
+				++dest;
+				++ep2_t1_read_offset;
+			} while(--num_to_read);
+			
+			if(ep2_t1_read_offset == ep2_t1_num_bytes)
+			{
+				ep2_t1_read_offset = 0;
+				ep2_t1_num_bytes = 0;
+				ep2_read_select = 0;
+			}
 		}
-
-		usb_disable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-		fifo_read(&cdc_rx_fifo, dest, num_to_read);
-		usb_enable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-
-		num_remaining -= num_to_read;
-		dest += num_to_read;
+		else
+		{
+			num_to_read = ep2_t0_num_bytes - ep2_t0_read_offset;
+			if(!num_to_read)
+				continue;
+			if(num_to_read > num_bytes)
+			{
+				num_to_read = num_bytes;
+			}
+			
+			num_bytes -= num_to_read;
+			do
+			{
+				*dest = ep2_t0_buffer[ep2_t0_read_offset];
+				++dest;
+				++ep2_t0_read_offset;
+			} while(--num_to_read);
+			
+			if(ep2_t0_read_offset == ep2_t0_num_bytes)
+			{
+				ep2_t0_read_offset = 0;
+				ep2_t0_num_bytes = 0;
+				ep2_read_select = 1;
+			}
+		}
 	}
 }
 
