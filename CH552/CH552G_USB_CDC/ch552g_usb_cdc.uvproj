@@ -442,16 +442,6 @@
               <FilePath>.\System.h</FilePath>
             </File>
             <File>
-              <FileName>usb_cdc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\usb_cdc.c</FilePath>
-            </File>
-            <File>
-              <FileName>usb_cdc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\usb_cdc.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552_FIFO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH552_FIFO.c</FilePath>
@@ -460,6 +450,16 @@
               <FileName>CH552_FIFO.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_FIFO.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB_CDC.h</FilePath>
             </File>
           </Files>
         </Group>

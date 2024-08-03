@@ -1,7 +1,7 @@
 #include "CH552.H"
 #include "CH552_FIFO.h"
 #include "CH552_USB.h"
-#include "usb_cdc.h"
+#include "CH552_USB_CDC.h"
 
 #define SET_LINE_CODING         0x20  // host configures line coding
 #define GET_LINE_CODING         0x21  // host reads configured line coding
@@ -11,7 +11,7 @@
 #define CDC_DEV_DESCR_SIZE 18
 #define CDC_CONF_DESCR_SIZE 67
 #define CDC_LINE_CODING_SIZE 7
-//#define CDC_SERIAL_STATE_SIZE 9
+#define CDC_SERIAL_STATE_SIZE 9
 
 fifo_t cdc_rx_fifo;
 fifo_t cdc_tx_fifo;
@@ -19,7 +19,7 @@ UINT8 cdc_rx_buf[CDC_RX_FIFO_SIZE];
 UINT8 cdc_tx_buf[CDC_TX_FIFO_SIZE];
 
 UINT16 cdc_last_data_time;
-//UINT16 cdc_last_status_time;
+UINT16 cdc_last_status_time;
 UINT8 cdc_tx_busy;
 
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
@@ -37,8 +37,8 @@ UINT8 code* descriptor_ptr;
 UINT8 cdc_address;
 UINT8 cdc_config;
 
-UINT8 cdc_line_coding[] = {0x48, 0xE8, 0x01, 0x00, 0x00, 0x00, 0x08};	//125K baud, 1 stop, no parity, 8 data
-UINT8 cdc_control_line_state = 0;
+volatile cdc_line_coding_t cdc_line_coding = {0x48, 0xE8, 0x01, 0x00, 0x00, 0x00, 0x08};	//125K baud, 1 stop, no parity, 8 data
+volatile UINT8 cdc_control_line_state = 0;
 
 /* USB Device Descriptors */
 UINT8 code cdc_device_descriptor[] =
@@ -46,7 +46,7 @@ UINT8 code cdc_device_descriptor[] =
     CDC_DEV_DESCR_SIZE,				// bLength
     0x01,                           // bDescriptorType
     0x10, 0x01,                     // bcdUSB
-    0x02,                           // bDeviceClass
+    0x02,                           // bDeviceClass	(Communications Device Class)
     0x00,                           // bDeviceSubClass
     0x00,                           // bDeviceProtocol
     CDC_ENDP0_SIZE,					// bMaxPacketSize0
@@ -78,18 +78,18 @@ UINT8 code  cdc_config_descriptor[] =
     0x00,                           // bInterfaceNumber 0
     0x00,                           // bAlternateSetting
     0x01,                           // bNumEndpoints 1
-    0x02,                           // bInterfaceClass
-    0x02,                           // bInterfaceSubClass
-    0x01,                           // bInterfaceProtocol
+    0x02,                           // bInterfaceClass	(Communications Interface Class)
+    0x02,                           // bInterfaceSubClass	 (Abstract Control Model)
+    0x01,                           // bInterfaceProtocol	(AT Commands: V.250)
     0x04,                           // iInterface (String Index)
 
     /* Functional Descriptors */
-    0x05, 0x24, 0x00, 0x10, 0x01, 
+    0x05, 0x24, 0x00, 0x10, 0x01,	//CDC Header Functional Descriptor (CDC 1.2)
 
-    /* Length/management descriptor (data class interface 1) */
-    0x05, 0x24, 0x01, 0x00, 0x01,
-    0x04, 0x24, 0x02, 0x02,
-    0x05, 0x24, 0x06, 0x00, 0x01,
+    /* Length/management descriptor */
+    0x05, 0x24, 0x01, 0x00, 0x01,	//Call Management Functional Descriptor (interface 1)
+    0x04, 0x24, 0x02, 0x02,			//Abstract Control Management Functional Descriptor
+    0x05, 0x24, 0x06, 0x00, 0x01,	//Union Functional Descriptor (interface 0, interface 1)
 
     /* Interrupt upload endpoint descriptor */
     0x07,                           // bLength
@@ -105,7 +105,7 @@ UINT8 code  cdc_config_descriptor[] =
     0x01,                           // bInterfaceNumber 1
     0x00,                           // bAlternateSetting
     0x02,                           // bNumEndpoints 2
-    0x0A,                           // bInterfaceClass
+    0x0A,                           // bInterfaceClass	(Data Interface Class)
     0x00,                           // bInterfaceSubClass
     0x00,                           // bInterfaceProtocol
     0x00,                           // iInterface (String Index)
@@ -124,8 +124,7 @@ UINT8 code  cdc_config_descriptor[] =
     0x83,                           // bEndpointAddress (IN/D2H)
     0x02,                           // bmAttributes (Bulk)
     CDC_ENDP3_SIZE & 0xFF, CDC_ENDP3_SIZE >> 8, // wMaxPacketSize
-    0x00,                           // bInterval 0 (unit depends on device speed)
-
+    0x00                            // bInterval 0 (unit depends on device speed)
 };
 
 /* USB String Descriptors */
@@ -161,7 +160,7 @@ UINT8 code cdc_string_serial[] =
 	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '1', 0
 };
 
-//UINT8 code cdc_serial_state[] = {0xA1, 0x20, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00};
+UINT8 code cdc_serial_state[] = {0xA1, 0x20, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00};
 
 
 void cdc_copy_descriptor(UINT8 len)
@@ -178,8 +177,8 @@ void cdc_copy_descriptor(UINT8 len)
 
 // HINT: This library contains some nasty hacks to work around bugs in CH552.
 // Enabling SOF interrupts makes interrupt transfers fail, since the SOF triggers UIF_TRANSFER (all enpoints respond with NAK while UIF_TRANSFER is set).
-// Serial state notifications have been disabled, and EP1 always responds with NAK...
-// This means that the control lines cannot be used, but data can still be transfered just fine.
+// When a notification needs to be sent the SOF interrupts are disabled so that the interrupt transfer can happen.
+// SOF interrupts are re-enableb after the interrupt transfer completes.
 void cdc_on_sof(void)
 {
 	UINT8 bytes_to_send;
@@ -204,11 +203,12 @@ void cdc_on_sof(void)
 		usb_set_ep2_out_res(USB_OUT_RES_ACK);
 	}
 	
-	/*if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
+	if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
 	{
 		usb_set_ep1_tx_len(CDC_SERIAL_STATE_SIZE);
 		usb_set_ep1_in_res(USB_IN_RES_EXPECT_ACK);
-	}*/
+		usb_disable_interrupts(USB_INT_SOF);
+	}
 }
 
 void cdc_on_out(UINT8 ep)
@@ -217,15 +217,15 @@ void cdc_on_out(UINT8 ep)
 	
 	if(ep == EP_0)
 	{
-		if(cdc_setup_req == SET_LINE_CODING)
+		if((cdc_setup_req == SET_LINE_CODING) && ((cdc_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_CLASS))
 		{
 			for(idx = 0; idx < CDC_LINE_CODING_SIZE; idx++)
 			{
-				cdc_line_coding[idx] = ep0_buffer[idx];
+				((UINT8*)&cdc_line_coding)[idx] = ep0_buffer[idx];
 			}
-			usb_set_ep0_tx_len(0);
-			usb_set_ep0_tog_res(EP_OUT_TOG_1 | EP_IN_TOG_1 | USB_OUT_RES_ACK | USB_IN_RES_EXPECT_ACK);
 		}
+		usb_set_ep0_tx_len(0);
+		usb_set_ep0_tog_res(EP_OUT_TOG_1 | EP_IN_TOG_1 | USB_OUT_RES_ACK | USB_IN_RES_EXPECT_ACK);
 	}
 	
 	if((ep == EP_2) && usb_is_toggle_ok())
@@ -244,32 +244,42 @@ void cdc_on_in(UINT8 ep)
 	
 	if(ep == EP_0)
 	{
-		switch(cdc_setup_req)
+		if((cdc_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_STANDARD)
 		{
-			case USB_GET_DESCRIPTOR:
-				len = cdc_setup_len >= CDC_ENDP0_SIZE ? CDC_ENDP0_SIZE : cdc_setup_len;
-				cdc_copy_descriptor(len);
-				cdc_setup_len -= len;
-				usb_set_ep0_tx_len(len);
-				usb_toggle_ep0_in_toggle();
-				break;
-			case USB_SET_ADDRESS:
-				usb_set_addr(cdc_address);
-				usb_set_ep0_in_res(USB_IN_RES_NAK);
-				break;
-			default:
-				usb_set_ep0_tx_len(0);
-				usb_set_ep0_in_res(USB_IN_RES_NAK);
-				break;
+			switch(cdc_setup_req)
+			{
+				case USB_GET_DESCRIPTOR:
+					len = cdc_setup_len >= CDC_ENDP0_SIZE ? CDC_ENDP0_SIZE : cdc_setup_len;
+					cdc_copy_descriptor(len);
+					cdc_setup_len -= len;
+					usb_set_ep0_tx_len(len);
+					usb_toggle_ep0_in_toggle();
+					break;
+				case USB_SET_ADDRESS:
+					usb_set_addr(cdc_address);
+					usb_set_ep0_in_res(USB_IN_RES_NAK);
+					break;
+				default:
+					usb_set_ep0_tx_len(0);
+					usb_set_ep0_in_res(USB_IN_RES_NAK);
+					break;
+			}
+		}
+		else
+		{
+			usb_set_ep0_tx_len(0);
+			usb_set_ep0_in_res(USB_IN_RES_NAK);
 		}
 	}
 	
-	/*if(ep == EP_1)
+	if(ep == EP_1)
 	{
 		usb_set_ep1_tx_len(0);
 		usb_set_ep1_in_res(USB_IN_RES_NAK);
 		cdc_last_status_time = sof_count;
-	}*/
+		usb_enable_interrupts(USB_INT_SOF);
+		++sof_count;
+	}
 	
 	if(ep == EP_3)
 	{
@@ -380,6 +390,7 @@ void cdc_on_setup(UINT8 ep)
 							case 0x81:
 								usb_set_ep1_in_toggle(EP_IN_TOG_0);
 								usb_set_ep1_in_res(USB_IN_RES_NAK);
+								usb_enable_interrupts(USB_INT_SOF);	//SOF interrupts must be enabled when EP1 is not ready
 								break;
 							case 0x02:
 								usb_set_ep2_out_toggle(EP_OUT_TOG_0);
@@ -419,6 +430,7 @@ void cdc_on_setup(UINT8 ep)
 							case 0x81:
 								usb_set_ep1_in_toggle(EP_IN_TOG_0);
 								usb_set_ep1_in_res(USB_IN_RES_STALL);
+								usb_enable_interrupts(USB_INT_SOF);	//SOF interrupts must be enabled when EP1 is not ready
 								break;
 							case 0x02:
 								usb_set_ep2_out_toggle(EP_OUT_TOG_0);
@@ -458,7 +470,7 @@ void cdc_on_setup(UINT8 ep)
 				case GET_LINE_CODING:
 					for(idx = 0; idx < CDC_LINE_CODING_SIZE; ++idx)
 					{
-						ep0_buffer[idx] = cdc_line_coding[idx];
+						ep0_buffer[idx] = ((UINT8*)&cdc_line_coding)[idx];
 					}
 					len = CDC_LINE_CODING_SIZE;
 					break;
@@ -511,7 +523,7 @@ void cdc_on_rst(void)
 	usb_set_ep3_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1);
 	
 	cdc_last_data_time = 0;
-	//cdc_last_status_time = 0;
+	cdc_last_status_time = 0;
 	sof_count = 0;
 	cdc_tx_busy = 0;
 }
@@ -545,10 +557,10 @@ void cdc_init(void)
 	usb_suspend_callback = NULL;
 	
 	usb_init(&usb_config);
-	//cdc_set_serial_state(0x00);
+	cdc_set_serial_state(0x00);
 }
 
-/*void cdc_set_serial_state(UINT8 val)
+void cdc_set_serial_state(UINT8 val)
 {
 	UINT8 idx;
 	for(idx = 0; idx < CDC_SERIAL_STATE_SIZE; ++idx)
@@ -558,7 +570,7 @@ void cdc_init(void)
 	ep1_buffer[7] = val;
 	usb_set_ep1_tx_len(CDC_SERIAL_STATE_SIZE);
 	usb_set_ep1_in_res(USB_IN_RES_EXPECT_ACK);
-}*/
+}
 
 // Receive
 UINT16 cdc_bytes_available(void)
@@ -604,8 +616,6 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 		num_remaining -= num_to_read;
 		dest += num_to_read;
 	}
-
-	return;
 }
 
 // Send

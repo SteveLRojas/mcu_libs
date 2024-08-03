@@ -3,13 +3,13 @@
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
 #include "CH552_TIMER.h"
-#include "usb_cdc.h"
+#include "CH552_USB_CDC.h"
 	
 char code test_string[] = "Unicorn\n";
 
 //Pins:
-// LED = P11
-// TEST = P14
+// LED2 = P16
+// LED3 = P17
 // RXD = P30
 // TXD = P31
 // UDP = P36
@@ -41,10 +41,11 @@ void byte_to_hex(UINT8 value, char* buff)
 int main()
 {
 	char last_keep_str[4];
+	UINT8 prev_control_line_state;
 	
-	CfgFsys();	//CH559 clock selection configuration
+	CfgFsys();
 	
-	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_1 | GPIO_PIN_4);
+	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_6 | GPIO_PIN_7);
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0);
 	
@@ -55,9 +56,9 @@ int main()
 	E_DIS = 0;
 	
 	//Blink LED once
-	gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_1);
+	gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_6);
 	timer_long_delay(TIMER_0, 250);
-	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_1);
+	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_6);
 	timer_long_delay(TIMER_0, 250);
 	uart_write_string(UART_0, test_string);
 	
@@ -67,21 +68,28 @@ int main()
 	uart_write_string(UART_0, last_keep_str);
 	
 	cdc_init();
-	//cdc_set_serial_state(cdc_control_line_state);
+	cdc_set_serial_state(0x03);
+	prev_control_line_state = cdc_control_line_state;
 	
 	while(TRUE)
 	{	
 		if(cdc_bytes_available())
 		{
 			uart_write_byte(UART_0, cdc_read_byte());
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_1, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_1));
-			//cdc_set_serial_state(cdc_control_line_state);
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
 		}
 		
 		if(uart_bytes_available(UART_0))
 		{
 			cdc_write_byte(uart_read_byte(UART_0));
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_4));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
+		}
+		
+		if(prev_control_line_state != cdc_control_line_state)
+		{
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_7, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
+			cdc_set_serial_state(cdc_control_line_state & 3);
+			prev_control_line_state = cdc_control_line_state;
 		}
 	}
 }

@@ -29,10 +29,24 @@ typedef struct _CDC_LINE_CODING {
 	UINT8 data_bits;
 } cdc_line_coding_t;
 
-extern UINT8 cdc_control_line_state;
+// Serial State defines
+#define CDC_SS_OVERRUN		0x40
+#define CDC_SS_PARITY		0x20
+#define CDC_SS_FRAMING		0x10
+#define CDC_SS_RINGSIGNAL	0x08
+#define CDC_SS_BREAK		0x04
+#define CDC_SS_TXCARRIER	0x02
+#define CDC_SS_RXCARRIER	0x01
+//HINT: TXCARRIER corresponds to the RS-232 signal DSR, and RXCARRIER to DCD.
+
+//Control Line State define
+#define CDC_CLS_RTS	0x02
+#define CDC_CLS_DTR	0x01
+
+extern volatile UINT8 cdc_control_line_state;
 
 void cdc_init(void);
-//void cdc_set_serial_state(UINT8 val);
+void cdc_set_serial_state(UINT8 val);
 UINT16 cdc_bytes_available(void);
 UINT8 cdc_peek(void);
 UINT8 cdc_read_byte(void);
