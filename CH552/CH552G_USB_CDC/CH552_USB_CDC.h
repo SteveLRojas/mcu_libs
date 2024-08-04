@@ -1,9 +1,6 @@
 #ifndef _USB_CDC_H_
 #define _USB_CDC_H_
 
-// HINT: FIFO sizes must be powers of 2
-#define CDC_TX_FIFO_SIZE 128
-
 #define CDC_TIMEOUT_MS 25
 
 #define CDC_ENDP0_SIZE 8

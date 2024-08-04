@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?CDC_INIT?CH552_USB_CDC ~ (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC), ?PR?USB_ISR?CH552_USB ! (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>

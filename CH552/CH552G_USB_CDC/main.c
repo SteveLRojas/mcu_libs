@@ -72,22 +72,24 @@ int main()
 	prev_control_line_state = cdc_control_line_state;
 	
 	while(TRUE)
-	{	
+	{
+		RESET_KEEP = (IE & 0xF0) | (SCON & 0x0F);
 		if(cdc_bytes_available())
 		{
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_7, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
 			uart_write_byte(UART_0, cdc_read_byte());
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
 		}
 		
 		if(uart_bytes_available(UART_0))
 		{
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_7, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
 			cdc_write_byte(uart_read_byte(UART_0));
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_6));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
 		}
 		
 		if(prev_control_line_state != cdc_control_line_state)
 		{
-			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_7, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
 			cdc_set_serial_state(cdc_control_line_state & 3);
 			prev_control_line_state = cdc_control_line_state;
 		}

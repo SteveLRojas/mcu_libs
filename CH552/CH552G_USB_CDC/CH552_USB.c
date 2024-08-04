@@ -10,6 +10,8 @@ void (*usb_suspend_callback)(void) = NULL;
 volatile UINT16 sof_count;
 
 // HINT: Enabling SOF interrupts makes SOF tokens trigger UIF_TRANSFER. This breaks interrupt transfers, and any other transfers that happen immediately after a SOF
+// HINT: When you use a function pointer, the linker cannot correctly create a call tree for your program.
+// For this reason, you may have to correct the call tree for the data overlaying. Use the OVERLAY directive with the linker to do this.
 void usb_isr(void) interrupt INT_NO_USB
 {
 	if(UIF_TRANSFER)

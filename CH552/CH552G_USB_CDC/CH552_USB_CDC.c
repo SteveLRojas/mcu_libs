@@ -1,5 +1,4 @@
 #include "CH552.H"
-#include "CH552_FIFO.h"
 #include "CH552_USB.h"
 #include "CH552_USB_CDC.h"
 
@@ -14,25 +13,28 @@
 #define CDC_SERIAL_STATE_SIZE 9
 
 //TODO: remove tx_fifo, make ep3 double buffered
-fifo_t cdc_tx_fifo;
-UINT8 cdc_tx_buf[CDC_TX_FIFO_SIZE];
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
-UINT8 cdc_tx_busy;
 
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
 UINT8 xdata ep1_buffer[CDC_ENDP1_SIZE];
 volatile UINT8 xdata ep2_t0_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0000;
 volatile UINT8 xdata ep2_t1_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0040;
-UINT8 xdata ep3_buffer[CDC_ENDP3_SIZE];
+volatile UINT8 xdata ep3_t0_buffer[CDC_ENDP3_SIZE] _at_ 0x0080;
+volatile UINT8 xdata ep3_t1_buffer[CDC_ENDP3_SIZE] _at_ 0x00C0;
 
 UINT8 ep2_read_select;
 UINT8 ep2_t0_num_bytes;
 UINT8 ep2_t0_read_offset;
 UINT8 ep2_t1_num_bytes;
 UINT8 ep2_t1_read_offset;
+
+volatile UINT8 ep3_wip;
+volatile UINT8 ep3_write_select;
+UINT8 ep3_t0_num_bytes;
+UINT8 ep3_t1_num_bytes;
 //note to self: when a packet is received enable receiving again if the other buffer is empty.
 // when a packet is sent enable sending again if the other buffer is full.
 
@@ -190,33 +192,33 @@ void cdc_copy_descriptor(UINT8 len)
 // SOF interrupts are re-enableb after the interrupt transfer completes.
 void cdc_on_sof(void)
 {
-	UINT8 bytes_to_send;
-	
-	if(!cdc_tx_busy)
+	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
+	if((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE)	//TODO: can this be done by the write functions?
 	{
-		if((fifo_num_used(&cdc_tx_fifo) >= CDC_ENDP3_SIZE) || ((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS))
+		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
+		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
+	}
+	
+	// check for timeout, if the buffer is not being written to then enable transmitting and mark the buffer as full
+	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !ep3_wip)
+	{
+		if(usb_get_ep3_in_toggle())
 		{
-			bytes_to_send = fifo_num_used(&cdc_tx_fifo);
-			if(bytes_to_send > CDC_ENDP3_SIZE)
-				bytes_to_send = CDC_ENDP3_SIZE;
-			
-			fifo_read(&cdc_tx_fifo, ep3_buffer, bytes_to_send);
-			usb_set_ep3_tx_len(bytes_to_send);
-			usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
-			cdc_tx_busy = 1;
+			usb_set_ep3_tx_len(ep3_t1_num_bytes);
+			ep3_t1_num_bytes = CDC_ENDP3_SIZE;
 		}
+		else
+		{
+			usb_set_ep3_tx_len(ep3_t0_num_bytes);
+			ep3_t0_num_bytes = CDC_ENDP3_SIZE;
+		}
+		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
 	}
 	
 	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
-	if(usb_get_ep2_out_toggle())	//TODO: can this be done by the read functions?
+	if((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0)	//TODO: can this be done by the read functions?
 	{
-		if(!ep2_t1_num_bytes)
-			usb_set_ep2_out_res(USB_OUT_RES_ACK);
-	}
-	else
-	{
-		if(!ep2_t0_num_bytes)
-			usb_set_ep2_out_res(USB_OUT_RES_ACK);
+		usb_set_ep2_out_res(USB_OUT_RES_ACK);
 	}
 		
 	if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
@@ -307,18 +309,27 @@ void cdc_on_in(UINT8 ep)
 	
 	if(ep == EP_3)
 	{
-		if(fifo_num_used(&cdc_tx_fifo) >= CDC_ENDP3_SIZE)
+		cdc_last_data_time = sof_count;
+		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
+		//auto-toggle is enabled, so here the toggle should point to the next buffer that will transmit
+		if(usb_get_ep3_in_toggle())
 		{
-			fifo_read(&cdc_tx_fifo, ep3_buffer, CDC_ENDP3_SIZE);
-			usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
+			ep3_t0_num_bytes = 0;
+			if(ep3_t1_num_bytes != CDC_ENDP3_SIZE)
+			{
+				usb_set_ep3_tx_len(0);
+				usb_set_ep3_in_res(USB_IN_RES_NAK);
+			}
 		}
 		else
 		{
-			usb_set_ep3_tx_len(0);
-			usb_set_ep3_in_res(USB_IN_RES_NAK);
-			cdc_tx_busy = 0;
+			ep3_t1_num_bytes = 0;
+			if(ep3_t0_num_bytes != CDC_ENDP3_SIZE)
+			{
+				usb_set_ep3_tx_len(0);
+				usb_set_ep3_in_res(USB_IN_RES_NAK);
+			}
 		}
-		cdc_last_data_time = sof_count;
 	}
 }
 
@@ -538,12 +549,17 @@ void cdc_on_setup(UINT8 ep)
 void cdc_on_rst(void)
 {
 	usb_disable_interrupts(USB_INT_SOF);
+	
+	ep2_read_select = 0;
 	ep2_t0_num_bytes = 0;
 	ep2_t0_read_offset = 0;
 	ep2_t1_num_bytes = 0;
 	ep2_t1_read_offset = 0;
-	ep2_read_select = 0;
-	fifo_init(&cdc_tx_fifo, cdc_tx_buf, CDC_TX_FIFO_SIZE);
+	
+	ep3_wip = 0;
+	ep3_write_select = 0;
+	ep3_t0_num_bytes = 0;
+	ep3_t1_num_bytes = 0;
 	
 	usb_set_ep0_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0);
 	usb_set_ep1_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1);
@@ -553,7 +569,6 @@ void cdc_on_rst(void)
 	cdc_last_data_time = 0;
 	cdc_last_status_time = 0;
 	sof_count = 0;
-	cdc_tx_busy = 0;
 }
 
 usb_config_t code usb_config = 
@@ -561,21 +576,19 @@ usb_config_t code usb_config =
 	(UINT16)ep0_buffer,
 	(UINT16)ep1_buffer,
 	(UINT16)ep2_t0_buffer,
-	(UINT16)ep3_buffer,
+	(UINT16)ep3_t0_buffer,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0,
 	USB_EP1_TX_EN | USB_EP1_BUF_SINGLE,
-	USB_EP2_RX_EN | USB_EP2_BUF_DOUBLE | USB_EP3_TX_EN | USB_EP3_BUF_SINGLE,
+	USB_EP2_RX_EN | USB_EP2_BUF_DOUBLE | USB_EP3_TX_EN | USB_EP3_BUF_DOUBLE,
 	USB_INT_TRANSFER | USB_INT_RST
 };
 
 void cdc_init(void)
 {
-	fifo_init(&cdc_tx_fifo, cdc_tx_buf, CDC_TX_FIFO_SIZE);
-	
 	usb_sof_callback = cdc_on_sof;
 	usb_out_callback = cdc_on_out;
 	usb_in_callback = cdc_on_in;
@@ -708,34 +721,84 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 // Send
 UINT16 cdc_bytes_available_for_write(void)
 {
-	return fifo_num_free(&cdc_tx_fifo);
+	return (CDC_ENDP3_SIZE - ep3_t0_num_bytes) + (CDC_ENDP3_SIZE - ep3_t1_num_bytes);
 }
 
 void cdc_write_byte(UINT8 val)
 {
-	usb_disable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-	fifo_push(&cdc_tx_fifo, val);
-	usb_enable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
+	ep3_wip = 1;
+	if(ep3_write_select)
+	{
+		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+		{
+			ep3_wip = 0;
+			return;
+		}
+		ep3_t1_buffer[ep3_t1_num_bytes] = val;
+		++ep3_t1_num_bytes;
+		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+			ep3_write_select = 0;
+	}
+	else
+	{
+		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+		{
+			ep3_wip = 0;
+			return;
+		}
+		ep3_t0_buffer[ep3_t0_num_bytes] = val;
+		++ep3_t0_num_bytes;
+		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+			ep3_write_select = 1;
+	}
+	ep3_wip = 0;
 }
 
 void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 {
-	UINT16 num_remaining = num_bytes;
 	UINT16 num_to_write = 0;
-
-	while(num_remaining)
+	
+	ep3_wip = 1;
+	while(num_bytes)
 	{
-		num_to_write = fifo_num_free(&cdc_tx_fifo);
-		if(num_to_write > num_remaining)
+		if(ep3_write_select)
 		{
-			num_to_write = num_remaining;
+			num_to_write = CDC_ENDP3_SIZE - ep3_t1_num_bytes;
+			if(!num_to_write)
+				continue;
+			if(num_to_write > num_bytes)
+				num_to_write = num_bytes;
+			
+			num_bytes -= num_to_write;
+			do
+			{
+				ep3_t1_buffer[ep3_t1_num_bytes] = *src;
+				++src;
+				++ep3_t1_num_bytes;
+			} while(--num_to_write);
+			
+			if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+				ep3_write_select = 0;
 		}
-
-		usb_disable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-		fifo_write(&cdc_tx_fifo, src, num_to_write);
-		usb_enable_interrupts(USB_INT_TRANSFER | USB_INT_RST);
-		
-		num_remaining -= num_to_write;
-		src += num_to_write;
+		else
+		{
+			num_to_write = CDC_ENDP3_SIZE - ep3_t0_num_bytes;
+			if(!num_to_write)
+				continue;
+			if(num_to_write > num_bytes)
+				num_to_write = num_bytes;
+			
+			num_bytes -= num_to_write;
+			do
+			{
+				ep3_t0_buffer[ep3_t0_num_bytes] = *src;
+				++src;
+				++ep3_t0_num_bytes;
+			} while(--num_to_write);
+			
+			if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+				ep3_write_select = 1;
+		}
 	}
+	ep3_wip = 0;
 }
