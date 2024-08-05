@@ -12,7 +12,6 @@
 #define CDC_LINE_CODING_SIZE 7
 #define CDC_SERIAL_STATE_SIZE 9
 
-//TODO: remove tx_fifo, make ep3 double buffered
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
@@ -35,8 +34,6 @@ volatile UINT8 ep3_wip;
 volatile UINT8 ep3_write_select;
 UINT8 ep3_t0_num_bytes;
 UINT8 ep3_t1_num_bytes;
-//note to self: when a packet is received enable receiving again if the other buffer is empty.
-// when a packet is sent enable sending again if the other buffer is full.
 
 #define cdc_setup_buf ((PUSB_SETUP_REQ)ep0_buffer)
 

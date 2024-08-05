@@ -1,5 +1,5 @@
-#ifndef _USB_CDC_H_
-#define _USB_CDC_H_
+#ifndef _CH552_USB_CDC_H_
+#define _CH552_USB_CDC_H_
 
 #define CDC_TIMEOUT_MS 25
 
@@ -37,6 +37,7 @@ typedef struct _CDC_LINE_CODING {
 #define CDC_CLS_RTS	0x02
 #define CDC_CLS_DTR	0x01
 
+extern volatile cdc_line_coding_t cdc_line_coding;
 extern volatile UINT8 cdc_control_line_state;
 
 void cdc_init(void);

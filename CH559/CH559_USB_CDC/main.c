@@ -3,8 +3,7 @@
 #include "CH559_GPIO.h"
 #include "CH559_TIMER.h"
 #include "CH559_UART.h"
-#include "CH559_USB.h"
-#include "usb_cdc.h"
+#include "CH559_USB_CDC.h"
 
 char code test_string[] = "Unicorn\n";
 
@@ -15,6 +14,21 @@ char code test_string[] = "Unicorn\n";
 // USB_DP = P51
 // LED1 = P14
 // LED2 = P15
+
+void usb_halt(UINT8 keep)
+{
+	RESET_KEEP = keep;
+	USB_CTRL = 0;
+	IE_USB = 0;
+	
+	while(TRUE)
+	{
+		gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_1);
+		mDelaymS(50);
+		gpio_set_pin(GPIO_PORT_1, GPIO_PIN_1);
+		mDelaymS(50);
+	}
+}
 
 void byte_to_hex(UINT8 value, char* buff)
 {
@@ -27,6 +41,7 @@ void byte_to_hex(UINT8 value, char* buff)
 int main()
 {
 	char last_keep_str[4];
+	UINT8 prev_control_line_state;
 	
 	CfgFsys();	//CH559 clock selection configuration
 	
@@ -61,19 +76,30 @@ int main()
 	uart_write_string(UART_0, last_keep_str);
 	
 	cdc_init();
+	cdc_set_serial_state(0x03);
+	prev_control_line_state = cdc_control_line_state;
 
 	while(TRUE)
-	{	
+	{
+		RESET_KEEP = (IE & 0xF0) | (SCON & 0x0F);
 		if(cdc_bytes_available())
 		{
+			gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_5);
 			uart_write_byte(UART_0, cdc_read_byte());
-			gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_4);
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_5));
 		}
 		
 		if(uart_bytes_available(UART_0))
 		{
-			cdc_write_byte(uart_read_byte(UART_0));
 			gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_5);
+			cdc_write_byte(uart_read_byte(UART_0));
+			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_5));
+		}
+		
+		if(prev_control_line_state != cdc_control_line_state)
+		{
+			cdc_set_serial_state(cdc_control_line_state & 3);
+			prev_control_line_state = cdc_control_line_state;
 		}
 	}
 }

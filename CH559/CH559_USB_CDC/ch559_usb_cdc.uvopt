@@ -355,8 +355,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\usb_cdc.c</PathWithFileName>
-      <FilenameWithoutPath>usb_cdc.c</FilenameWithoutPath>
+      <PathWithFileName>.\CH559_USB_CDC.c</PathWithFileName>
+      <FilenameWithoutPath>CH559_USB_CDC.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -367,8 +367,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\usb_cdc.h</PathWithFileName>
-      <FilenameWithoutPath>usb_cdc.h</FilenameWithoutPath>
+      <PathWithFileName>.\CH559_USB_CDC.h</PathWithFileName>
+      <FilenameWithoutPath>CH559_USB_CDC.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?CDC_INIT?CH559_USB_CDC ~ (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC), ?PR?USB_ISR?CH559_USB ! (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -452,14 +452,14 @@
               <FilePath>.\CH559_USB.h</FilePath>
             </File>
             <File>
-              <FileName>usb_cdc.c</FileName>
+              <FileName>CH559_USB_CDC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\usb_cdc.c</FilePath>
+              <FilePath>.\CH559_USB_CDC.c</FilePath>
             </File>
             <File>
-              <FileName>usb_cdc.h</FileName>
+              <FileName>CH559_USB_CDC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\usb_cdc.h</FilePath>
+              <FilePath>.\CH559_USB_CDC.h</FilePath>
             </File>
           </Files>
         </Group>
