@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch552_hid_cc_mouse</OutputName>
+          <OutputName>ch552_hid_cc_pan_mouse</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -177,7 +177,7 @@
           </Flash1>
           <bUseTDR>0</bUseTDR>
           <Flash2></Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -346,7 +346,7 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?HID_INIT?CH552_HID_CC_MOUSE ~ (?PR?_HID_ON_OUT?CH552_HID_CC_MOUSE, ?PR?_HID_ON_IN?CH552_HID_CC_MOUSE, ?PR?_HID_ON_SETUP?CH552_HID_CC_MOUSE, ?PR?HID_ON_RST?CH552_HID_CC_MOUSE), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?CH552_HID_CC_MOUSE, ?PR?_HID_ON_IN?CH552_HID_CC_MOUSE, ?PR?_HID_ON_SETUP?CH552_HID_CC_MOUSE, ?PR?HID_ON_RST?CH552_HID_CC_MOUSE)</OverlayString>
+            <OverlayString>?PR?HID_INIT?CH552_HID_CC_PAN_MOUSE ~ (?PR?_HID_ON_OUT?CH552_HID_CC_PAN_MOUSE, ?PR?_HID_ON_IN?CH552_HID_CC_PAN_MOUSE, ?PR?_HID_ON_SETUP?CH552_HID_CC_PAN_MOUSE, ?PR?HID_ON_RST?CH552_HID_CC_PAN_MOUSE), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?CH552_HID_CC_PAN_MOUSE, ?PR?_HID_ON_IN?CH552_HID_CC_PAN_MOUSE, ?PR?_HID_ON_SETUP?CH552_HID_CC_PAN_MOUSE, ?PR?HID_ON_RST?CH552_HID_CC_PAN_MOUSE)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile>.\link.lin</LinkerCmdFile>
@@ -377,6 +377,11 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
+              <FileName>STARTUP.A51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\STARTUP.A51</FilePath>
+            </File>
+            <File>
               <FileName>CH552.H</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552.H</FilePath>
@@ -402,14 +407,14 @@
               <FilePath>.\CH552_GPIO.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_HID_CC_MOUSE.c</FileName>
+              <FileName>CH552_HID_CC_PAN_MOUSE.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH552_HID_CC_MOUSE.c</FilePath>
+              <FilePath>.\CH552_HID_CC_PAN_MOUSE.c</FilePath>
             </File>
             <File>
-              <FileName>CH552_HID_CC_MOUSE.h</FileName>
+              <FileName>CH552_HID_CC_PAN_MOUSE.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH552_HID_CC_MOUSE.h</FilePath>
+              <FilePath>.\CH552_HID_CC_PAN_MOUSE.h</FilePath>
             </File>
             <File>
               <FileName>CH552_TIMER.c</FileName>
@@ -445,11 +450,6 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>STARTUP.A51</FileName>
-              <FileType>2</FileType>
-              <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
               <FileName>System.c</FileName>

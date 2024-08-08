@@ -4,6 +4,8 @@
 volatile UINT16 qenc_count;
 volatile UINT16 qenc_raw_count;
 UINT8 qenc_prev_event;	//Used to prevent false counting caused by bad contacts
+UINT8 qenc_a_prev;
+UINT8 qenc_b_prev;
 
 //CW Events:
 //	0: Falling A, high B
@@ -54,13 +56,60 @@ void int1_isr(void) interrupt INT_NO_INT1
 	}
 }
 
-void qenc_init()
+void qenc_init(UINT8 qenc_mode)
 {
 	qenc_count = 0;
 	qenc_raw_count = 0;
-	IT0 = 1;
-	IT1 = 1;
-	//Enable interrupts
-	EX0 = 1;
-	EX1 = 1;
+	if(qenc_mode == QENC_MODE_INTERRUPT)
+	{
+		IT0 = 1;
+		IT1 = 1;
+		//Enable interrupts
+		EX0 = 1;
+		EX1 = 1;
+	}
+	else if(qenc_mode == QENC_MODE_POLLED)
+	{
+		qenc_a_prev = INT0;
+		qenc_b_prev = INT1;
+	}
+}
+
+void qenc_poll(void)
+{
+	UINT8 qenc_a = INT0;
+	UINT8 qenc_b = INT1;
+	if(qenc_a_prev & ~qenc_a)	//Falling A
+	{
+		if(qenc_b)
+			++qenc_count;
+		else
+			--qenc_count;
+	}
+	
+	if(qenc_b_prev & ~qenc_b)	//Falling B
+	{
+		if(qenc_a)
+			--qenc_count;
+		else
+			++qenc_count;
+	}
+	
+	if(qenc_a & ~qenc_a_prev)	//Rising A
+	{
+		if(qenc_b)
+			--qenc_count;
+		else
+			++qenc_count;
+	}
+	
+	if(qenc_b & ~qenc_b_prev)	//Rising B
+	{
+		if(qenc_a)
+			++qenc_count;
+		else
+			--qenc_count;
+	}
+	qenc_a_prev = qenc_a;
+	qenc_b_prev = qenc_b;
 }

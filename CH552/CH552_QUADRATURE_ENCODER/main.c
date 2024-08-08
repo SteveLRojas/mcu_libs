@@ -58,7 +58,7 @@ int main()
 	hex_str[3] = '\0';
 	uart_write_string(UART_0, hex_str);
 	
-	qenc_init();
+	qenc_init(QENC_MODE_INTERRUPT);
 	
 	while(TRUE)
 	{

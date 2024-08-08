@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?HID_INIT?USB_CONSUMER_CONTROL ~ (?PR?_HID_ON_OUT?USB_CONSUMER_CONTROL, ?PR?_HID_ON_IN?USB_CONSUMER_CONTROL, ?PR?_HID_ON_SETUP?USB_CONSUMER_CONTROL, ?PR?HID_ON_RST?USB_CONSUMER_CONTROL), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?USB_CONSUMER_CONTROL, ?PR?_HID_ON_IN?USB_CONSUMER_CONTROL, ?PR?_HID_ON_SETUP?USB_CONSUMER_CONTROL, ?PR?HID_ON_RST?USB_CONSUMER_CONTROL)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>

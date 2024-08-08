@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xffff</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -346,7 +346,7 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?HID_INIT?USB_HID_PAN_MOUSE ~ (?PR?_HID_ON_OUT?USB_HID_PAN_MOUSE, ?PR?_HID_ON_IN?USB_HID_PAN_MOUSE, ?PR?_HID_ON_SETUP?USB_HID_PAN_MOUSE, ?PR?HID_ON_RST?USB_HID_PAN_MOUSE), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?USB_HID_PAN_MOUSE, ?PR?_HID_ON_IN?USB_HID_PAN_MOUSE, ?PR?_HID_ON_SETUP?USB_HID_PAN_MOUSE, ?PR?HID_ON_RST?USB_HID_PAN_MOUSE)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile></LinkerCmdFile>
