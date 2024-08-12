@@ -191,15 +191,7 @@ void cdc_copy_descriptor(UINT8 len)
 // When a notification needs to be sent the SOF interrupts are disabled so that the interrupt transfer can happen.
 // SOF interrupts are re-enableb after the interrupt transfer completes.
 void cdc_on_sof(void)
-{
-	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
-	if(!cdc_tx_enabled && ((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE))	//TODO: can this be done by the write functions?
-	{
-		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
-		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
-		cdc_tx_enabled = 1;
-	}
-	
+{	
 	// check for timeout, if the buffer is not being written to then enable transmitting and mark the buffer as full
 	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !(ep3_wip | cdc_tx_enabled))
 	{
@@ -578,6 +570,17 @@ void cdc_on_rst(void)
 	cdc_tx_enabled = 0;
 }
 
+void cdc_enable_tx(void)
+{
+	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
+	if(!cdc_tx_enabled && ((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE))
+	{
+		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
+		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
+		cdc_tx_enabled = 1;
+	}
+}
+
 usb_config_t code usb_config = 
 {
 	(UINT16)ep0_buffer,
@@ -747,7 +750,10 @@ void cdc_write_byte(UINT8 val)
 		++ep_num_bytes;
 		ep3_t1_num_bytes = ep_num_bytes;
 		if(ep_num_bytes == CDC_ENDP3_SIZE)
+		{
 			ep3_write_select = 0;
+			cdc_enable_tx();
+		}
 	}
 	else
 	{
@@ -761,7 +767,10 @@ void cdc_write_byte(UINT8 val)
 		++ep_num_bytes;
 		ep3_t0_num_bytes = ep_num_bytes;
 		if(ep_num_bytes == CDC_ENDP3_SIZE)
+		{
 			ep3_write_select = 1;
+			cdc_enable_tx();
+		}
 	}
 	ep3_wip = 0;
 }
@@ -793,7 +802,10 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			ep3_t1_num_bytes = ep_num_bytes;
 			
 			if(ep_num_bytes == CDC_ENDP3_SIZE)
+			{
 				ep3_write_select = 0;
+				cdc_enable_tx();
+			}
 		}
 		else
 		{
@@ -814,7 +826,10 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			ep3_t0_num_bytes = ep_num_bytes;
 			
 			if(ep_num_bytes == CDC_ENDP3_SIZE)
+			{
 				ep3_write_select = 1;
+				cdc_enable_tx();
+			}
 		}
 	}
 	ep3_wip = 0;
