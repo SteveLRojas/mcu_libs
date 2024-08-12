@@ -16,6 +16,7 @@
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
+UINT8 cdc_tx_enabled;
 
 // Buffers must be kept aligned to even addresses.
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
@@ -34,8 +35,8 @@ UINT8 ep2_t1_read_offset;
 
 volatile UINT8 ep3_wip;
 volatile UINT8 ep3_write_select;
-UINT8 ep3_t0_num_bytes;
-UINT8 ep3_t1_num_bytes;
+volatile UINT8 ep3_t0_num_bytes;
+volatile UINT8 ep3_t1_num_bytes;
 
 #define cdc_setup_buf ((PUSB_SETUP_REQ)ep0_buffer)
 
@@ -192,26 +193,30 @@ void cdc_copy_descriptor(UINT8 len)
 void cdc_on_sof(void)
 {
 	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
-	if((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE)	//TODO: can this be done by the write functions?
+	if(!cdc_tx_enabled && ((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE))	//TODO: can this be done by the write functions?
 	{
 		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
 		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
+		cdc_tx_enabled = 1;
 	}
 	
 	// check for timeout, if the buffer is not being written to then enable transmitting and mark the buffer as full
-	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !ep3_wip)
+	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !(ep3_wip | cdc_tx_enabled))
 	{
-		if(usb_get_ep3_in_toggle())
+		if(ep3_write_select)
 		{
 			usb_set_ep3_tx_len(ep3_t1_num_bytes);
 			ep3_t1_num_bytes = CDC_ENDP3_SIZE;
+			ep3_write_select = 0;
 		}
 		else
 		{
 			usb_set_ep3_tx_len(ep3_t0_num_bytes);
 			ep3_t0_num_bytes = CDC_ENDP3_SIZE;
+			ep3_write_select = 1;
 		}
 		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
+		cdc_tx_enabled = 1;
 	}
 	
 	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
@@ -318,6 +323,7 @@ void cdc_on_in(UINT8 ep)
 			{
 				usb_set_ep3_tx_len(0);
 				usb_set_ep3_in_res(USB_IN_RES_NAK);
+				cdc_tx_enabled = 0;
 			}
 		}
 		else
@@ -327,6 +333,7 @@ void cdc_on_in(UINT8 ep)
 			{
 				usb_set_ep3_tx_len(0);
 				usb_set_ep3_in_res(USB_IN_RES_NAK);
+				cdc_tx_enabled = 0;
 			}
 		}
 	}
@@ -568,6 +575,7 @@ void cdc_on_rst(void)
 	cdc_last_data_time = 0;
 	cdc_last_status_time = 0;
 	sof_count = 0;
+	cdc_tx_enabled = 0;
 }
 
 usb_config_t code usb_config = 
@@ -725,29 +733,34 @@ UINT16 cdc_bytes_available_for_write(void)
 
 void cdc_write_byte(UINT8 val)
 {
+	UINT8 ep_num_bytes;
 	ep3_wip = 1;
 	if(ep3_write_select)
 	{
-		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+		ep_num_bytes = ep3_t1_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 		{
 			ep3_wip = 0;
 			return;
 		}
-		ep3_t1_buffer[ep3_t1_num_bytes] = val;
-		++ep3_t1_num_bytes;
-		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+		ep3_t1_buffer[ep_num_bytes] = val;
+		++ep_num_bytes;
+		ep3_t1_num_bytes = ep_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 			ep3_write_select = 0;
 	}
 	else
 	{
-		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+		ep_num_bytes = ep3_t0_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 		{
 			ep3_wip = 0;
 			return;
 		}
-		ep3_t0_buffer[ep3_t0_num_bytes] = val;
-		++ep3_t0_num_bytes;
-		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+		ep3_t0_buffer[ep_num_bytes] = val;
+		++ep_num_bytes;
+		ep3_t0_num_bytes = ep_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 			ep3_write_select = 1;
 	}
 	ep3_wip = 0;
@@ -756,13 +769,15 @@ void cdc_write_byte(UINT8 val)
 void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 {
 	UINT16 num_to_write = 0;
+	UINT8 ep_num_bytes;
 	
 	ep3_wip = 1;
 	while(num_bytes)
 	{
 		if(ep3_write_select)
 		{
-			num_to_write = CDC_ENDP3_SIZE - ep3_t1_num_bytes;
+			ep_num_bytes = ep3_t1_num_bytes;
+			num_to_write = CDC_ENDP3_SIZE - ep_num_bytes;
 			if(!num_to_write)
 				continue;
 			if(num_to_write > num_bytes)
@@ -771,17 +786,19 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			num_bytes -= num_to_write;
 			do
 			{
-				ep3_t1_buffer[ep3_t1_num_bytes] = *src;
+				ep3_t1_buffer[ep_num_bytes] = *src;
 				++src;
-				++ep3_t1_num_bytes;
+				++ep_num_bytes;
 			} while(--num_to_write);
+			ep3_t1_num_bytes = ep_num_bytes;
 			
-			if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+			if(ep_num_bytes == CDC_ENDP3_SIZE)
 				ep3_write_select = 0;
 		}
 		else
 		{
-			num_to_write = CDC_ENDP3_SIZE - ep3_t0_num_bytes;
+			ep_num_bytes = ep3_t0_num_bytes;
+			num_to_write = CDC_ENDP3_SIZE - ep_num_bytes;
 			if(!num_to_write)
 				continue;
 			if(num_to_write > num_bytes)
@@ -790,12 +807,13 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			num_bytes -= num_to_write;
 			do
 			{
-				ep3_t0_buffer[ep3_t0_num_bytes] = *src;
+				ep3_t0_buffer[ep_num_bytes] = *src;
 				++src;
-				++ep3_t0_num_bytes;
+				++ep_num_bytes;
 			} while(--num_to_write);
+			ep3_t0_num_bytes = ep_num_bytes;
 			
-			if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+			if(ep_num_bytes == CDC_ENDP3_SIZE)
 				ep3_write_select = 1;
 		}
 	}
