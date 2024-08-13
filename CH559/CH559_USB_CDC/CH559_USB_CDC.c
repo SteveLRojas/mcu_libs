@@ -17,6 +17,7 @@
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
 UINT8 cdc_tx_enabled;
+UINT8 cdc_rx_enabled;
 
 // Buffers must be kept aligned to even addresses.
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
@@ -210,12 +211,6 @@ void cdc_on_sof(void)
 		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
 		cdc_tx_enabled = 1;
 	}
-	
-	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
-	if((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0)	//TODO: can this be done by the read functions?
-	{
-		usb_set_ep2_out_res(USB_OUT_RES_ACK);
-	}
 		
 	if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
 	{
@@ -249,13 +244,19 @@ void cdc_on_out(UINT8 ep)
 		{
 			ep2_t0_num_bytes = usb_get_rx_len();
 			if(ep2_t1_num_bytes)
+			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
+				cdc_rx_enabled = 0;
+			}
 		}
 		else
 		{
 			ep2_t1_num_bytes = usb_get_rx_len();
 			if(ep2_t0_num_bytes)
+			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
+				cdc_rx_enabled = 0;
+			}
 		}
 	}
 }
@@ -568,6 +569,7 @@ void cdc_on_rst(void)
 	cdc_last_status_time = 0;
 	sof_count = 0;
 	cdc_tx_enabled = 0;
+	cdc_rx_enabled = 1;
 }
 
 void cdc_enable_tx(void)
@@ -578,6 +580,16 @@ void cdc_enable_tx(void)
 		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
 		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
 		cdc_tx_enabled = 1;
+	}
+}
+
+void cdc_enable_rx(void)
+{
+	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
+	if(!cdc_rx_enabled && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
+	{
+		usb_set_ep2_out_res(USB_OUT_RES_ACK);
+		cdc_rx_enabled = 1;
 	}
 }
 
@@ -652,6 +664,7 @@ UINT8 cdc_read_byte(void)
 			ep2_t1_read_offset = 0;
 			ep2_t1_num_bytes = 0;
 			ep2_read_select = 0;
+			cdc_enable_rx();
 		}
 	}
 	else
@@ -663,6 +676,7 @@ UINT8 cdc_read_byte(void)
 			ep2_t0_read_offset = 0;
 			ep2_t0_num_bytes = 0;
 			ep2_read_select = 1;
+			cdc_enable_rx();
 		}
 	}
 	
@@ -698,6 +712,7 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 				ep2_t1_read_offset = 0;
 				ep2_t1_num_bytes = 0;
 				ep2_read_select = 0;
+				cdc_enable_rx();
 			}
 		}
 		else
@@ -723,6 +738,7 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 				ep2_t0_read_offset = 0;
 				ep2_t0_num_bytes = 0;
 				ep2_read_select = 1;
+				cdc_enable_rx();
 			}
 		}
 	}
