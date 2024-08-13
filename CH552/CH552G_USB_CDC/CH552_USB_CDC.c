@@ -15,6 +15,8 @@
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
+UINT8 cdc_tx_enabled;
+UINT8 cdc_rx_enabled;
 
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
@@ -32,8 +34,8 @@ UINT8 ep2_t1_read_offset;
 
 volatile UINT8 ep3_wip;
 volatile UINT8 ep3_write_select;
-UINT8 ep3_t0_num_bytes;
-UINT8 ep3_t1_num_bytes;
+volatile UINT8 ep3_t0_num_bytes;
+volatile UINT8 ep3_t1_num_bytes;
 
 #define cdc_setup_buf ((PUSB_SETUP_REQ)ep0_buffer)
 
@@ -188,34 +190,24 @@ void cdc_copy_descriptor(UINT8 len)
 // When a notification needs to be sent the SOF interrupts are disabled so that the interrupt transfer can happen.
 // SOF interrupts are re-enableb after the interrupt transfer completes.
 void cdc_on_sof(void)
-{
-	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
-	if((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE)	//TODO: can this be done by the write functions?
-	{
-		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
-		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
-	}
-	
+{	
 	// check for timeout, if the buffer is not being written to then enable transmitting and mark the buffer as full
-	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !ep3_wip)
+	if(((sof_count - cdc_last_data_time) >= CDC_TIMEOUT_MS) && !(ep3_wip | cdc_tx_enabled))
 	{
-		if(usb_get_ep3_in_toggle())
+		if(ep3_write_select)
 		{
 			usb_set_ep3_tx_len(ep3_t1_num_bytes);
 			ep3_t1_num_bytes = CDC_ENDP3_SIZE;
+			ep3_write_select = 0;
 		}
 		else
 		{
 			usb_set_ep3_tx_len(ep3_t0_num_bytes);
 			ep3_t0_num_bytes = CDC_ENDP3_SIZE;
+			ep3_write_select = 1;
 		}
 		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
-	}
-	
-	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
-	if((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0)	//TODO: can this be done by the read functions?
-	{
-		usb_set_ep2_out_res(USB_OUT_RES_ACK);
+		cdc_tx_enabled = 1;
 	}
 		
 	if((sof_count - cdc_last_status_time) >= CDC_TIMEOUT_MS)
@@ -250,13 +242,19 @@ void cdc_on_out(UINT8 ep)
 		{
 			ep2_t0_num_bytes = usb_get_rx_len();
 			if(ep2_t1_num_bytes)
+			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
+				cdc_rx_enabled = 0;
+			}
 		}
 		else
 		{
 			ep2_t1_num_bytes = usb_get_rx_len();
 			if(ep2_t0_num_bytes)
+			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
+				cdc_rx_enabled = 0;
+			}
 		}
 	}
 }
@@ -316,6 +314,7 @@ void cdc_on_in(UINT8 ep)
 			{
 				usb_set_ep3_tx_len(0);
 				usb_set_ep3_in_res(USB_IN_RES_NAK);
+				cdc_tx_enabled = 0;
 			}
 		}
 		else
@@ -325,6 +324,7 @@ void cdc_on_in(UINT8 ep)
 			{
 				usb_set_ep3_tx_len(0);
 				usb_set_ep3_in_res(USB_IN_RES_NAK);
+				cdc_tx_enabled = 0;
 			}
 		}
 	}
@@ -566,6 +566,29 @@ void cdc_on_rst(void)
 	cdc_last_data_time = 0;
 	cdc_last_status_time = 0;
 	sof_count = 0;
+	cdc_tx_enabled = 0;
+	cdc_rx_enabled = 1;
+}
+
+void cdc_enable_tx(void)
+{
+	// check toggle, if the buffer pointed to by the toggle is completely full then enable transmitting
+	if(!cdc_tx_enabled && ((usb_get_ep3_in_toggle() ? ep3_t1_num_bytes : ep3_t0_num_bytes) == CDC_ENDP3_SIZE))
+	{
+		usb_set_ep3_tx_len(CDC_ENDP3_SIZE);
+		usb_set_ep3_in_res(USB_IN_RES_EXPECT_ACK);
+		cdc_tx_enabled = 1;
+	}
+}
+
+void cdc_enable_rx(void)
+{
+	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
+	if(!cdc_rx_enabled && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
+	{
+		usb_set_ep2_out_res(USB_OUT_RES_ACK);
+		cdc_rx_enabled = 1;
+	}
 }
 
 usb_config_t code usb_config = 
@@ -639,6 +662,7 @@ UINT8 cdc_read_byte(void)
 			ep2_t1_read_offset = 0;
 			ep2_t1_num_bytes = 0;
 			ep2_read_select = 0;
+			cdc_enable_rx();
 		}
 	}
 	else
@@ -650,6 +674,7 @@ UINT8 cdc_read_byte(void)
 			ep2_t0_read_offset = 0;
 			ep2_t0_num_bytes = 0;
 			ep2_read_select = 1;
+			cdc_enable_rx();
 		}
 	}
 	
@@ -685,6 +710,7 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 				ep2_t1_read_offset = 0;
 				ep2_t1_num_bytes = 0;
 				ep2_read_select = 0;
+				cdc_enable_rx();
 			}
 		}
 		else
@@ -710,6 +736,7 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 				ep2_t0_read_offset = 0;
 				ep2_t0_num_bytes = 0;
 				ep2_read_select = 1;
+				cdc_enable_rx();
 			}
 		}
 	}
@@ -723,30 +750,41 @@ UINT16 cdc_bytes_available_for_write(void)
 
 void cdc_write_byte(UINT8 val)
 {
+	UINT8 ep_num_bytes;
 	ep3_wip = 1;
 	if(ep3_write_select)
 	{
-		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+		ep_num_bytes = ep3_t1_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 		{
 			ep3_wip = 0;
 			return;
 		}
-		ep3_t1_buffer[ep3_t1_num_bytes] = val;
-		++ep3_t1_num_bytes;
-		if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+		ep3_t1_buffer[ep_num_bytes] = val;
+		++ep_num_bytes;
+		ep3_t1_num_bytes = ep_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
+		{
 			ep3_write_select = 0;
+			cdc_enable_tx();
+		}
 	}
 	else
 	{
-		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+		ep_num_bytes = ep3_t0_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
 		{
 			ep3_wip = 0;
 			return;
 		}
-		ep3_t0_buffer[ep3_t0_num_bytes] = val;
-		++ep3_t0_num_bytes;
-		if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+		ep3_t0_buffer[ep_num_bytes] = val;
+		++ep_num_bytes;
+		ep3_t0_num_bytes = ep_num_bytes;
+		if(ep_num_bytes == CDC_ENDP3_SIZE)
+		{
 			ep3_write_select = 1;
+			cdc_enable_tx();
+		}
 	}
 	ep3_wip = 0;
 }
@@ -754,13 +792,15 @@ void cdc_write_byte(UINT8 val)
 void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 {
 	UINT16 num_to_write = 0;
+	UINT8 ep_num_bytes;
 	
 	ep3_wip = 1;
 	while(num_bytes)
 	{
 		if(ep3_write_select)
 		{
-			num_to_write = CDC_ENDP3_SIZE - ep3_t1_num_bytes;
+			ep_num_bytes = ep3_t1_num_bytes;
+			num_to_write = CDC_ENDP3_SIZE - ep_num_bytes;
 			if(!num_to_write)
 				continue;
 			if(num_to_write > num_bytes)
@@ -769,17 +809,22 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			num_bytes -= num_to_write;
 			do
 			{
-				ep3_t1_buffer[ep3_t1_num_bytes] = *src;
+				ep3_t1_buffer[ep_num_bytes] = *src;
 				++src;
-				++ep3_t1_num_bytes;
+				++ep_num_bytes;
 			} while(--num_to_write);
+			ep3_t1_num_bytes = ep_num_bytes;
 			
-			if(ep3_t1_num_bytes == CDC_ENDP3_SIZE)
+			if(ep_num_bytes == CDC_ENDP3_SIZE)
+			{
 				ep3_write_select = 0;
+				cdc_enable_tx();
+			}
 		}
 		else
 		{
-			num_to_write = CDC_ENDP3_SIZE - ep3_t0_num_bytes;
+			ep_num_bytes = ep3_t0_num_bytes;
+			num_to_write = CDC_ENDP3_SIZE - ep_num_bytes;
 			if(!num_to_write)
 				continue;
 			if(num_to_write > num_bytes)
@@ -788,13 +833,17 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 			num_bytes -= num_to_write;
 			do
 			{
-				ep3_t0_buffer[ep3_t0_num_bytes] = *src;
+				ep3_t0_buffer[ep_num_bytes] = *src;
 				++src;
-				++ep3_t0_num_bytes;
+				++ep_num_bytes;
 			} while(--num_to_write);
+			ep3_t0_num_bytes = ep_num_bytes;
 			
-			if(ep3_t0_num_bytes == CDC_ENDP3_SIZE)
+			if(ep_num_bytes == CDC_ENDP3_SIZE)
+			{
 				ep3_write_select = 1;
+				cdc_enable_tx();
+			}
 		}
 	}
 	ep3_wip = 0;

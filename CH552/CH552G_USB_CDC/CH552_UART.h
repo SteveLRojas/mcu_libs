@@ -3,7 +3,7 @@
 
 // HINT: user options
 #define USE_UART_0 1
-#define USE_UART_1 1
+#define USE_UART_1 0
 
 //buffer sizes must be powers of 2
 #define UART_TX_BUF_SIZE 64
