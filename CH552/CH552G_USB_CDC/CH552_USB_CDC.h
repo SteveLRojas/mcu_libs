@@ -4,7 +4,7 @@
 #define CDC_TIMEOUT_MS 25
 
 #define CDC_ENDP0_SIZE 8
-#define CDC_ENDP1_SIZE 8
+#define CDC_ENDP1_SIZE 16
 #define CDC_ENDP2_SIZE 64
 #define CDC_ENDP3_SIZE 64
 

@@ -10,13 +10,13 @@
 #define CDC_DEV_DESCR_SIZE 18
 #define CDC_CONF_DESCR_SIZE 67
 #define CDC_LINE_CODING_SIZE 7
-#define CDC_SERIAL_STATE_SIZE 9
+#define CDC_SERIAL_STATE_SIZE 10
 
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
-UINT8 cdc_tx_enabled;
-UINT8 cdc_rx_enabled;
+volatile UINT8 cdc_tx_enabled;
+volatile UINT8 cdc_rx_enabled;
 
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
@@ -27,9 +27,9 @@ volatile UINT8 xdata ep3_t0_buffer[CDC_ENDP3_SIZE] _at_ 0x0080;
 volatile UINT8 xdata ep3_t1_buffer[CDC_ENDP3_SIZE] _at_ 0x00C0;
 
 UINT8 ep2_read_select;
-UINT8 ep2_t0_num_bytes;
+volatile UINT8 ep2_t0_num_bytes;
 UINT8 ep2_t0_read_offset;
-UINT8 ep2_t1_num_bytes;
+volatile UINT8 ep2_t1_num_bytes;
 UINT8 ep2_t1_read_offset;
 
 volatile UINT8 ep3_wip;
@@ -90,7 +90,7 @@ UINT8 code  cdc_config_descriptor[] =
     0x01,                           // bNumEndpoints 1
     0x02,                           // bInterfaceClass	(Communications Interface Class)
     0x02,                           // bInterfaceSubClass	 (Abstract Control Model)
-    0x01,                           // bInterfaceProtocol	(AT Commands: V.250)
+    0x00,                           // bInterfaceProtocol	(No class specific protocol required)
     0x04,                           // iInterface (String Index)
 
     /* Functional Descriptors */
@@ -170,7 +170,7 @@ UINT8 code cdc_string_serial[] =
 	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '1', 0
 };
 
-UINT8 code cdc_serial_state[] = {0xA1, 0x20, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00};
+UINT8 code cdc_serial_state[] = {0xA1, 0x20, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00};
 
 
 void cdc_copy_descriptor(UINT8 len)
@@ -627,7 +627,7 @@ void cdc_set_serial_state(UINT8 val)
 	{
 		ep1_buffer[idx] = cdc_serial_state[idx];
 	}
-	ep1_buffer[7] = val;
+	ep1_buffer[8] = val;
 	usb_set_ep1_tx_len(CDC_SERIAL_STATE_SIZE);
 	usb_set_ep1_in_res(USB_IN_RES_EXPECT_ACK);
 }

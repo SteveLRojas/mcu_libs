@@ -34,7 +34,7 @@ UINT8 ep2_t0_read_offset;
 volatile UINT8 ep2_t1_num_bytes;
 UINT8 ep2_t1_read_offset;
 
-UINT8 ep3_wip;
+volatile UINT8 ep3_wip;
 volatile UINT8 ep3_write_select;
 volatile UINT8 ep3_t0_num_bytes;
 volatile UINT8 ep3_t1_num_bytes;
