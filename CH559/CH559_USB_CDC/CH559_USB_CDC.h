@@ -5,7 +5,7 @@
 
 // Endpoint sizes must be a multiple of 2 in order to keep the buffers aligned. CH559 does not support odd addresses.
 #define CDC_ENDP0_SIZE 8
-#define CDC_ENDP1_SIZE 8
+#define CDC_ENDP1_SIZE 16
 #define CDC_ENDP2_SIZE 64
 #define CDC_ENDP3_SIZE 64
 
