@@ -225,7 +225,7 @@ void hid_on_out(UINT8 ep)
 	if(ep == EP_0)
 	{
 		usb_set_ep0_tx_len(0);
-		usb_set_ep0_tog_res(EP_OUT_TOG_1 | EP_IN_TOG_1 | USB_OUT_RES_ACK | USB_IN_RES_NAK);
+		usb_set_ep0_tog_res(EP_OUT_TOG_1 | EP_IN_TOG_1 | USB_OUT_RES_ACK | USB_IN_RES_EXPECT_ACK);
 	}
 }
 
