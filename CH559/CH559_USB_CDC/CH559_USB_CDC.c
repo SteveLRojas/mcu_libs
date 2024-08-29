@@ -187,10 +187,10 @@ void cdc_copy_descriptor(UINT8 len)
 	}
 }
 
-// HINT: This library contains some nasty hacks to work around bugs in CH552.
+// HINT: This library contains some nasty hacks to work around bugs in CH559.
 // Enabling SOF interrupts makes interrupt transfers fail, since the SOF triggers UIF_TRANSFER (all enpoints respond with NAK while UIF_TRANSFER is set).
 // When a notification needs to be sent the SOF interrupts are disabled so that the interrupt transfer can happen.
-// SOF interrupts are re-enableb after the interrupt transfer completes.
+// SOF interrupts are re-enabled after the interrupt transfer completes.
 void cdc_on_sof(void)
 {	
 	// check for timeout, if the buffer is not being written to then enable transmitting and mark the buffer as full
