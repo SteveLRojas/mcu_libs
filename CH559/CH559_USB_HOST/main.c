@@ -167,6 +167,7 @@ int main()
 	
 	usbh_init();
 	usbh_in_transfer_nak_limit = 0;	//no NAK retry for interrupt transfers
+	usbh_out_transfer_nak_limit = 0xFFFF;
 	
 	
 	usb_state = S_DISCONNECTED;
@@ -260,7 +261,7 @@ int main()
 				copy_request(usb_request_set_addr);
 				response = usbh_control_transfer(&ep0_info, descr_buf);
 				
-				if(response && U_TOG_OK)
+				if(response && usbh_is_toggle_ok())
 				{
 					uart_write_string(UART_0, str_response_ok);
 					usbh_set_address(0x01);
@@ -280,7 +281,7 @@ int main()
 				copy_request(usb_request_set_config);
 				response = usbh_control_transfer(&ep0_info, descr_buf);
 			
-				if(response && U_TOG_OK)
+				if(response && usbh_is_toggle_ok())
 				{
 					uart_write_string(UART_0, str_response_ok);
 					usb_state = S_RUN;

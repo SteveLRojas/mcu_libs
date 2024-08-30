@@ -5,8 +5,8 @@
 UINT8 xdata usbh_rx_buf[64] _at_ 0x0000;
 UINT8 xdata usbh_tx_buf[64] _at_ 0x0040;
 UINT8 usbh_ep_pid;
-UINT8 usbh_in_transfer_nak_limit;
-UINT8 usbh_out_transfer_nak_limit;
+UINT16 usbh_in_transfer_nak_limit;
+UINT16 usbh_out_transfer_nak_limit;
 
 void usbh_init(void)
 {
@@ -25,7 +25,7 @@ void usbh_init(void)
 	UH_SETUP = bUH_SOF_EN;
 	UH_EP_PID = 0x00;
 	UH_TX_LEN = 0x00;
-	USB_INT_EN = bUIE_TRANSFER | bUIE_DETECT;
+	USB_INT_EN = 0x00;
 	USB_INT_FG = 0xFF;
 }
 
@@ -42,7 +42,7 @@ UINT8 usbh_control_transfer(usbh_ep_info_t* ep_info, UINT8* pbuf)
 	UH_TX_CTRL = 0x00;
 	UH_TX_LEN = 0x08;
 	usbh_ep_pid = (USB_PID_SETUP << 4) | ep_info->ep_num;
-	response = usbh_transact(0xFF);
+	response = usbh_transact(0xFFFF);
 	if(response != USB_PID_ACK)
 		return response;
 	
@@ -57,7 +57,7 @@ UINT8 usbh_control_transfer(usbh_ep_info_t* ep_info, UINT8* pbuf)
 			usbh_ep_pid = (USB_PID_IN << 4) | ep_info->ep_num;
 			do
 			{
-				response = usbh_transact(0xFF);
+				response = usbh_transact(0xFFFF);
 				// U_TOG_OK is not cleared if no response is received?
 				if(!U_TOG_OK || !response)
 					return response;
@@ -80,7 +80,7 @@ UINT8 usbh_control_transfer(usbh_ep_info_t* ep_info, UINT8* pbuf)
 			// status stage (OUT)
 			UH_TX_LEN = 0x00;
 			usbh_ep_pid = (USB_PID_OUT << 4) | ep_info->ep_num;
-			response = usbh_transact(0xFF);
+			response = usbh_transact(0xFFFF);
 			ep_info->rx_tog_res = UH_RX_CTRL;
 			ep_info->tx_tog_res = UH_TX_CTRL;
 			return response;
@@ -101,7 +101,7 @@ UINT8 usbh_control_transfer(usbh_ep_info_t* ep_info, UINT8* pbuf)
 					++pbuf;
 				}
 				
-				response = usbh_transact(0xFF);
+				response = usbh_transact(0xFFFF);
 				if(response != USB_PID_ACK)
 					return response;
 				
@@ -112,7 +112,7 @@ UINT8 usbh_control_transfer(usbh_ep_info_t* ep_info, UINT8* pbuf)
 	
 	// status stage (IN)
 	usbh_ep_pid = (USB_PID_IN << 4) | ep_info->ep_num;
-	response = usbh_transact(0xFF);
+	response = usbh_transact(0xFFFF);
 	ep_info->rx_tog_res = UH_RX_CTRL;
 	ep_info->tx_tog_res = UH_TX_CTRL;
 	return response;
@@ -191,23 +191,27 @@ UINT8 usbh_out_transfer(usbh_ep_info_t* ep_info, UINT8* source, UINT16 num_bytes
 	return response;
 }
 
-//HINT: set nak_limit to 0xFF for unlimited retries
-//TODO: use U_SIE_FREE?
-UINT8 usbh_transact(UINT8 nak_limit)
+//HINT: set nak_limit to 0xFFFF for unlimited retries
+UINT8 usbh_transact(UINT16 nak_limit)
 {
-	UINT16 timeout_count;
-	UINT8 nak_count = 0;
+	UINT8 sof_count;
+	UINT16 nak_count = 0;
 	UINT8 response;
 	
 	do
 	{
 		UH_EP_PID = usbh_ep_pid;
 		UIF_TRANSFER = 0;
-		timeout_count = USBH_TRANSACT_TIMEOUT;
+		sof_count = 0;
+		UIF_HST_SOF = 0;
 		do
 		{
-			--timeout_count;
-		} while (!UIF_TRANSFER && timeout_count);
+			if(UIF_HST_SOF)
+			{
+				++sof_count;
+				UIF_HST_SOF = 0;
+			}
+		} while (!UIF_TRANSFER && (sof_count != 2));
 		UH_EP_PID = USB_PID_NULL;
 		
 		// MASK_UIS_H_RES is not set to 0 by the hardware!
