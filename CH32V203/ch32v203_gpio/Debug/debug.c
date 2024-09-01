@@ -10,9 +10,12 @@
 * Attention: This software (modified or not) and binary are used for 
 * microcontroller manufactured by Nanjing Qinheng Microelectronics.
 *******************************************************************************/
+#include "ch32v20x.h"
+#include "ch32v203_core.h"
 #include "debug.h"
-#include "system_ch32v20x.h"
-#include "uart.h"
+#include "fifo.h"
+#include "ch32v203_uart.h"
+#include "ch32v203_rcc.h"
 
 static uint8_t  p_us = 0;
 static uint16_t p_ms = 0;
@@ -25,7 +28,7 @@ static uint16_t p_ms = 0;
  */
 void Delay_Init(void)
 {
-    p_us = SystemCoreClock / 8000000;
+    p_us = rcc_compute_hclk_freq() / 8000000;
     p_ms = (uint16_t)p_us * 1000;
 }
 
@@ -78,75 +81,6 @@ void Delay_Ms(uint32_t n)
 }
 
 /*********************************************************************
- * @fn      USART_Printf_Init
- *
- * @brief   Initializes the USARTx peripheral.
- *
- * @param   baudrate - USART communication baud rate.
- *
- * @return  None
- */
-/*void USART_Printf_Init(uint32_t baudrate)
-{
-    GPIO_InitTypeDef  GPIO_InitStructure;
-    USART_InitTypeDef USART_InitStructure;
-
-#if(DEBUG == DEBUG_UART1)
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_GPIOA, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_9;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-#elif(DEBUG == DEBUG_UART2)
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-#elif(DEBUG == DEBUG_UART3)
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
-
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
-
-#endif
-
-    USART_InitStructure.USART_BaudRate = baudrate;
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    USART_InitStructure.USART_Mode = (USART_Mode_Rx | USART_Mode_Tx);
-
-#if(DEBUG == DEBUG_UART1)
-    USART_Init(USART1, &USART_InitStructure);
-    USART_Cmd(USART1, ENABLE);
-
-#elif(DEBUG == DEBUG_UART2)
-    USART_Init(USART2, &USART_InitStructure);
-    USART_Cmd(USART2, ENABLE);
-
-#elif(DEBUG == DEBUG_UART3)
-    USART_Init(USART3, &USART_InitStructure);
-    USART_Cmd(USART3, ENABLE);
-
-#endif
-}*/
-
-/*********************************************************************
  * @fn      _write
  *
  * @brief   Support Printf Function
@@ -160,11 +94,13 @@ __attribute__((used))
 int _write(int fd, char* buf, int size)
 {
 #if(DEBUG == DEBUG_UART1)
-	uart_write_bytes(USART1, (uint8_t*)buf, (uint16_t)size);
+	uart_write_bytes(USART1, uart1_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #elif(DEBUG == DEBUG_UART2)
-	uart_write_bytes(USART2, (uint8_t*)buf, (uint16_t)size);
+	uart_write_bytes(USART2, uart2_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #elif(DEBUG == DEBUG_UART3)
-	uart_write_bytes(USART3, (uint8_t*)buf, (uint16_t)size);
+	uart_write_bytes(USART3, uart3_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_UART4)
+	uart_write_bytes(USART4, uart4_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #endif
     return size;
 }
@@ -176,6 +112,7 @@ int _write(int fd, char* buf, int size)
  *
  * @return  size: Data length
  */
+__attribute__((used))
 void *_sbrk(ptrdiff_t incr)
 {
     extern char _end[];

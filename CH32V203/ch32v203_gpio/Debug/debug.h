@@ -14,7 +14,6 @@
 #define __DEBUG_H
 
 #include "stdio.h"
-#include "ch32v20x.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,7 +23,8 @@ extern "C" {
 #define DEBUG_UART1    1
 #define DEBUG_UART2    2
 #define DEBUG_UART3    3
-#define DEBUG_CDC	4
+#define DEBUG_UART4    3
+#define DEBUG_CDC	5
 
 /* DEBUG UATR Definition */
 #ifndef DEBUG
@@ -34,7 +34,6 @@ extern "C" {
 void Delay_Init(void);
 void Delay_Us(uint32_t n);
 void Delay_Ms(uint32_t n);
-//void USART_Printf_Init(uint32_t baudrate);
 
 #if(DEBUG)
   #define PRINT(format, ...)    printf(format, ##__VA_ARGS__)

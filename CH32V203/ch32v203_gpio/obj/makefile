@@ -11,9 +11,7 @@ RM := rm -rf
 -include user_libs/subdir.mk
 -include User/subdir.mk
 -include Startup/subdir.mk
--include Peripheral/src/subdir.mk
 -include Debug/subdir.mk
--include Core/subdir.mk
 -include subdir.mk
 -include objects.mk
 
@@ -49,7 +47,7 @@ all: ch32v203_gpio.elf secondary-outputs
 ch32v203_gpio.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU RISC-V Cross C Linker'
-	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -T "C:\Users\Steve\mrs_community_workspace\ch32v203_gpio\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"ch32v203_gpio.map" --specs=nano.specs --specs=nosys.specs -o "ch32v203_gpio.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -T "C:\Users\Steve\repos\mcu_libs\CH32V203\ch32v203_gpio\Ld\Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"ch32v203_gpio.map" --specs=nano.specs --specs=nosys.specs -o "ch32v203_gpio.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
