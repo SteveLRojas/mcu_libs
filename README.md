@@ -8,6 +8,7 @@ Some of the supported MCUs have bugs or deficiencies that might make them unsuit
 - The analog comparator cannot generate interrupts, it has to be polled.  
 - The USB controller has a bug that prevents interrupt transfers from working when SOF interrupts are enabled.  
 - Low write endurance of about 200 cycles, and must be powered from 5V for programming.  
+- When writing data flash interrupts must be manually disabled, otherwise very strange behaviour can occur.  
 
 ### CH559
 - The analog comparator cannot generate interrupts, it has to be polled.  
