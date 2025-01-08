@@ -77,7 +77,6 @@
 
 uint16_t cdc_last_data_time;
 uint16_t cdc_last_status_time;
-//volatile uint8_t cdc_tx_enabled;
 
 //HINT:
 //For RX double-buffered endpoint (EP_2) DTOG_RX indicates the buffer in use by HW and DTOG_TX indicates the buffer in use by SW.
@@ -114,7 +113,7 @@ usb_setup_req_t cdc_setup_buf __attribute__ ((aligned(2)));
 
 const uint8_t* descriptor_ptr;
 uint8_t cdc_address;
-uint8_t cdc_config;
+volatile uint8_t cdc_config;
 
 volatile cdc_line_coding_t cdc_line_coding __attribute__ ((aligned(2))) = {125000, 0x00, 0x00, 0x08, 0x00};	//125K baud, 1 stop, no parity, 8 data
 volatile uint8_t cdc_control_line_state = 0;
@@ -251,23 +250,16 @@ void cdc_on_sof(void)
 			usbd_set_tx_1_len(EP_3, ep3_t1_num_bytes);
 			ep3_t1_num_bytes = CDC_ENDP3_SIZE;
 			ep3_write_select = 0;
-			//if((usbd_get_out_toggle(EP_3) && usbd_get_in_toggle(EP_3)) || (!usbd_get_out_toggle(EP_3) && !usbd_get_in_toggle(EP_3)))
-			//{
-				usbd_set_out_toggle(EP_3, USBD_OUT_TOG_0);
-			//}
+			usbd_set_out_toggle(EP_3, USBD_OUT_TOG_0);
 		}
 		else
 		{
 			usbd_set_tx_0_len(EP_3, ep3_t0_num_bytes);
 			ep3_t0_num_bytes = CDC_ENDP3_SIZE;
 			ep3_write_select = 1;
-			//if((usbd_get_out_toggle(EP_3) && usbd_get_in_toggle(EP_3)) || (!usbd_get_out_toggle(EP_3) && !usbd_get_in_toggle(EP_3)))
-			//{
-				usbd_set_out_toggle(EP_3, USBD_OUT_TOG_1);
-			//}
+			usbd_set_out_toggle(EP_3, USBD_OUT_TOG_1);
 		}
 		usbd_set_in_res(EP_3, USBD_IN_RES_ACK);
-		//cdc_tx_enabled = 1;
 	}
 
 	if((uint16_t)(sof_count - cdc_last_status_time) >= (uint16_t)CDC_TIMEOUT_MS)
@@ -567,13 +559,14 @@ void cdc_on_rst(void)
 
 	cdc_last_data_time = 0;
 	cdc_last_status_time = 0;
+	cdc_config = 0;
 	sof_count = 0;
 }
 
 //TODO: move these functions to the USBD library and use the DMA controller
 void usbd_write_bytes_to_pma(uint16_t byte_offset, const uint8_t* source, uint16_t num_bytes)
 {
-	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + (byte_offset & 0xFFFE));
+	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + ((byte_offset & 0xFFFE) << 1));
 	uint16_t num_words;
 	uint16_t pma_word;
 
@@ -606,7 +599,7 @@ void usbd_write_bytes_to_pma(uint16_t byte_offset, const uint8_t* source, uint16
 
 void usbd_read_bytes_from_pma(uint16_t byte_offset, uint8_t* dest, uint16_t num_bytes)
 {
-	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + (byte_offset & 0xFFFE));
+	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + ((byte_offset & 0xFFFE) << 1));
 	uint16_t num_words;
 	uint16_t pma_word;
 
@@ -655,6 +648,7 @@ void cdc_init(void)
 	usbd_suspend_callback = 0;
 
 	usbd_init(&usbd_config);
+	cdc_config = 0;
 	cdc_set_serial_state(0x00);
 }
 
@@ -752,7 +746,9 @@ void cdc_read_bytes(uint8_t* dest, uint16_t num_bytes)
 			}
 
 			num_bytes -= num_to_read;
-			usbd_read_bytes_from_pma((usbd_get_rx_1_buf_offset(EP_2) << 1) + ep2_t1_read_offset, dest, num_to_read);
+			usbd_read_bytes_from_pma(usbd_get_rx_1_buf_offset(EP_2) + ep2_t1_read_offset, dest, num_to_read);
+			dest += num_to_read;
+			ep2_t1_read_offset += num_to_read;
 
 			if(ep2_t1_read_offset == ep2_t1_num_bytes)
 			{
@@ -777,7 +773,9 @@ void cdc_read_bytes(uint8_t* dest, uint16_t num_bytes)
 			}
 
 			num_bytes -= num_to_read;
-			usbd_read_bytes_from_pma((usbd_get_rx_0_buf_offset(EP_2) << 1) + ep2_t0_read_offset, dest, num_to_read);
+			usbd_read_bytes_from_pma(usbd_get_rx_0_buf_offset(EP_2) + ep2_t0_read_offset, dest, num_to_read);
+			dest += num_to_read;
+			ep2_t0_read_offset += num_to_read;
 
 			if(ep2_t0_read_offset == ep2_t0_num_bytes)
 			{
@@ -879,7 +877,9 @@ void cdc_write_bytes(const uint8_t* src, uint16_t num_bytes)
 				num_to_write = num_bytes;
 
 			num_bytes -= num_to_write;
-			usbd_write_bytes_to_pma((usbd_get_tx_1_buf_offset(EP_3) << 1) + ep_num_bytes, src, num_to_write);
+			usbd_write_bytes_to_pma(usbd_get_tx_1_buf_offset(EP_3) + ep_num_bytes, src, num_to_write);
+			src += num_to_write;
+			ep_num_bytes += num_to_write;
 			ep3_t1_num_bytes = ep_num_bytes;
 
 			if(ep_num_bytes == CDC_ENDP3_SIZE)
@@ -903,7 +903,9 @@ void cdc_write_bytes(const uint8_t* src, uint16_t num_bytes)
 				num_to_write = num_bytes;
 
 			num_bytes -= num_to_write;
-			usbd_write_bytes_to_pma((usbd_get_tx_0_buf_offset(EP_3) << 1) + ep_num_bytes, src, num_to_write);
+			usbd_write_bytes_to_pma(usbd_get_tx_0_buf_offset(EP_3) + ep_num_bytes, src, num_to_write);
+			src += num_to_write;
+			ep_num_bytes += num_to_write;
 			ep3_t0_num_bytes = ep_num_bytes;
 
 			if(ep_num_bytes == CDC_ENDP3_SIZE)

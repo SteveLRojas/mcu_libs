@@ -40,26 +40,6 @@ void USB_HP_CAN1_TX_IRQHandler(void)
 			usbd_in_callback(ep);
 		USBD_ENDPOINT[ep].EPR &= ~(USBD_CTR_TX | USBD_DTOG_RX | USBD_STAT_RX | USBD_DTOG_TX | USBD_STAT_TX);
 	}
-
-//	uint16_t interrupt_status;
-//	uint8_t ep;
-//
-//	while((interrupt_status = USBD_COMMON->ISTR) & USBD_CTR)
-//	{
-//		ep = (uint8_t)(interrupt_status & USBD_EP_ID);
-//		if(USBD_ENDPOINT[ep].EPR & USBD_CTR_RX)
-//		{
-//			if(usbd_out_callback)
-//				usbd_out_callback(ep);
-//			USBD_ENDPOINT[ep].EPR &= ~(USBD_CTR_RX | USBD_DTOG_RX | USBD_STAT_RX | USBD_DTOG_TX | USBD_STAT_TX);
-//		}
-//		if(USBD_ENDPOINT[ep].EPR & USBD_CTR_TX)
-//		{
-//			if(usbd_in_callback)
-//				usbd_in_callback(ep);
-//			USBD_ENDPOINT[ep].EPR &= ~(USBD_CTR_TX | USBD_DTOG_RX | USBD_STAT_RX | USBD_DTOG_TX | USBD_STAT_TX);
-//		}
-//	}
 }
 
 void USB_LP_CAN1_RX0_IRQHandler(void)

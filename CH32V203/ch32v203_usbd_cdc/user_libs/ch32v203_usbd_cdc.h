@@ -37,6 +37,7 @@ typedef struct _CDC_LINE_CODING {
 #define CDC_CLS_RTS	0x02
 #define CDC_CLS_DTR	0x01
 
+extern volatile uint8_t cdc_config;
 extern volatile cdc_line_coding_t cdc_line_coding;
 extern volatile uint8_t cdc_control_line_state;
 
