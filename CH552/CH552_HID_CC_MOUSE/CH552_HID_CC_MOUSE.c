@@ -198,7 +198,7 @@ UINT8 code hid_string_serial[] =
 {
 	22,          
 	0x03,                   
-	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '3', 0
+	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '4', 0
 };
 
 void hid_copy_descriptor(UINT8 len)

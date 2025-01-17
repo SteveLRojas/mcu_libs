@@ -1,11 +1,11 @@
 #include "CH552.H"
 #include "CH552_USB.h"
-#include "usb_hid_pan_mouse.h"
+#include "usb_hid_keyboard.h"
 
 #define HID_DEV_DESCR_SIZE 18
 #define HID_CONF_DESCR_SIZE 34
-#define HID_REPORT_DESCR_SIZE 67
-#define HID_MOUSE_REPORT_SIZE 5
+#define HID_REPORT_DESCR_SIZE 65
+#define HID_KB_REPORT_SIZE 8
 
 UINT8 xdata ep0_buffer[HID_ENDP0_BUF_SIZE];
 UINT8 xdata ep1_buffer[HID_ENDP1_BUF_SIZE];
@@ -17,12 +17,13 @@ UINT8 hid_setup_type;
 UINT16 hid_setup_len;
 
 UINT8 code* descriptor_ptr;
-UINT8 hid_address;
-UINT8 hid_config;
+UINT8 hid_kb_address;
+UINT8 hid_kb_config;
 
-volatile UINT8 hid_report_pending;
-volatile UINT8 hid_idle_rate;
-UINT8 hid_protocol;
+volatile UINT8 hid_kb_report_pending;
+volatile UINT8 hid_kb_idle_rate;
+volatile UINT8 hid_kb_indicators;
+UINT8 hid_kb_protocol;
 
 /* USB Device Descriptors */
 UINT8 code hid_device_descriptor[] =
@@ -56,7 +57,7 @@ UINT8 code hid_config_descriptor[] =
     0x80,                           // bmAttributes: bus powered, no wakeup
     0x32,                           // MaxPower: 100mA
 
-    /* Interface Descriptor (Mouse) */
+    /* Interface Descriptor (Keyboard) */
     0x09,                           // bLength
     0x04,                           // bDescriptorType
     0x00,                           // bInterfaceNumber
@@ -64,10 +65,10 @@ UINT8 code hid_config_descriptor[] =
     0x01,                           // bNumEndpoints
     0x03,                           // bInterfaceClass
     0x01,                           // bInterfaceSubClass
-    0x02,                           // bInterfaceProtocol: Mouse
+    0x01,                           // bInterfaceProtocol: Keyboard
     0x04,                           // iInterface
 
-    /* HID Descriptor (Mouse) */
+    /* HID Descriptor (Keyboard) */
     0x09,                           // bLength
     0x21,                           // bDescriptorType
     0x10, 0x01,                     // bcdHID
@@ -76,7 +77,7 @@ UINT8 code hid_config_descriptor[] =
     0x22,                           // bDescriptorType
     HID_REPORT_DESCR_SIZE & 0xFF, HID_REPORT_DESCR_SIZE >> 8, // wDescriptorLength
 
-    /* Endpoint Descriptor (Mouse) */
+    /* Endpoint Descriptor (Keyboard) */
     0x07,                           // bLength
     0x05,                           // bDescriptorType
     0x81,                           // bEndpointAddress: IN Endpoint 1
@@ -89,38 +90,36 @@ UINT8 code hid_config_descriptor[] =
 UINT8 code hid_report_descriptor[] =
 {
     0x05, 0x01,                     // Usage Page (Generic Desktop)
-    0x09, 0x02,                     // Usage (Mouse)
+    0x09, 0x06,                     // Usage (Keyboard)
     0xA1, 0x01,                     // Collection (Application)
-    0x09, 0x01,                     // Usage (Pointer)
-    0xA1, 0x00,                     // Collection (Physical)
-    0x05, 0x09,                     // Usage Page (Button)
-    0x19, 0x01,                     // Usage Minimum (Button 1)
-    0x29, 0x03,                     // Usage Maximum (Button 3)
+	0x05, 0x07,                     // Usage Page (Keyboard/keypad)
+	0x19, 0xE0,						// Usage Minimum (Keyboard LeftControl)
+	0x29, 0xE7,                     // Usage Maximum (Keyboard Right GUI)
     0x15, 0x00,                     // Logical Minimum (0)
     0x25, 0x01,                     // Logical Maximum (1)
-    0x75, 0x01,                     // Report Size (1)
-    0x95, 0x03,                     // Report Count (3)
-    0x81, 0x02,                     // Input (Data,Variable,Absolute)
-    0x75, 0x05,                     // Report Size (5)
+	0x75, 0x01,                     // Report Size (1)
+    0x95, 0x08,                     // Report Count (8)
+	0x81, 0x02,                     // Input (Data, Variable, Absolute)
+	0x75, 0x08,                     // Report Size (8)
     0x95, 0x01,                     // Report Count (1)
-    0x81, 0x03,                     // Input (Constant,Variable,Absolute)
-    0x05, 0x01,                     // Usage Page (Generic Desktop)
-    0x09, 0x30,                     // Usage (X)
-    0x09, 0x31,                     // Usage (Y)
-    0x09, 0x38,                     // Usage (Wheel)
-    0x15, 0x81,                     // Logical Minimum (-127)
-    0x25, 0x7F,                     // Logical Maximum (127)
-    0x75, 0x08,                     // Report Size (8)
-    0x95, 0x03,                     // Report Count (3)
-    0x81, 0x06,                     // Input (Data,Variable,Relative)
-	0x05, 0x0c,                     // USAGE PAGE (Consumer Devices)
-	0x0a, 0x38, 0x02,               // USAGE (AC Pan)
-	0x15, 0x81,                     // LOGICAL_MINIMUM (-127)
-	0x25, 0x7f,                     // LOGICAL_MAXIMUM (127)
-	0x75, 0x08,                     // REPORT_SIZE (8)
-	0x95, 0x01,                     // REPORT_COUNT (1)
-	0x81, 0x06,                     // INPUT (Data, Var, Rel)
-    0xC0,                           // End Collection
+	0x81, 0x01,                     // Input (Constant, Array, Absolute)
+	0x75, 0x01,                     // Report Size (1)
+    0x95, 0x05,                     // Report Count (5)
+	0x05, 0x08,                     // Usage Page (LED)
+	0x19, 0x01,						// Usage Minimum (Num Lock)
+	0x29, 0x05,                     // Usage Maximum (Kana)
+	0x91, 0x02,                     // Output (Data, Variable, Absolute)
+	0x75, 0x03,                     // Report Size (3)
+    0x95, 0x01,                     // Report Count (1)
+	0x91, 0x01,                     // Output (Constant, Array, Absolute)
+	0x75, 0x08,                     // Report Size (8)
+    0x95, 0x06,                     // Report Count (6)
+	0x15, 0x00,                     // Logical Minimum (0)
+    0x26, 0xFF, 0x00,               // Logical Maximum (255)
+	0x05, 0x07,                     // Usage Page (Keyboard/Keypad)
+	0x19, 0x00,                     // Usage Minimum (Reserved)
+    0x2A, 0xFF, 0x00,               // Usage Maximum (Reserved)
+	0x81, 0x00,                     // Input (Data, Array, Absolute)
     0xC0                            // End Collection
 };
 
@@ -144,20 +143,20 @@ UINT8 code hid_string_vendor[] =
 /* USB Device String Product */
 UINT8 code hid_string_product[] =
 {
-    28,
+    26,
     0x03,
-    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'P', 0, 'a', 0, 'n', 0, ' ', 0, 'M', 0, 'o', 0, 'u', 0, 's', 0, 'e', 0
+    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'K', 0, 'e', 0, 'y', 0, 'b', 0, 'o', 0, 'a', 0, 'r', 0, 'd', 0
 };
 
-/* USB Device String Serial */
+/* USB Serial String Descriptor */
 UINT8 code hid_string_serial[] =
 {
 	22,          
 	0x03,                   
-	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '5', 0
+	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '7', 0
 };
 
-void hid_copy_descriptor(UINT8 len)
+void hid_kb_copy_descriptor(UINT8 len)
 {
 	UINT8* dest = ep0_buffer;
 	while(len)
@@ -169,16 +168,19 @@ void hid_copy_descriptor(UINT8 len)
 	}
 }
 
-void hid_on_out(UINT8 ep)
+void hid_kb_on_out(UINT8 ep)
 {
 	if(ep == EP_0)
 	{
+		if((hid_setup_req == HID_SET_REPORT) && ((hid_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_CLASS))
+			hid_kb_indicators = ep0_buffer[0];
+		
 		usb_set_ep0_tx_len(0);
 		usb_set_ep0_tog_res(EP_OUT_TOG_1 | EP_IN_TOG_1 | USB_OUT_RES_ACK | USB_IN_RES_EXPECT_ACK);
 	}
 }
 
-void hid_on_in(UINT8 ep)
+void hid_kb_on_in(UINT8 ep)
 {
 	UINT8 len;
 	
@@ -190,13 +192,13 @@ void hid_on_in(UINT8 ep)
 			{
 				case USB_GET_DESCRIPTOR:
 					len = hid_setup_len >= HID_ENDP0_SIZE ? HID_ENDP0_SIZE : hid_setup_len;
-					hid_copy_descriptor(len);
+					hid_kb_copy_descriptor(len);
 					hid_setup_len -= len;
 					usb_set_ep0_tx_len(len);
 					usb_toggle_ep0_in_toggle();
 					break;
 				case USB_SET_ADDRESS:
-					usb_set_addr(hid_address);
+					usb_set_addr(hid_kb_address);
 					usb_set_ep0_in_res(USB_IN_RES_NAK);
 					break;
 				default:
@@ -216,16 +218,11 @@ void hid_on_in(UINT8 ep)
 	{
 		usb_set_ep1_tx_len(0);
 		usb_set_ep1_in_res(USB_IN_RES_NAK);
-		
-		ep1_buffer[1] = 0;	//clear movement and scrolling
-		ep1_buffer[2] = 0;
-		ep1_buffer[3] = 0;
-		ep1_buffer[4] = 0;
-		hid_report_pending = 0;
+		hid_kb_report_pending = 0;
 	}
 }
 
-void hid_on_setup(UINT8 ep)
+void hid_kb_on_setup(UINT8 ep)
 {
 	UINT8 len;
 	UINT8 idx;
@@ -294,7 +291,7 @@ void hid_on_setup(UINT8 ep)
 					}
 					break;
 				case USB_SET_ADDRESS:
-					hid_address = hid_setup_buf->wValueL;
+					hid_kb_address = hid_setup_buf->wValueL;
 					break;
 				case USB_GET_DESCRIPTOR:
 					switch(hid_setup_buf->wValueH)
@@ -346,11 +343,11 @@ void hid_on_setup(UINT8 ep)
 					}
 					break;
 				case USB_GET_CONFIGURATION:
-					ep0_buffer[0] = hid_config;
+					ep0_buffer[0] = hid_kb_config;
 					len = 1;
 					break;
 				case USB_SET_CONFIGURATION:
-					hid_config = hid_setup_buf->wValueL;
+					hid_kb_config = hid_setup_buf->wValueL;
 					break;
 				case USB_GET_INTERFACE:
 					ep0_buffer[0] = 0;
@@ -369,28 +366,28 @@ void hid_on_setup(UINT8 ep)
 			switch(hid_setup_req)
 			{
 				case HID_GET_REPORT:
-					for(idx = 0; idx < HID_MOUSE_REPORT_SIZE; ++idx)
+					for(idx = 0; idx < HID_KB_REPORT_SIZE; ++idx)
 					{
 						ep0_buffer[idx] = ep1_buffer[idx];	//the report does not have its own buffer, it stays in ep1
 					}
-					len = HID_MOUSE_REPORT_SIZE;
+					len = HID_KB_REPORT_SIZE;
 					break;
 				case HID_GET_IDLE:
-					ep0_buffer[0] = hid_idle_rate;
+					ep0_buffer[0] = hid_kb_idle_rate;
 					len = 1;
 					break;
 				case HID_GET_PROTOCOL:
-					ep0_buffer[0] = hid_protocol;
+					ep0_buffer[0] = hid_kb_protocol;
 					len = 1;
 					break;
 				case HID_SET_REPORT:
-					// nothing to do here
+					//nothing to do here
 					break;
 				case HID_SET_IDLE:
-					hid_idle_rate = hid_setup_buf->wValueH;
+					hid_kb_idle_rate = hid_setup_buf->wValueH;
 					break;
 				case HID_SET_PROTOCOL:
-					hid_protocol = hid_setup_buf->wValueL;
+					hid_kb_protocol = hid_setup_buf->wValueL;
 					break;
 				default:
 					len = 0xFF;
@@ -414,7 +411,7 @@ void hid_on_setup(UINT8 ep)
 			len = (hid_setup_len > HID_ENDP0_SIZE) ? HID_ENDP0_SIZE : hid_setup_len;
 			
 			if(descriptor_ptr != (UINT8 code*)NULL)
-				hid_copy_descriptor(len);
+				hid_kb_copy_descriptor(len);
 			
 			hid_setup_len -= len;
 			usb_set_ep0_tx_len(len);
@@ -423,22 +420,24 @@ void hid_on_setup(UINT8 ep)
 	}	// end if(ep == EP_0)
 }
 
-void hid_on_rst(void)
+void hid_kb_on_rst(void)
 {
+	UINT8 idx;
 	usb_set_ep0_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0);
 	usb_set_ep1_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1);
 	
-	ep1_buffer[0] = 0;
-	ep1_buffer[1] = 0;
-	ep1_buffer[2] = 0;
-	ep1_buffer[3] = 0;
-	ep1_buffer[4] = 0;
-	hid_report_pending = 0;
-	hid_idle_rate = 0;
-	hid_protocol = 0x01;	//default to report protocol
+	for(idx = 0; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
+		ep1_buffer[idx] = 0x00;
+	}
+	hid_kb_report_pending = 0;
+	hid_kb_idle_rate = 0;
+	hid_kb_protocol = 0x01;	//default to report protocol
+	hid_kb_config = 0;
+	hid_kb_indicators = 0;
 }
 
-usb_config_t code usb_config = 
+usb_config_t code usb_kb_config = 
 {
 	(UINT16)ep0_buffer,
 	(UINT16)ep1_buffer,
@@ -454,47 +453,70 @@ usb_config_t code usb_config =
 	USB_INT_TRANSFER | USB_INT_RST
 };
 
-void hid_init(void)
+void hid_kb_init(void)
 {
 	usb_sof_callback = NULL;
-	usb_out_callback = hid_on_out;
-	usb_in_callback = hid_on_in;
-	usb_setup_callback = hid_on_setup;
-	usb_rst_callback = hid_on_rst;
+	usb_out_callback = hid_kb_on_out;
+	usb_in_callback = hid_kb_on_in;
+	usb_setup_callback = hid_kb_on_setup;
+	usb_rst_callback = hid_kb_on_rst;
 	usb_suspend_callback = NULL;
 	
-	usb_init(&usb_config);
+	usb_init(&usb_kb_config);
 }
 
-void hid_mouse_send_report(void)
+void hid_kb_send_report(void)
 {
-	hid_report_pending = 1;
-	usb_set_ep1_tx_len(HID_MOUSE_REPORT_SIZE);
+	hid_kb_report_pending = 1;
+	usb_set_ep1_tx_len(HID_KB_REPORT_SIZE);
 	usb_set_ep1_in_res(USB_IN_RES_EXPECT_ACK);
 }
 
-void hid_mouse_press(UINT8 buttons)
+void hid_kb_press_modifier(UINT8 modifiers)
 {
-	ep1_buffer[0] = ep1_buffer[0] | buttons;
-	hid_mouse_send_report();
+	ep1_buffer[0] |= modifiers;
+	hid_kb_send_report();
 }
 
-void hid_mouse_release(UINT8 buttons)
+void hid_kb_release_modifier(UINT8 modifiers)
 {
-	ep1_buffer[0] = ep1_buffer[0] & ~buttons;
-	hid_mouse_send_report();
+	ep1_buffer[0] &= ~modifiers;
+	hid_kb_send_report();
 }
 
-void hid_mouse_move(UINT8 x_rel, UINT8 y_rel)
+void hid_kb_press_key(UINT8 key)
 {
-	ep1_buffer[1] += x_rel;
-	ep1_buffer[2] += y_rel;
-	hid_mouse_send_report();
+	UINT8 idx;
+	
+	for(idx = 2; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
+		if(!ep1_buffer[idx])
+		{
+			ep1_buffer[idx] = key;
+			hid_kb_send_report();
+			return;
+		}
+	}
+	
+	for(idx = 2; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
+		ep1_buffer[idx] = 0x00;
+	}
+	ep1_buffer[2] = HID_KB_KEY_ROLL_OVER;
+	hid_kb_send_report();
 }
 
-void hid_mouse_scroll(UINT8 v_rel, UINT8 h_rel)
+void hid_kb_release_key(UINT8 key)
 {
-	ep1_buffer[3] += v_rel;
-	ep1_buffer[4] += h_rel;
-	hid_mouse_send_report();
+	UINT8 idx;
+	
+	for(idx = 2; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
+		if(ep1_buffer[idx] == key)
+		{
+			ep1_buffer[idx] = 0x00;
+			hid_kb_send_report();
+			return;
+		}
+	}
 }
