@@ -10,13 +10,13 @@
 
 // HINT: user options
 #define USE_UART_1 1
-#define USE_UART_2 1
-#define USE_UART_3 1
-#define USE_UART_4 1
+#define USE_UART_2 0
+#define USE_UART_3 0
+#define USE_UART_4 0
 
 //buffer sizes must be powers of 2
-#define UART1_RX_BUF_SIZE 64
-#define UART1_TX_BUF_SIZE 64
+#define UART1_RX_BUF_SIZE 1024
+#define UART1_TX_BUF_SIZE 1024
 #define UART2_RX_BUF_SIZE 64
 #define UART2_TX_BUF_SIZE 64
 #define UART3_RX_BUF_SIZE 64

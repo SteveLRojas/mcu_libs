@@ -29,8 +29,8 @@ uint8_t uart2_tx_buf[UART2_TX_BUF_SIZE];
 volatile fifo_t uart2_rx_fifo_i;
 volatile fifo_t uart2_tx_fifo_i;
 #else
-#define uart2_rx_fifo (fifo_t*)NULL
-#define uart2_tx_fifo (fifo_t*)NULL
+#define uart2_rx_fifo (fifo_t*)0
+#define uart2_tx_fifo (fifo_t*)0
 #endif
 
 #if USE_UART_3
@@ -39,8 +39,8 @@ uint8_t uart3_tx_buf[UART3_TX_BUF_SIZE];
 volatile fifo_t uart3_rx_fifo_i;
 volatile fifo_t uart3_tx_fifo_i;
 #else
-#define uart3_rx_fifo (fifo_t*)NULL
-#define uart3_tx_fifo (fifo_t*)NULL
+#define uart3_rx_fifo (fifo_t*)0
+#define uart3_tx_fifo (fifo_t*)0
 #endif
 
 #if USE_UART_4
@@ -49,8 +49,8 @@ uint8_t uart4_tx_buf[UART4_TX_BUF_SIZE];
 volatile fifo_t uart4_rx_fifo_i;
 volatile fifo_t uart4_tx_fifo_i;
 #else
-#define uart4_rx_fifo (fifo_t*)NULL
-#define uart4_tx_fifo (fifo_t*)NULL
+#define uart4_rx_fifo (fifo_t*)0
+#define uart4_tx_fifo (fifo_t*)0
 #endif
 
 
@@ -134,26 +134,34 @@ void uart_init(USART_TypeDef* uart, uint32_t baud)
 
 	if(baud)
 	{
+#if USE_UART_1
 		if(uart == USART1)
 		{
 			fifo_init((fifo_t*)uart1_rx_fifo, uart1_rx_buf, UART1_RX_BUF_SIZE);
 			fifo_init((fifo_t*)uart1_tx_fifo, uart1_tx_buf, UART1_TX_BUF_SIZE);
 		}
+#endif
+#if USE_UART_2
 		if(uart == USART2)
 		{
 			fifo_init((fifo_t*)uart2_rx_fifo, uart2_rx_buf, UART2_RX_BUF_SIZE);
 			fifo_init((fifo_t*)uart2_tx_fifo, uart2_tx_buf, UART2_TX_BUF_SIZE);
 		}
+#endif
+#if USE_UART_3
 		if(uart == USART3)
 		{
 			fifo_init((fifo_t*)uart3_rx_fifo, uart3_rx_buf, UART3_RX_BUF_SIZE);
 			fifo_init((fifo_t*)uart3_tx_fifo, uart3_tx_buf, UART3_TX_BUF_SIZE);
 		}
+#endif
+#if USE_UART_4
 		if(uart == UART4)
 		{
 			fifo_init((fifo_t*)uart4_rx_fifo, uart4_rx_buf, UART4_RX_BUF_SIZE);
 			fifo_init((fifo_t*)uart4_tx_fifo, uart4_tx_buf, UART4_TX_BUF_SIZE);
 		}
+#endif
 
 		apbclock = (uart == USART1) ? rcc_compute_pclk2_freq() : rcc_compute_pclk1_freq(); // USART1 is on APB2, others are on APB1
 		usart_div = ((apbclock << 1) / baud);
