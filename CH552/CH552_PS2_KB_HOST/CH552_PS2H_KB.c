@@ -255,111 +255,111 @@ void ps2h_kb_update_keys(void)
 {
 	UINT8 temp;
 	
-	if(!ps2h_kb_rx_count)
-		return;
-	
-	temp = ps2h_kb_rx_buf[ps2h_kb_rx_front];
-	ps2h_kb_rx_front += 1;
-	ps2h_kb_rx_front &= (PS2H_KB_RX_BUF_SIZE - 1);
-	ps2h_kb_rx_count -= 1;	//This needs to be atomic since interrupts are not disabled... check compiled code, should be a single DEC instruction
-	
-	if(temp == 0xAA)	//ignore self test passed
+	while(ps2h_kb_rx_count)
 	{
-		ps2h_kb_status |= PS2H_KB_STAT_BAT_PASSED;
-		return;
-	}
-	
-	switch(ps2h_kb_scan_state)
-	{
-		case PS2H_KB_S_SCAN_IDLE:
-			if(temp == 0xF0)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_BREAK2;
-			else if(temp == 0xE0)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_E0;
-			else if(temp == 0xE1)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE2;
-			else
-				ps2h_kb_press_key(temp);
-			break;
-		case PS2H_KB_S_SCAN_E0:
-			if(temp == 0xF0)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_BREAK3;
-			else
-			{
-				ps2h_kb_press_key(0xE000 | temp);
+		temp = ps2h_kb_rx_buf[ps2h_kb_rx_front];
+		ps2h_kb_rx_front += 1;
+		ps2h_kb_rx_front &= (PS2H_KB_RX_BUF_SIZE - 1);
+		ps2h_kb_rx_count -= 1;	//This needs to be atomic since interrupts are not disabled... check compiled code, should be a single DEC instruction
+		
+		if(temp == 0xAA)	//ignore self test passed
+		{
+			ps2h_kb_status |= PS2H_KB_STAT_BAT_PASSED;
+			return;
+		}
+		
+		switch(ps2h_kb_scan_state)
+		{
+			case PS2H_KB_S_SCAN_IDLE:
+				if(temp == 0xF0)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_BREAK2;
+				else if(temp == 0xE0)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_E0;
+				else if(temp == 0xE1)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE2;
+				else
+					ps2h_kb_press_key(temp);
+				break;
+			case PS2H_KB_S_SCAN_E0:
+				if(temp == 0xF0)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_BREAK3;
+				else
+				{
+					ps2h_kb_press_key(0xE000 | temp);
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_BREAK2:
+				ps2h_kb_release_key(temp);
 				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_BREAK2:
-			ps2h_kb_release_key(temp);
-			ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			break;
-		case PS2H_KB_S_SCAN_BREAK3:
-			ps2h_kb_release_key(0xE000 | temp);
-			ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			break;
-		case PS2H_KB_S_SCAN_PAUSE2:
-			if(temp == 0x14)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE3;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+				break;
+			case PS2H_KB_S_SCAN_BREAK3:
+				ps2h_kb_release_key(0xE000 | temp);
 				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE3:
-			if(temp == 0x77)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE4;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+				break;
+			case PS2H_KB_S_SCAN_PAUSE2:
+				if(temp == 0x14)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE3;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE3:
+				if(temp == 0x77)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE4;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE4:
+				if(temp == 0xE1)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE5;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE5:
+				if(temp == 0xF0)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE6;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE6:
+				if(temp == 0x14)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE7;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE7:
+				if(temp == 0xF0)
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE8;
+				else
+				{
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
+					ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				}
+				break;
+			case PS2H_KB_S_SCAN_PAUSE8:
+				if(temp == 0x77)
+					ps2h_kb_status |= PS2H_KB_STAT_PAUSE_KEY;
+				else
+					ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
 				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE4:
-			if(temp == 0xE1)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE5;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE5:
-			if(temp == 0xF0)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE6;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE6:
-			if(temp == 0x14)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE7;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE7:
-			if(temp == 0xF0)
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_PAUSE8;
-			else
-			{
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
-				ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			}
-			break;
-		case PS2H_KB_S_SCAN_PAUSE8:
-			if(temp == 0x77)
-				ps2h_kb_status |= PS2H_KB_STAT_PAUSE_KEY;
-			else
-				ps2h_kb_status |= PS2H_KB_STAT_PROT_ERROR;
-			ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
-			break;
-		default: ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+				break;
+			default: ps2h_kb_scan_state = PS2H_KB_S_SCAN_IDLE;
+		}
 	}
 }
 

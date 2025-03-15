@@ -1,12 +1,18 @@
 #ifndef _CH552_PS2_HOST_H_
 #define _CH552_PS2_HOST_H_
 
+// HINT: For performance reasons this library controls some pins directly. Due to the way the GPIO library works it can overwrite the changes made by this library.
+// Do not use the GPIO library to drive any port containing a pin controlled by this library, or YOU WILL REGRET IT!
+// Some more details: The pins controlled by this library include INT0 (if port 0 is enabled) and INT1 (if port 1 is enabled), as well as the pins specified below.
+// The GPIO library overwrites pin changes made by this library because it needs to keep track of the last value written to a port, and it can only do that if 
+// the value is changed by calling a GPIO library function. Keeping track of the previous written value is needed because the output registers are not readable.
+
 // HINT: user options
 #define PS2_USE_PORT_0 1
 #define PS2_USE_PORT_1 0
 
 // HINT: The CLK pin for port 0 is always INT0, and the CLK pin for port 1 is always INT1
-#define PS2_P0_DATA_PIN	INT1
+#define PS2_P0_DATA_PIN	MISO
 #define PS2_P1_DATA_PIN	AIN3
 
 // HINT: do not change any defines below this line

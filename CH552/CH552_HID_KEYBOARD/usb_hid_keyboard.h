@@ -38,5 +38,6 @@ void hid_kb_press_modifier(UINT8 modifiers);
 void hid_kb_release_modifier(UINT8 modifiers);
 void hid_kb_press_key(UINT8 key);
 void hid_kb_release_key(UINT8 key);
+void hid_kb_release_all_keys(void);
 
 #endif

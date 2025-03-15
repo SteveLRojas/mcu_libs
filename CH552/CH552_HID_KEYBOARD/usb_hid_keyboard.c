@@ -490,6 +490,12 @@ void hid_kb_press_key(UINT8 key)
 	
 	for(idx = 2; idx < HID_KB_REPORT_SIZE; ++idx)
 	{
+		if(ep1_buffer[idx] == key)
+			return;	//key is already pressed
+	}
+	
+	for(idx = 2; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
 		if(!ep1_buffer[idx])
 		{
 			ep1_buffer[idx] = key;
@@ -518,5 +524,15 @@ void hid_kb_release_key(UINT8 key)
 			hid_kb_send_report();
 			return;
 		}
+	}
+}
+
+void hid_kb_release_all_keys(void)
+{
+	UINT8 idx;
+	
+	for(idx = 0; idx < HID_KB_REPORT_SIZE; ++idx)
+	{
+		ep1_buffer[idx] = 0x00;
 	}
 }

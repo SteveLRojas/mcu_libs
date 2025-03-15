@@ -1,6 +1,8 @@
 #ifndef _CH552_PS2H_KB_H_
 #define _CH552_PS2H_KB_H_
 
+//HINT: Read the VERY IMPORTANT warning in CH552_PS2_HOST.h. This library may conflict with the GPIO library.
+
 //HINT: The RX buffer size must be a power of 2
 #define PS2H_KB_RX_BUF_SIZE 	8
 #define PS2H_KB_MAX_NUM_PRESSED 6
