@@ -16,13 +16,8 @@ typedef struct _FIFO {
 #define fifo_peek(fifo_inst) ((fifo_inst)->pbuf[(fifo_inst)->front])
 
 void fifo_init(fifo_t* fifo_inst, uint8_t* fifo_buf, uint16_t fifo_size);
-//uint16_t fifo_num_used(fifo_t* fifo_inst);
-//uint16_t fifo_num_free(fifo_t* fifo_inst);
-//uint8_t fifo_empty(fifo_t* fifo_inst);
-//uint8_t fifo_full(fifo_t* fifo_inst);
 uint8_t fifo_push(fifo_t* fifo_inst, uint8_t val);
 uint8_t fifo_pop(fifo_t* fifo_inst);
-//uint8_t fifo_peek(fifo_t* fifo_inst);
 uint8_t fifo_read(fifo_t* fifo_inst, uint8_t* dest, uint16_t num_bytes);
 uint8_t fifo_write(fifo_t* fifo_inst, uint8_t* src, uint16_t num_bytes);
 

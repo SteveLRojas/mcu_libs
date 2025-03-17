@@ -8,6 +8,15 @@
 #ifndef _CH32V203_TIMER_H_
 #define _CH32V203_TIMER_H_
 
+#define TIMER_IMPLEMENT_ISR 1
+
+#if TIMER_IMPLEMENT_ISR
+extern void (*timer1_callback)(void);
+extern void (*timer2_callback)(void);
+extern void (*timer3_callback)(void);
+extern void (*timer4_callback)(void);
+#endif
+
 #define timer_set_period(timer, period) ((timer)->ATRLR = (period))
 #define timer_clear_interrupt_flag(timer) ((timer)->INTFR = 0)
 #define timer_enable_interrupt(timer) ((timer)->DMAINTENR |= TIM_UIE)
