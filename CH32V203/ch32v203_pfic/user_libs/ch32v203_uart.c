@@ -19,8 +19,8 @@ uint8_t uart1_tx_buf[UART1_TX_BUF_SIZE];
 volatile fifo_t uart1_rx_fifo_i;
 volatile fifo_t uart1_tx_fifo_i;
 #else
-#define uart1_rx_fifo (fifo_t*)NULL
-#define uart1_tx_fifo (fifo_t*)NULL
+#define uart1_rx_fifo (fifo_t*)0
+#define uart1_tx_fifo (fifo_t*)0
 #endif
 
 #if USE_UART_2

@@ -121,15 +121,6 @@ Discarded input sections
                 0x0000000000000000        0x6 ./user_libs/ch32v203_core.o
  .text.core_get_sp
                 0x0000000000000000        0x4 ./user_libs/ch32v203_core.o
- .debug_info    0x0000000000000000      0x36f ./user_libs/ch32v203_core.o
- .debug_abbrev  0x0000000000000000       0xb1 ./user_libs/ch32v203_core.o
- .debug_aranges
-                0x0000000000000000       0xb0 ./user_libs/ch32v203_core.o
- .debug_ranges  0x0000000000000000       0xa0 ./user_libs/ch32v203_core.o
- .debug_line    0x0000000000000000      0x443 ./user_libs/ch32v203_core.o
- .debug_str     0x0000000000000000      0x2d8 ./user_libs/ch32v203_core.o
- .comment       0x0000000000000000       0x34 ./user_libs/ch32v203_core.o
- .debug_frame   0x0000000000000000      0x140 ./user_libs/ch32v203_core.o
  .text          0x0000000000000000        0x0 ./user_libs/ch32v203_gpio.o
  .data          0x0000000000000000        0x0 ./user_libs/ch32v203_gpio.o
  .bss           0x0000000000000000        0x0 ./user_libs/ch32v203_gpio.o
@@ -184,9 +175,6 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 ./user_libs/fifo.o
  .text.fifo_read
                 0x0000000000000000       0xa8 ./user_libs/fifo.o
- .text          0x0000000000000000        0x0 ./User/ch32v20x_it.o
- .data          0x0000000000000000        0x0 ./User/ch32v20x_it.o
- .bss           0x0000000000000000        0x0 ./User/ch32v20x_it.o
  .text          0x0000000000000000        0x0 ./User/main.o
  .data          0x0000000000000000        0x0 ./User/main.o
  .bss           0x0000000000000000        0x0 ./User/main.o
@@ -368,7 +356,6 @@ LOAD ./user_libs/ch32v203_spi.o
 LOAD ./user_libs/ch32v203_timer.o
 LOAD ./user_libs/ch32v203_uart.o
 LOAD ./user_libs/fifo.o
-LOAD ./User/ch32v20x_it.o
 LOAD ./User/main.o
 LOAD ./Startup/startup_ch32v20x_D6.o
 LOAD ./Debug/debug.o
@@ -436,78 +423,78 @@ END GROUP
  .text          0x0000000000000160       0xa8 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-memset.o)
                 0x0000000000000160                memset
  *(.text.*)
- .text.gpio_set_mode
-                0x0000000000000208       0x66 ./user_libs/ch32v203_gpio.o
-                0x0000000000000208                gpio_set_mode
- .text.rcc_hse_init
-                0x000000000000026e       0x4c ./user_libs/ch32v203_rcc.o
-                0x000000000000026e                rcc_hse_init
- .text.rcc_init_pll
-                0x00000000000002ba       0x3c ./user_libs/ch32v203_rcc.o
-                0x00000000000002ba                rcc_init_pll
- .text.rcc_system_init
-                0x00000000000002f6       0x9e ./user_libs/ch32v203_rcc.o
-                0x00000000000002f6                rcc_system_init
- .text.rcc_compute_sysclk_freq
-                0x0000000000000394       0x72 ./user_libs/ch32v203_rcc.o
-                0x0000000000000394                rcc_compute_sysclk_freq
- .text.rcc_compute_hclk_freq
-                0x0000000000000406       0x22 ./user_libs/ch32v203_rcc.o
-                0x0000000000000406                rcc_compute_hclk_freq
- .text.rcc_compute_pclk1_freq
-                0x0000000000000428       0x22 ./user_libs/ch32v203_rcc.o
-                0x0000000000000428                rcc_compute_pclk1_freq
- .text.rcc_compute_pclk2_freq
-                0x000000000000044a       0x24 ./user_libs/ch32v203_rcc.o
-                0x000000000000044a                rcc_compute_pclk2_freq
- .text.rcc_compute_adcclk
-                0x000000000000046e       0x18 ./user_libs/ch32v203_rcc.o
-                0x000000000000046e                rcc_compute_adcclk
- .text.timer_init
-                0x0000000000000486       0x38 ./user_libs/ch32v203_timer.o
-                0x0000000000000486                timer_init
- .text.timer_short_delay
-                0x00000000000004be       0x42 ./user_libs/ch32v203_timer.o
-                0x00000000000004be                timer_short_delay
- .text.timer_long_delay
-                0x0000000000000500       0x46 ./user_libs/ch32v203_timer.o
-                0x0000000000000500                timer_long_delay
- .text.USART1_IRQHandler
-                0x0000000000000546       0x82 ./user_libs/ch32v203_uart.o
-                0x0000000000000546                USART1_IRQHandler
- .text.USART2_IRQHandler
-                0x00000000000005c8       0x5e ./user_libs/ch32v203_uart.o
-                0x00000000000005c8                USART2_IRQHandler
- .text.USART3_IRQHandler
-                0x0000000000000626       0x5e ./user_libs/ch32v203_uart.o
-                0x0000000000000626                USART3_IRQHandler
- .text.UART4_IRQHandler
-                0x0000000000000684       0x5e ./user_libs/ch32v203_uart.o
-                0x0000000000000684                UART4_IRQHandler
- .text.uart_init
-                0x00000000000006e2       0x6a ./user_libs/ch32v203_uart.o
-                0x00000000000006e2                uart_init
- .text.uart_write_bytes
-                0x000000000000074c       0xae ./user_libs/ch32v203_uart.o
-                0x000000000000074c                uart_write_bytes
- .text.fifo_init
-                0x00000000000007fa       0x10 ./user_libs/fifo.o
-                0x00000000000007fa                fifo_init
- .text.fifo_push
-                0x000000000000080a       0x3c ./user_libs/fifo.o
-                0x000000000000080a                fifo_push
- .text.fifo_pop
-                0x0000000000000846       0x2e ./user_libs/fifo.o
-                0x0000000000000846                fifo_pop
- .text.fifo_write
-                0x0000000000000874       0xa4 ./user_libs/fifo.o
-                0x0000000000000874                fifo_write
  .text.NMI_Handler
-                0x0000000000000918        0x2 ./User/ch32v20x_it.o
-                0x0000000000000918                NMI_Handler
+                0x0000000000000208        0x2 ./user_libs/ch32v203_core.o
+                0x0000000000000208                NMI_Handler
  .text.HardFault_Handler
-                0x000000000000091a        0x2 ./User/ch32v20x_it.o
-                0x000000000000091a                HardFault_Handler
+                0x000000000000020a        0x2 ./user_libs/ch32v203_core.o
+                0x000000000000020a                HardFault_Handler
+ .text.gpio_set_mode
+                0x000000000000020c       0x66 ./user_libs/ch32v203_gpio.o
+                0x000000000000020c                gpio_set_mode
+ .text.rcc_hse_init
+                0x0000000000000272       0x4c ./user_libs/ch32v203_rcc.o
+                0x0000000000000272                rcc_hse_init
+ .text.rcc_init_pll
+                0x00000000000002be       0x3c ./user_libs/ch32v203_rcc.o
+                0x00000000000002be                rcc_init_pll
+ .text.rcc_system_init
+                0x00000000000002fa       0x9e ./user_libs/ch32v203_rcc.o
+                0x00000000000002fa                rcc_system_init
+ .text.rcc_compute_sysclk_freq
+                0x0000000000000398       0x72 ./user_libs/ch32v203_rcc.o
+                0x0000000000000398                rcc_compute_sysclk_freq
+ .text.rcc_compute_hclk_freq
+                0x000000000000040a       0x22 ./user_libs/ch32v203_rcc.o
+                0x000000000000040a                rcc_compute_hclk_freq
+ .text.rcc_compute_pclk1_freq
+                0x000000000000042c       0x22 ./user_libs/ch32v203_rcc.o
+                0x000000000000042c                rcc_compute_pclk1_freq
+ .text.rcc_compute_pclk2_freq
+                0x000000000000044e       0x24 ./user_libs/ch32v203_rcc.o
+                0x000000000000044e                rcc_compute_pclk2_freq
+ .text.rcc_compute_adcclk
+                0x0000000000000472       0x18 ./user_libs/ch32v203_rcc.o
+                0x0000000000000472                rcc_compute_adcclk
+ .text.timer_init
+                0x000000000000048a       0x38 ./user_libs/ch32v203_timer.o
+                0x000000000000048a                timer_init
+ .text.timer_short_delay
+                0x00000000000004c2       0x42 ./user_libs/ch32v203_timer.o
+                0x00000000000004c2                timer_short_delay
+ .text.timer_long_delay
+                0x0000000000000504       0x46 ./user_libs/ch32v203_timer.o
+                0x0000000000000504                timer_long_delay
+ .text.USART1_IRQHandler
+                0x000000000000054a       0x82 ./user_libs/ch32v203_uart.o
+                0x000000000000054a                USART1_IRQHandler
+ .text.USART2_IRQHandler
+                0x00000000000005cc       0x5e ./user_libs/ch32v203_uart.o
+                0x00000000000005cc                USART2_IRQHandler
+ .text.USART3_IRQHandler
+                0x000000000000062a       0x5e ./user_libs/ch32v203_uart.o
+                0x000000000000062a                USART3_IRQHandler
+ .text.UART4_IRQHandler
+                0x0000000000000688       0x5e ./user_libs/ch32v203_uart.o
+                0x0000000000000688                UART4_IRQHandler
+ .text.uart_init
+                0x00000000000006e6       0x6a ./user_libs/ch32v203_uart.o
+                0x00000000000006e6                uart_init
+ .text.uart_write_bytes
+                0x0000000000000750       0xae ./user_libs/ch32v203_uart.o
+                0x0000000000000750                uart_write_bytes
+ .text.fifo_init
+                0x00000000000007fe       0x10 ./user_libs/fifo.o
+                0x00000000000007fe                fifo_init
+ .text.fifo_push
+                0x000000000000080e       0x3c ./user_libs/fifo.o
+                0x000000000000080e                fifo_push
+ .text.fifo_pop
+                0x000000000000084a       0x2e ./user_libs/fifo.o
+                0x000000000000084a                fifo_pop
+ .text.fifo_write
+                0x0000000000000878       0xa4 ./user_libs/fifo.o
+                0x0000000000000878                fifo_write
  .text.TIM1_UP_IRQHandler
                 0x000000000000091c       0x30 ./User/main.o
                 0x000000000000091c                TIM1_UP_IRQHandler
@@ -705,40 +692,40 @@ END GROUP
                 0x0000000000001f2c                . = ALIGN (0x4)
 
 .rela.dyn       0x0000000000001f2c        0x0
- .rela.init     0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
- .rela.vector   0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+ .rela.init     0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
+ .rela.vector   0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text.handle_reset
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._sbrk
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.sdata.curbrk.3349
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._vfprintf_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._sbrk_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._write_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._close_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._fstat_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._isatty_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._lseek_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._read_r
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._close
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._fstat
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._isatty
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._lseek
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
  .rela.text._read
-                0x0000000000001f2c        0x0 ./user_libs/ch32v203_gpio.o
+                0x0000000000001f2c        0x0 ./user_libs/ch32v203_core.o
 
 .fini           0x0000000000001f2c        0x0
  *(SORT_NONE(.fini))
@@ -859,27 +846,138 @@ END GROUP
                 0x0000000020005000                PROVIDE (_eusrstack = .)
 OUTPUT(ch32v203_pfic.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x4035
- .debug_info    0x0000000000000000      0x205 ./user_libs/ch32v203_gpio.o
- .debug_info    0x0000000000000205      0x3c7 ./user_libs/ch32v203_rcc.o
- .debug_info    0x00000000000005cc      0x394 ./user_libs/ch32v203_timer.o
- .debug_info    0x0000000000000960      0x874 ./user_libs/ch32v203_uart.o
- .debug_info    0x00000000000011d4      0x2aa ./user_libs/fifo.o
- .debug_info    0x000000000000147e      0x93e ./User/ch32v20x_it.o
- .debug_info    0x0000000000001dbc     0x154b ./User/main.o
- .debug_info    0x0000000000003307       0x22 ./Startup/startup_ch32v20x_D6.o
- .debug_info    0x0000000000003329      0xd0c ./Debug/debug.o
+.debug_info     0x0000000000000000     0x3a8e
+ .debug_info    0x0000000000000000      0x397 ./user_libs/ch32v203_core.o
+ .debug_info    0x0000000000000397      0x205 ./user_libs/ch32v203_gpio.o
+ .debug_info    0x000000000000059c      0x3c7 ./user_libs/ch32v203_rcc.o
+ .debug_info    0x0000000000000963      0x394 ./user_libs/ch32v203_timer.o
+ .debug_info    0x0000000000000cf7      0x874 ./user_libs/ch32v203_uart.o
+ .debug_info    0x000000000000156b      0x2aa ./user_libs/fifo.o
+ .debug_info    0x0000000000001815     0x154b ./User/main.o
+ .debug_info    0x0000000000002d60       0x22 ./Startup/startup_ch32v20x_D6.o
+ .debug_info    0x0000000000002d82      0xd0c ./Debug/debug.o
 
-.debug_abbrev   0x0000000000000000      0xd7f
- .debug_abbrev  0x0000000000000000      0x117 ./user_libs/ch32v203_gpio.o
- .debug_abbrev  0x0000000000000117      0x163 ./user_libs/ch32v203_rcc.o
- .debug_abbrev  0x000000000000027a       0xe1 ./user_libs/ch32v203_timer.o
- .debug_abbrev  0x000000000000035b      0x21f ./user_libs/ch32v203_uart.o
- .debug_abbrev  0x000000000000057a      0x102 ./user_libs/fifo.o
- .debug_abbrev  0x000000000000067c      0x1bc ./User/ch32v20x_it.o
- .debug_abbrev  0x0000000000000838      0x29f ./User/main.o
- .debug_abbrev  0x0000000000000ad7       0x12 ./Startup/startup_ch32v20x_D6.o
- .debug_abbrev  0x0000000000000ae9      0x296 ./Debug/debug.o
+.debug_abbrev   0x0000000000000000      0xc72
+ .debug_abbrev  0x0000000000000000       0xaf ./user_libs/ch32v203_core.o
+ .debug_abbrev  0x00000000000000af      0x117 ./user_libs/ch32v203_gpio.o
+ .debug_abbrev  0x00000000000001c6      0x163 ./user_libs/ch32v203_rcc.o
+ .debug_abbrev  0x0000000000000329       0xe1 ./user_libs/ch32v203_timer.o
+ .debug_abbrev  0x000000000000040a      0x21f ./user_libs/ch32v203_uart.o
+ .debug_abbrev  0x0000000000000629      0x102 ./user_libs/fifo.o
+ .debug_abbrev  0x000000000000072b      0x29f ./User/main.o
+ .debug_abbrev  0x00000000000009ca       0x12 ./Startup/startup_ch32v20x_D6.o
+ .debug_abbrev  0x00000000000009dc      0x296 ./Debug/debug.o
+
+.debug_aranges  0x0000000000000000      0x2d8
+ .debug_aranges
+                0x0000000000000000       0xc0 ./user_libs/ch32v203_core.o
+ .debug_aranges
+                0x00000000000000c0       0x28 ./user_libs/ch32v203_gpio.o
+ .debug_aranges
+                0x00000000000000e8       0x58 ./user_libs/ch32v203_rcc.o
+ .debug_aranges
+                0x0000000000000140       0x30 ./user_libs/ch32v203_timer.o
+ .debug_aranges
+                0x0000000000000170       0x90 ./user_libs/ch32v203_uart.o
+ .debug_aranges
+                0x0000000000000200       0x40 ./user_libs/fifo.o
+ .debug_aranges
+                0x0000000000000240       0x28 ./User/main.o
+ .debug_aranges
+                0x0000000000000268       0x30 ./Startup/startup_ch32v20x_D6.o
+ .debug_aranges
+                0x0000000000000298       0x40 ./Debug/debug.o
+
+.debug_ranges   0x0000000000000000      0x268
+ .debug_ranges  0x0000000000000000       0xb0 ./user_libs/ch32v203_core.o
+ .debug_ranges  0x00000000000000b0       0x30 ./user_libs/ch32v203_gpio.o
+ .debug_ranges  0x00000000000000e0       0x48 ./user_libs/ch32v203_rcc.o
+ .debug_ranges  0x0000000000000128       0x20 ./user_libs/ch32v203_timer.o
+ .debug_ranges  0x0000000000000148       0x80 ./user_libs/ch32v203_uart.o
+ .debug_ranges  0x00000000000001c8       0x30 ./user_libs/fifo.o
+ .debug_ranges  0x00000000000001f8       0x18 ./User/main.o
+ .debug_ranges  0x0000000000000210       0x28 ./Startup/startup_ch32v20x_D6.o
+ .debug_ranges  0x0000000000000238       0x30 ./Debug/debug.o
+
+.debug_line     0x0000000000000000     0x2f49
+ .debug_line    0x0000000000000000      0x498 ./user_libs/ch32v203_core.o
+ .debug_line    0x0000000000000498      0x322 ./user_libs/ch32v203_gpio.o
+ .debug_line    0x00000000000007ba      0x6a2 ./user_libs/ch32v203_rcc.o
+ .debug_line    0x0000000000000e5c      0x368 ./user_libs/ch32v203_timer.o
+ .debug_line    0x00000000000011c4      0xc88 ./user_libs/ch32v203_uart.o
+ .debug_line    0x0000000000001e4c      0x620 ./user_libs/fifo.o
+ .debug_line    0x000000000000246c      0x4ea ./User/main.o
+ .debug_line    0x0000000000002956      0x121 ./Startup/startup_ch32v20x_D6.o
+ .debug_line    0x0000000000002a77      0x4d2 ./Debug/debug.o
+
+.debug_str      0x0000000000000000     0x119f
+ .debug_str     0x0000000000000000      0x2ac ./user_libs/ch32v203_core.o
+                                        0x2f6 (size before relaxing)
+ .debug_str     0x00000000000002ac       0x95 ./user_libs/ch32v203_gpio.o
+                                        0x22e (size before relaxing)
+ .debug_str     0x0000000000000341      0x1a8 ./user_libs/ch32v203_rcc.o
+                                        0x356 (size before relaxing)
+ .debug_str     0x00000000000004e9      0x1c8 ./user_libs/ch32v203_timer.o
+                                        0x369 (size before relaxing)
+ .debug_str     0x00000000000006b1      0x2c4 ./user_libs/ch32v203_uart.o
+                                        0x4f8 (size before relaxing)
+ .debug_str     0x0000000000000975       0x4c ./user_libs/fifo.o
+                                        0x24e (size before relaxing)
+ .debug_str     0x00000000000009c1      0x74f ./User/main.o
+                                        0xcb6 (size before relaxing)
+ .debug_str     0x0000000000001110       0x2d ./Startup/startup_ch32v20x_D6.o
+                                         0x66 (size before relaxing)
+ .debug_str     0x000000000000113d       0x62 ./Debug/debug.o
+                                        0x766 (size before relaxing)
+
+.comment        0x0000000000000000       0x33
+ .comment       0x0000000000000000       0x33 ./user_libs/ch32v203_core.o
+                                         0x34 (size before relaxing)
+ .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_gpio.o
+ .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_rcc.o
+ .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_timer.o
+ .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_uart.o
+ .comment       0x0000000000000033       0x34 ./user_libs/fifo.o
+ .comment       0x0000000000000033       0x34 ./User/main.o
+ .comment       0x0000000000000033       0x34 ./Debug/debug.o
+
+.debug_frame    0x0000000000000000      0xe9c
+ .debug_frame   0x0000000000000000      0x160 ./user_libs/ch32v203_core.o
+ .debug_frame   0x0000000000000160       0x30 ./user_libs/ch32v203_gpio.o
+ .debug_frame   0x0000000000000190       0xd0 ./user_libs/ch32v203_rcc.o
+ .debug_frame   0x0000000000000260       0x40 ./user_libs/ch32v203_timer.o
+ .debug_frame   0x00000000000002a0      0x1d0 ./user_libs/ch32v203_uart.o
+ .debug_frame   0x0000000000000470       0x60 ./user_libs/fifo.o
+ .debug_frame   0x00000000000004d0       0x40 ./User/main.o
+ .debug_frame   0x0000000000000510       0x78 ./Debug/debug.o
+ .debug_frame   0x0000000000000588       0x54 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-printf.o)
+ .debug_frame   0x00000000000005dc       0x54 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-puts.o)
+ .debug_frame   0x0000000000000630       0x50 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-wbuf.o)
+ .debug_frame   0x0000000000000680       0x3c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-wsetup.o)
+ .debug_frame   0x00000000000006bc       0x7c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fflush.o)
+ .debug_frame   0x0000000000000738      0x148 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-findfp.o)
+ .debug_frame   0x0000000000000880       0x88 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fwalk.o)
+ .debug_frame   0x0000000000000908       0x64 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-makebuf.o)
+ .debug_frame   0x000000000000096c       0x40 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x00000000000009ac       0x40 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00000000000009ec       0xd0 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-vfprintf.o)
+ .debug_frame   0x0000000000000abc       0x8c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x0000000000000b48       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x0000000000000b78       0xa4 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-stdio.o)
+ .debug_frame   0x0000000000000c1c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-writer.o)
+ .debug_frame   0x0000000000000c4c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-closer.o)
+ .debug_frame   0x0000000000000c7c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fstatr.o)
+ .debug_frame   0x0000000000000cac       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-isattyr.o)
+ .debug_frame   0x0000000000000cdc       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-lseekr.o)
+ .debug_frame   0x0000000000000d0c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-memchr.o)
+ .debug_frame   0x0000000000000d2c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-mlock.o)
+ .debug_frame   0x0000000000000d5c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-readr.o)
+ .debug_frame   0x0000000000000d8c       0x70 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-reent.o)
+ .debug_frame   0x0000000000000dfc       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(close.o)
+ .debug_frame   0x0000000000000e1c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(fstat.o)
+ .debug_frame   0x0000000000000e3c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(isatty.o)
+ .debug_frame   0x0000000000000e5c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(lseek.o)
+ .debug_frame   0x0000000000000e7c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(read.o)
 
 .debug_loc      0x0000000000000000      0xdf8
  .debug_loc     0x0000000000000000      0x100 ./user_libs/ch32v203_gpio.o
@@ -889,117 +987,6 @@ OUTPUT(ch32v203_pfic.elf elf32-littleriscv)
  .debug_loc     0x00000000000008f2      0x3dd ./user_libs/fifo.o
  .debug_loc     0x0000000000000ccf       0x46 ./User/main.o
  .debug_loc     0x0000000000000d15       0xe3 ./Debug/debug.o
-
-.debug_aranges  0x0000000000000000      0x240
- .debug_aranges
-                0x0000000000000000       0x28 ./user_libs/ch32v203_gpio.o
- .debug_aranges
-                0x0000000000000028       0x58 ./user_libs/ch32v203_rcc.o
- .debug_aranges
-                0x0000000000000080       0x30 ./user_libs/ch32v203_timer.o
- .debug_aranges
-                0x00000000000000b0       0x90 ./user_libs/ch32v203_uart.o
- .debug_aranges
-                0x0000000000000140       0x40 ./user_libs/fifo.o
- .debug_aranges
-                0x0000000000000180       0x28 ./User/ch32v20x_it.o
- .debug_aranges
-                0x00000000000001a8       0x28 ./User/main.o
- .debug_aranges
-                0x00000000000001d0       0x30 ./Startup/startup_ch32v20x_D6.o
- .debug_aranges
-                0x0000000000000200       0x40 ./Debug/debug.o
-
-.debug_ranges   0x0000000000000000      0x1d0
- .debug_ranges  0x0000000000000000       0x30 ./user_libs/ch32v203_gpio.o
- .debug_ranges  0x0000000000000030       0x48 ./user_libs/ch32v203_rcc.o
- .debug_ranges  0x0000000000000078       0x20 ./user_libs/ch32v203_timer.o
- .debug_ranges  0x0000000000000098       0x80 ./user_libs/ch32v203_uart.o
- .debug_ranges  0x0000000000000118       0x30 ./user_libs/fifo.o
- .debug_ranges  0x0000000000000148       0x18 ./User/ch32v20x_it.o
- .debug_ranges  0x0000000000000160       0x18 ./User/main.o
- .debug_ranges  0x0000000000000178       0x28 ./Startup/startup_ch32v20x_D6.o
- .debug_ranges  0x00000000000001a0       0x30 ./Debug/debug.o
-
-.debug_line     0x0000000000000000     0x2c1a
- .debug_line    0x0000000000000000      0x322 ./user_libs/ch32v203_gpio.o
- .debug_line    0x0000000000000322      0x6a2 ./user_libs/ch32v203_rcc.o
- .debug_line    0x00000000000009c4      0x368 ./user_libs/ch32v203_timer.o
- .debug_line    0x0000000000000d2c      0xc88 ./user_libs/ch32v203_uart.o
- .debug_line    0x00000000000019b4      0x620 ./user_libs/fifo.o
- .debug_line    0x0000000000001fd4      0x169 ./User/ch32v20x_it.o
- .debug_line    0x000000000000213d      0x4ea ./User/main.o
- .debug_line    0x0000000000002627      0x121 ./Startup/startup_ch32v20x_D6.o
- .debug_line    0x0000000000002748      0x4d2 ./Debug/debug.o
-
-.debug_str      0x0000000000000000     0x106d
- .debug_str     0x0000000000000000      0x1db ./user_libs/ch32v203_gpio.o
-                                        0x22e (size before relaxing)
- .debug_str     0x00000000000001db      0x1a8 ./user_libs/ch32v203_rcc.o
-                                        0x356 (size before relaxing)
- .debug_str     0x0000000000000383      0x1c8 ./user_libs/ch32v203_timer.o
-                                        0x369 (size before relaxing)
- .debug_str     0x000000000000054b      0x2c4 ./user_libs/ch32v203_uart.o
-                                        0x4f8 (size before relaxing)
- .debug_str     0x000000000000080f       0x4c ./user_libs/fifo.o
-                                        0x24e (size before relaxing)
- .debug_str     0x000000000000085b      0x3e1 ./User/ch32v20x_it.o
-                                        0x58d (size before relaxing)
- .debug_str     0x0000000000000c3c      0x3a2 ./User/main.o
-                                        0xcb6 (size before relaxing)
- .debug_str     0x0000000000000fde       0x2d ./Startup/startup_ch32v20x_D6.o
-                                         0x66 (size before relaxing)
- .debug_str     0x000000000000100b       0x62 ./Debug/debug.o
-                                        0x766 (size before relaxing)
-
-.comment        0x0000000000000000       0x33
- .comment       0x0000000000000000       0x33 ./user_libs/ch32v203_gpio.o
-                                         0x34 (size before relaxing)
- .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_rcc.o
- .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_timer.o
- .comment       0x0000000000000033       0x34 ./user_libs/ch32v203_uart.o
- .comment       0x0000000000000033       0x34 ./user_libs/fifo.o
- .comment       0x0000000000000033       0x34 ./User/ch32v20x_it.o
- .comment       0x0000000000000033       0x34 ./User/main.o
- .comment       0x0000000000000033       0x34 ./Debug/debug.o
-
-.debug_frame    0x0000000000000000      0xd6c
- .debug_frame   0x0000000000000000       0x30 ./user_libs/ch32v203_gpio.o
- .debug_frame   0x0000000000000030       0xd0 ./user_libs/ch32v203_rcc.o
- .debug_frame   0x0000000000000100       0x40 ./user_libs/ch32v203_timer.o
- .debug_frame   0x0000000000000140      0x1d0 ./user_libs/ch32v203_uart.o
- .debug_frame   0x0000000000000310       0x60 ./user_libs/fifo.o
- .debug_frame   0x0000000000000370       0x30 ./User/ch32v20x_it.o
- .debug_frame   0x00000000000003a0       0x40 ./User/main.o
- .debug_frame   0x00000000000003e0       0x78 ./Debug/debug.o
- .debug_frame   0x0000000000000458       0x54 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-printf.o)
- .debug_frame   0x00000000000004ac       0x54 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-puts.o)
- .debug_frame   0x0000000000000500       0x50 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-wbuf.o)
- .debug_frame   0x0000000000000550       0x3c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-wsetup.o)
- .debug_frame   0x000000000000058c       0x7c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fflush.o)
- .debug_frame   0x0000000000000608      0x148 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-findfp.o)
- .debug_frame   0x0000000000000750       0x88 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fwalk.o)
- .debug_frame   0x00000000000007d8       0x64 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-makebuf.o)
- .debug_frame   0x000000000000083c       0x40 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-freer.o)
- .debug_frame   0x000000000000087c       0x40 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-mallocr.o)
- .debug_frame   0x00000000000008bc       0xd0 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-vfprintf.o)
- .debug_frame   0x000000000000098c       0x8c c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-nano-vfprintf_i.o)
- .debug_frame   0x0000000000000a18       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-sbrkr.o)
- .debug_frame   0x0000000000000a48       0xa4 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-stdio.o)
- .debug_frame   0x0000000000000aec       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-writer.o)
- .debug_frame   0x0000000000000b1c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-closer.o)
- .debug_frame   0x0000000000000b4c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-fstatr.o)
- .debug_frame   0x0000000000000b7c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-isattyr.o)
- .debug_frame   0x0000000000000bac       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-lseekr.o)
- .debug_frame   0x0000000000000bdc       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-memchr.o)
- .debug_frame   0x0000000000000bfc       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-mlock.o)
- .debug_frame   0x0000000000000c2c       0x30 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-readr.o)
- .debug_frame   0x0000000000000c5c       0x70 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libg_nano.a(lib_a-reent.o)
- .debug_frame   0x0000000000000ccc       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(close.o)
- .debug_frame   0x0000000000000cec       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(fstat.o)
- .debug_frame   0x0000000000000d0c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(isatty.o)
- .debug_frame   0x0000000000000d2c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(lseek.o)
- .debug_frame   0x0000000000000d4c       0x20 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(read.o)
 
 .stab           0x0000000000000000       0x84
  .stab          0x0000000000000000       0x24 c:/mounriver/mrs_community/toolchain/risc-v embedded gcc/bin/../lib/gcc/riscv-none-embed/8.2.0/../../../../riscv-none-embed/lib/rv32imac/ilp32\libnosys.a(close.o)
