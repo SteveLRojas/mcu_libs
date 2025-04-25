@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?MAIN?MAIN ~ ?PR?ON_GPIO_INT?MAIN, ?PR?GPIO_ISR?CH552_GPIO ! ?PR?ON_GPIO_INT?MAIN</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -402,14 +402,14 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>System.c</FileName>
+              <FileName>CH552_RCC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
+              <FilePath>.\CH552_RCC.c</FilePath>
             </File>
             <File>
-              <FileName>System.h</FileName>
+              <FileName>CH552_RCC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

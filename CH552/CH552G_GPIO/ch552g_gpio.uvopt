@@ -235,8 +235,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\System.c</PathWithFileName>
-      <FilenameWithoutPath>System.c</FilenameWithoutPath>
+      <PathWithFileName>.\CH552_RCC.c</PathWithFileName>
+      <FilenameWithoutPath>CH552_RCC.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -247,8 +247,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\System.h</PathWithFileName>
-      <FilenameWithoutPath>System.h</FilenameWithoutPath>
+      <PathWithFileName>.\CH552_RCC.h</PathWithFileName>
+      <FilenameWithoutPath>CH552_RCC.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
