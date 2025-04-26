@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?MAIN?MAIN ~ ?PR?ON_GPIO_INT?MAIN, ?PR?GPIO_ISR?CH559_GPIO ! ?PR?ON_GPIO_INT?MAIN</OverlayString>
             <MiscControls></MiscControls>
-            <DisableWarningNumbers></DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <DisableWarningNumbers>16</DisableWarningNumbers>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -402,14 +402,14 @@
               <FilePath>.\CH559.H</FilePath>
             </File>
             <File>
-              <FileName>DEBUG.C</FileName>
+              <FileName>CH559_RCC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\DEBUG.C</FilePath>
+              <FilePath>.\CH559_RCC.c</FilePath>
             </File>
             <File>
-              <FileName>DEBUG.H</FileName>
+              <FileName>CH559_RCC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\DEBUG.H</FilePath>
+              <FilePath>.\CH559_RCC.h</FilePath>
             </File>
           </Files>
         </Group>
