@@ -49,6 +49,6 @@
 #define gpio_toggle_pin(port, pin) ((port)->OUTDR ^= (pin))
 
 void gpio_set_mode(GPIO_TypeDef* port, uint8_t mode, uint16_t pins);
-uint16_t gpio_lock_pin(GPIO_TypeDef* port, uint16_t pins);
+uint16_t gpio_lock_pin(GPIO_TypeDef* port, uint32_t pins);
 
 #endif /* _CH32V203_GPIO_H_ */

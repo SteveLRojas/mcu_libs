@@ -18,6 +18,7 @@ extern void (*timer4_callback)(void);
 #endif
 
 #define timer_set_period(timer, period) ((timer)->ATRLR = (period))
+#define timer_get_period(timer) ((timer)->ATRLR)
 #define timer_clear_interrupt_flag(timer) ((timer)->INTFR = 0)
 #define timer_enable_interrupt(timer) ((timer)->DMAINTENR |= TIM_UIE)
 #define timer_disable_interrupt(timer) ((timer)->DMAINTENR &= ~TIM_UIE)

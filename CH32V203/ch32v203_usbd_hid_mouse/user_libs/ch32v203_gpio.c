@@ -34,11 +34,11 @@ void gpio_set_mode(GPIO_TypeDef* port, uint8_t mode, uint16_t pins)
 	}
 }
 
-uint16_t gpio_lock_pin(GPIO_TypeDef* port, uint16_t pins)
+uint16_t gpio_lock_pin(GPIO_TypeDef* port, uint32_t pins)
 {
+	port->LCKR = pins | 0x00010000;
 	port->LCKR = pins;
-	port->LCKR = ~pins;
-	port->LCKR = pins;
-	pins = (uint16_t)(port->LCKR);
-	return (uint16_t)(port->LCKR);
+	port->LCKR = pins | 0x00010000;
+	pins = port->LCKR;
+	return (uint16_t)(pins | port->LCKR);
 }
