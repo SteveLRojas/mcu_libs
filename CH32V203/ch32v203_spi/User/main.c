@@ -1,8 +1,11 @@
+#include "ch32v20x.h"
+#include "ch32v203_afio.h"
+#include "ch32v203_core.h"
 #include "debug.h"
-#include "system_ch32v20x.h"
 #include "fifo.h"
 #include "ch32v203_uart.h"
 #include "ch32v203_gpio.h"
+#include "ch32v203_rcc.h"
 #include "ch32v203_spi.h"
 
 //Pins:
@@ -19,13 +22,10 @@
 // LED1 = PC14
 // LED0 = PC15
 
-#define UART_RX_INT_DISABLE(uart) ((uart)->CTLR1 &= (~USART_CTLR1_RXNEIE))
-#define UART_RX_INT_ENABLE(uart) ((uart)->CTLR1 |= USART_CTLR1_RXNEIE)
-
 int main(void)
 {
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO | RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB | RCC_APB2Periph_GPIOC | RCC_APB2Periph_SPI1 | RCC_APB2Periph_USART1, ENABLE);
+	rcc_apb2_clk_enable(RCC_AFIOEN | RCC_IOPAEN | RCC_IOPBEN | RCC_IOPCEN | RCC_ADC1EN | RCC_ADC2EN | RCC_TIM1EN | RCC_SPI1EN | RCC_USART1EN);
+	afio_pcfr1_remap(AFIO_PCFR1_SWJ_CFG_DISABLE);
 
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_10);
@@ -35,28 +35,30 @@ int main(void)
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOB, GPIO_PIN_4);
 
-    Delay_Init();
-    uart_init(USART1, 115200);
-    NVIC_EnableIRQ(USART1_IRQn);
+	delay_init();
+	uart_init(USART1, 115200);
+	core_enable_irq(USART1_IRQn);
 
-    printf("SystemClk:%d\n", SystemCoreClock);
-    printf("Unicorn\n");
+	printf("SYSCLK: %u\n", rcc_compute_sysclk_freq());
+	printf("HCLK: %u\n", rcc_compute_hclk_freq());
+	printf("PCLK1: %u\n", rcc_compute_pclk1_freq());
+	printf("PCLK2: %u\n", rcc_compute_pclk2_freq());
+	printf("ADCCLK: %u\n", rcc_compute_adcclk());
 
-    spi_init(SPI1, SPI_8_BIT | SPI_CLK_DIV_16 | SPI_MODE_0);
-    AFIO->PCFR1 |= AFIO_PCFR1_SPI1_REMAP;
-    gpio_set_pin(GPIOA, GPIO_PIN_15);
+	spi_init(SPI1, SPI_8_BIT | SPI_CLK_DIV_16 | SPI_MODE_0);
+	afio_pcfr1_remap(AFIO_PCFR1_SPI1_REMAP);
+	gpio_set_pin(GPIOA, GPIO_PIN_15);
 
-    // blink the led once
-    gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
-    gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-    gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
-    gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-    Delay_Ms(100);
-    printf("Blink done\n");
-
+	// blink the led once
+	gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	gpio_set_pin(GPIOA, GPIO_PIN_8);
+	delay_ms(100);
+	gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	gpio_set_pin(GPIOA, GPIO_PIN_8);
+	delay_ms(100);
+	gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
+	delay_ms(100);
+	printf("Unicorn\n");
 
 	uint8_t time = 0;
 	uint8_t temp = 0;
@@ -75,6 +77,6 @@ int main(void)
 			gpio_toggle_pin(GPIOC, GPIO_PIN_13);
 		}
 
-		Delay_Ms(1);
+		delay_ms(1);
 	}
 }

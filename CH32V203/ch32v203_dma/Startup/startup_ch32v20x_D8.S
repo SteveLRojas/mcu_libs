@@ -1,9 +1,9 @@
 ;/********************************** (C) COPYRIGHT *******************************
-;* File Name          : startup_ch32v20x_D6.s
+;* File Name          : startup_ch32v20x_D8.s
 ;* Author             : WCH
 ;* Version            : V1.0.1
 ;* Date               : 2024/01/31
-;* Description        :  CH32V203F6-CH32V203F8-CH32V203G6-CH32V203G8-CH32V203K6-CH32V203K8-CH32V203C6-CH32V203C8-CH32V203G8
+;* Description        : CH32V203RB
 ;*                    vector table for eclipse toolchain.
 ;*********************************************************************************
 ;* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
@@ -83,8 +83,15 @@ _vector_base:
     .word   USBWakeUp_IRQHandler       /* USB Wake up from suspend */
     .word   USBFS_IRQHandler           /* USBFS Break */
     .word   USBFSWakeUp_IRQHandler     /* USBFS Wake up from suspend */
+    .word   ETH_IRQHandler             /* ETH global */
+    .word   ETHWakeUp_IRQHandler       /* ETH Wake up */
+    .word   0                          /* BLE BB */
+    .word   0                          /* BLE LLE */
+    .word   TIM5_IRQHandler            /* TIM5 */
     .word   UART4_IRQHandler           /* UART4 */
     .word   DMA1_Channel8_IRQHandler   /* DMA1 Channel8 */
+    .word   OSC32KCal_IRQHandler       /* OSC32KCal */
+    .word   OSCWakeUp_IRQHandler       /* OSC Wake Up */
 
     .option rvc;
     .section    .text.vector_handler, "ax", @progbits
@@ -140,8 +147,13 @@ _vector_base:
     .weak   USBWakeUp_IRQHandler       /* USB Wakeup from suspend */
     .weak   USBFS_IRQHandler           /* USBFS */
     .weak   USBFSWakeUp_IRQHandler     /* USBFS Wake Up */
+    .weak   ETH_IRQHandler             /* ETH global */
+    .weak   ETHWakeUp_IRQHandler       /* ETHWakeUp */
+    .weak   TIM5_IRQHandler            /* TIM5 */
     .weak   UART4_IRQHandler           /* UART4 */
     .weak   DMA1_Channel8_IRQHandler   /* DMA1 Channel8 */
+    .weak   OSC32KCal_IRQHandler       /* OSC32 KCal */
+    .weak   OSCWakeUp_IRQHandler       /* OSC Wake Up */
 
 NMI_Handler:
 HardFault_Handler:
@@ -195,6 +207,11 @@ RTCAlarm_IRQHandler:
 USBWakeUp_IRQHandler:
 USBFS_IRQHandler:
 USBFSWakeUp_IRQHandler:
+ETH_IRQHandler:
+ETHWakeUp_IRQHandler:
+TIM5_IRQHandler:
+OSC32KCal_IRQHandler:
+OSCWakeUp_IRQHandler:
 UART4_IRQHandler:
 DMA1_Channel8_IRQHandler:
 1:
@@ -246,9 +263,7 @@ handle_reset:
     ori t0, t0, 3           
 	csrw mtvec, t0
 
-    jal rcc_system_init
+    jal  SystemInit
 	la t0, main
 	csrw mepc, t0
 	mret
-
-
