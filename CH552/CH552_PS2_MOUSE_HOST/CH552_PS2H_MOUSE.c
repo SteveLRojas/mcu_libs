@@ -325,6 +325,7 @@ void ps2h_ms_enable_scrolling(void)
 	ps2h_ms_set_sample_rate(PS2H_MS_SAMPLE_RATE_80);
 	while(!(ps2h_ms_status & PS2H_MS_STAT_READY));
 	//now get the device ID
+	ps2h_ms_status &= ~PS2H_MS_STAT_DEVICE_ID;
 	ps2h_ms_timer_state = PS2H_MS_S_TIM_SEND1;
 	ps2h_ms_parse_state = PS2H_MS_S_PRS_WID;
 	ps2h_ms_tx_buf[0] = PS2H_MS_COM_1B_GET_DEVICE_ID;
