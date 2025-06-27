@@ -31,12 +31,18 @@ void (*ps2_p1_tx_callback)(void) = NULL;
 #if PS2_USE_PORT_0
 void int0_isr(void) interrupt INT_NO_INT0
 {
+#if PS2_P0_USE_BENCHMARK_PIN
+	PS2_P0_ISR_BENCHMARK_PIN = 0;
+#endif
 	if(ps2_p0_rx_enabled)
 	{
 		if(!ps2_p0_bit_count)	//start
 		{
 			if(PS2_P0_DATA_PIN)
 			{
+#if PS2_P0_USE_BENCHMARK_PIN
+				PS2_P0_ISR_BENCHMARK_PIN = 1;
+#endif
 				return;
 			}
 			else
@@ -57,6 +63,9 @@ void int0_isr(void) interrupt INT_NO_INT0
 			ps2_p0_bit_count = 0;
 			if(ps2_p0_rx_callback)
 				ps2_p0_rx_callback();
+#if PS2_P0_USE_BENCHMARK_PIN
+			PS2_P0_ISR_BENCHMARK_PIN = 1;
+#endif
 			return;
 		}
 		else	//data
@@ -88,6 +97,9 @@ void int0_isr(void) interrupt INT_NO_INT0
 			ps2_p0_bit_count = 0;
 			if(ps2_p0_tx_callback)
 				ps2_p0_tx_callback();
+#if PS2_P0_USE_BENCHMARK_PIN
+			PS2_P0_ISR_BENCHMARK_PIN = 1;
+#endif
 			return;
 		}
 		else
@@ -98,6 +110,9 @@ void int0_isr(void) interrupt INT_NO_INT0
 		}
 		ps2_p0_bit_count += 1;
 	}
+#if PS2_P0_USE_BENCHMARK_PIN
+	PS2_P0_ISR_BENCHMARK_PIN = 1;
+#endif
 }
 #endif
 

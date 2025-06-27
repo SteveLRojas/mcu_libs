@@ -346,7 +346,7 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?_PS2H_KB_INIT?CH552_PS2H_KB ~ (?PR?PS2H_KB_ON_RX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TIMER?CH552_PS2H_KB), ?PR?INT0_ISR?CH552_PS2_HOST ! (?PR?PS2H_KB_ON_RX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TX?CH552_PS2H_KB), ?PR?TIMER2_ISR?CH552_TIMER ! ?PR?PS2H_KB_ON_TIMER?CH552_PS2H_KB</OverlayString>
+            <OverlayString>?PR?_PS2H_KB_INIT?CH552_PS2H_KB ~ (?PR?PS2H_KB_ON_RX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TIMER?CH552_PS2H_KB), ?PR?INT0_ISR?CH552_PS2_HOST ! (?PR?PS2H_KB_ON_RX?CH552_PS2H_KB, ?PR?PS2H_KB_ON_TX?CH552_PS2H_KB), ?PR?TIMER2_ISR?CH552_TIMER ! ?PR?PS2H_KB_ON_TIMER?CH552_PS2H_KB, ?PR?CDC_INIT?CH552_USB_CDC ~ (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC), ?PR?USB_ISR?CH552_USB ! (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile>.\link.lin</LinkerCmdFile>
@@ -387,16 +387,6 @@
               <FilePath>.\CH552.H</FilePath>
             </File>
             <File>
-              <FileName>CH552_FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_FIFO.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_FIFO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_FIFO.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552_GPIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH552_GPIO.c</FilePath>
@@ -427,16 +417,6 @@
               <FilePath>.\CH552_TIMER.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_UART.h</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
@@ -460,6 +440,26 @@
               <FileName>CH552_PS2H_KB.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_PS2H_KB.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB_CDC.h</FilePath>
             </File>
           </Files>
         </Group>

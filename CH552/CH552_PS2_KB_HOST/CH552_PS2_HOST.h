@@ -10,9 +10,11 @@
 // HINT: user options
 #define PS2_USE_PORT_0 1
 #define PS2_USE_PORT_1 0
+#define PS2_P0_USE_BENCHMARK_PIN 1
+#define PS2_P0_ISR_BENCHMARK_PIN TIN2
 
 // HINT: The CLK pin for port 0 is always INT0, and the CLK pin for port 1 is always INT1
-#define PS2_P0_DATA_PIN	INT1
+#define PS2_P0_DATA_PIN	MISO
 #define PS2_P1_DATA_PIN	AIN3
 
 // HINT: do not change any defines below this line
