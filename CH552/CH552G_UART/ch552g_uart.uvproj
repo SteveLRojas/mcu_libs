@@ -422,14 +422,14 @@
               <FilePath>.\CH552_UART.h</FilePath>
             </File>
             <File>
-              <FileName>System.c</FileName>
+              <FileName>CH552_RCC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
+              <FilePath>.\CH552_RCC.c</FilePath>
             </File>
             <File>
-              <FileName>System.h</FileName>
+              <FileName>CH552_RCC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

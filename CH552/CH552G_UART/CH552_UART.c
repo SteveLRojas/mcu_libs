@@ -1,5 +1,5 @@
 #include "CH552.H"
-#include "System.h"
+#include "CH552_RCC.h"
 #include "CH552_FIFO.h"
 #include "CH552_UART.h"
 

@@ -1,7 +1,9 @@
 #include "CH552.H"
-#include "System.h"
+#include "CH552_RCC.h"
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
+
+#define  BAUD_RATE  125000ul
 
 char code test_string[] = "Unicorn";
 
@@ -19,7 +21,7 @@ int main()
 	UINT8 time = 0;
 	UINT8 temp = 0;
 	
-	CfgFsys();
+	rcc_set_clk_freq(RCC_CLK_FREQ_24M);
 	
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_1 | GPIO_PIN_4 | GPIO_PIN_5);
 	
@@ -35,9 +37,9 @@ int main()
 	E_DIS = 0;
 	
 	gpio_clear_pin(GPIO_PORT_1, GPIO_PIN_1);
-	mDelaymS(250);
+	rcc_delay_ms(250);
 	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_1);
-	mDelaymS(250);
+	rcc_delay_ms(250);
 	uart_write_string(UART_0, test_string);
 
 	while(TRUE)
@@ -59,7 +61,7 @@ int main()
 			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_5, !gpio_read_pin(GPIO_PORT_1, GPIO_PIN_5));
 		}
 		
-		mDelayuS(1000);
+		rcc_delay_us(1000);
 	}
 }
 

@@ -41,10 +41,14 @@
 #define HID_CC_BTN_MEDIA_EJECT   0xB8
 #define HID_CC_BTN_MEDIA_RANDOM  0xB9
 
+#define HID_CC_BTN_PLAY_PAUSE    0xCD
+#define HID_CC_BTN_PLAY_SKIP     0xCE
+
 #define HID_CC_BTN_VOL_MUTE      0xE2
 #define HID_CC_BTN_VOL_UP        0xE9
 #define HID_CC_BTN_VOL_DOWN      0xEA
 
+//HINT: Idle rates are in units of 4ms (see HID specification). The user must call the corresponding _send_report functions for non-zero idle rates.
 extern volatile UINT8 hid_mouse_report_pending;
 extern volatile UINT8 hid_mouse_idle_rate;
 extern volatile UINT8 hid_cc_report_pending;
