@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch547_rcc_gpio</OutputName>
+          <OutputName>ch547_uart</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0xffff</Size>
+                <Size>0x10000</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?MAIN?MAIN ~ ?PR?ON_GPIO_INT?MAIN, ?PR?GPIO_ISR?CH547_GPIO ! ?PR?ON_GPIO_INT?MAIN</OverlayString>
+            <OverlayString></OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
+            <LinkerCmdFile></LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -382,16 +382,6 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>CH547_RCC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH547_RCC.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH547_RCC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH547_RCC.h</FilePath>
-            </File>
-            <File>
               <FileName>CH547.H</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH547.H</FilePath>
@@ -407,9 +397,39 @@
               <FilePath>.\CH547_GPIO.h</FilePath>
             </File>
             <File>
+              <FileName>CH547_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_RCC.h</FilePath>
+            </File>
+            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_UART.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_UART.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_UART.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_UART.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_FIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_FIFO.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_FIFO.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_FIFO.h</FilePath>
             </File>
           </Files>
         </Group>
