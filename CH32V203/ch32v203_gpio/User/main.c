@@ -26,7 +26,7 @@ int main(void)
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_8);
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 
-	Delay_Init();
+	core_delay_init();
 	uart_init(USART1, 115200);
 	core_enable_irq(USART1_IRQn);
 
@@ -38,12 +38,12 @@ int main(void)
 
 	gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOA, GPIO_PIN_8);
-	Delay_Ms(100);
+	core_delay_ms(100);
 	gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_clear_pin(GPIOA, GPIO_PIN_8);
-	Delay_Ms(100);
+	core_delay_ms(100);
 	gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-	Delay_Ms(100);
+	core_delay_ms(100);
 	printf("Unicorn\n");
 
 	if(((*(uint32_t *) 0x40022030) & 0x0F000000) == 0)
@@ -55,10 +55,10 @@ int main(void)
 	{
     	gpio_toggle_pin(GPIOA, GPIO_PIN_8);
     	gpio_toggle_pin(GPIOC, GPIO_PIN_15);
-    	Delay_Ms(50);
+    	core_delay_ms(50);
     	gpio_write_pin(GPIOC, GPIO_PIN_14, gpio_read_pin(GPIOC, GPIO_PIN_15));
-    	Delay_Ms(50);
+    	core_delay_ms(50);
     	gpio_write_pin(GPIOC, GPIO_PIN_13, gpio_read_pin(GPIOC, GPIO_PIN_14));
-    	Delay_Ms(50);
+    	core_delay_ms(50);
 	}
 }

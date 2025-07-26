@@ -17,79 +17,11 @@
 #include "ch32v203_uart.h"
 #include "ch32v203_rcc.h"
 
-static uint8_t  p_us = 0;
-static uint16_t p_ms = 0;
-/*********************************************************************
- * @fn      Delay_Init
- *
- * @brief   Initializes Delay Funcation.
- *
- * @return  none
- */
-void delay_init(void)
-{
-    p_us = rcc_compute_hclk_freq() / 8000000;
-    p_ms = (uint16_t)p_us * 1000;
-}
+#if(DEBUG == DEBUG_CDC)
+#include "ch32v203_usbd_cdc.h"
+#endif
 
-/*********************************************************************
- * @fn      Delay_Us
- *
- * @brief   Microsecond Delay Time.
- *
- * @param   n - Microsecond number.
- *
- * @return  None
- */
-void delay_us(uint32_t n)
-{
-    uint32_t i;
 
-    SysTick->SR &= ~(1 << 0);
-    i = (uint32_t)n * p_us;
-
-    SysTick->CMP = i;
-    SysTick->CTLR |= (1 << 4);
-    SysTick->CTLR |= (1 << 5) | (1 << 0);
-
-    while((SysTick->SR & (1 << 0)) != (1 << 0));
-    SysTick->CTLR &= ~(1 << 0);
-}
-
-/*********************************************************************
- * @fn      Delay_Ms
- *
- * @brief   Millisecond Delay Time.
- *
- * @param   n - Millisecond number.
- *
- * @return  None
- */
-void delay_ms(uint32_t n)
-{
-    uint32_t i;
-
-    SysTick->SR &= ~(1 << 0);
-    i = (uint32_t)n * p_ms;
-
-    SysTick->CMP = i;
-    SysTick->CTLR |= (1 << 4);
-    SysTick->CTLR |= (1 << 5) | (1 << 0);
-
-    while((SysTick->SR & (1 << 0)) != (1 << 0));
-    SysTick->CTLR &= ~(1 << 0);
-}
-
-/*********************************************************************
- * @fn      _write
- *
- * @brief   Support Printf Function
- *
- * @param   *buf - UART send Data.
- *          size - Data length
- *
- * @return  size: Data length
- */
 __attribute__((used))
 int _write(int fd, char* buf, int size)
 {
@@ -101,8 +33,10 @@ int _write(int fd, char* buf, int size)
 	uart_write_bytes(USART3, uart3_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #elif(DEBUG == DEBUG_UART4)
 	uart_write_bytes(USART4, uart4_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_CDC)
+	cdc_write_bytes((uint8_t*)buf, (uint16_t)size);
 #endif
-    return size;
+	return size;
 }
 
 /*********************************************************************
@@ -113,15 +47,15 @@ int _write(int fd, char* buf, int size)
  * @return  size: Data length
  */
 __attribute__((used))
-void *_sbrk(ptrdiff_t incr)
+void* _sbrk(ptrdiff_t incr)
 {
-    extern char _end[];
-    extern char _heap_end[];
-    static char *curbrk = _end;
+	extern char _end[];
+	extern char _heap_end[];
+	static char *curbrk = _end;
 
-    if ((curbrk + incr < _end) || (curbrk + incr > _heap_end))
-    return NULL - 1;
+	if((curbrk + incr < _end) || (curbrk + incr > _heap_end))
+		return NULL - 1;
 
-    curbrk += incr;
-    return curbrk - incr;
+	curbrk += incr;
+	return curbrk - incr;
 }

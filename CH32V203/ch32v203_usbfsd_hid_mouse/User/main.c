@@ -29,7 +29,7 @@ int main(void)
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOB, GPIO_PIN_4);
 
-    Delay_Init();
+    core_delay_init();
     uart_init(USART1, 115200);
     core_enable_irq(USART1_IRQn);
 
@@ -42,12 +42,12 @@ int main(void)
     // blink the led once
     gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
+    core_delay_ms(100);
     gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
+    core_delay_ms(100);
     gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-    Delay_Ms(100);
+    core_delay_ms(100);
     printf("Unicorn\n");
 
 //    USBOTG_FS->USB_INT_EN = 0x80;
@@ -70,17 +70,17 @@ int main(void)
 			{
 			case 0x01:
 				hid_mouse_press(HID_MOUSE_BTN_LEFT);
-				Delay_Ms(50);
+				core_delay_ms(50);
 				hid_mouse_release(HID_MOUSE_BTN_LEFT);
 				break;
 			case 0x02:
 				hid_mouse_press(HID_MOUSE_BTN_RIGHT);
-				Delay_Ms(50);
+				core_delay_ms(50);
 				hid_mouse_release(HID_MOUSE_BTN_RIGHT);
 				break;
 			case 0x03:
 				hid_mouse_press(HID_MOUSE_BTN_WHEEL);
-				Delay_Ms(50);
+				core_delay_ms(50);
 				hid_mouse_release(HID_MOUSE_BTN_WHEEL);
 				break;
 			case 0x04:
@@ -103,7 +103,7 @@ int main(void)
 			gpio_toggle_pin(GPIOA, GPIO_PIN_8);
 		}
 
-		Delay_Ms(1);
+		core_delay_ms(1);
 		++time;
 
 		if(hid_idle_rate && ((time >> 2) >= hid_idle_rate))	//idle rate is in units of 4 ms

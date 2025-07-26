@@ -5,8 +5,8 @@
  *      Author: Steve
  */
 
-#ifndef _LIBS_CH32V203_CORE_H_
-#define _LIBS_CH32V203_CORE_H_
+#ifndef _CH32V203_CORE_H_
+#define _CH32V203_CORE_H_
 
 #ifndef __IO
 #define __I     volatile const          /*  defines 'read only' permissions     */
@@ -50,8 +50,6 @@ typedef struct
     __IO uint64_t CMP;
 }SysTick_Type;
 
-#endif /* _CH32V203_CORE_H_ */
-
 #define PFIC            ((PFIC_Type *) 0xE000E000 )
 #define SysTick         ((SysTick_Type *) 0xE000F000)
 
@@ -73,6 +71,9 @@ typedef struct
 #define core_vtf_irq_enable(vtf_idx) (PFIC->VTFADDR[(vtf_idx)] |= 0x01)
 #define core_vtf_irq_disable(vtf_idx) (PFIC->VTFADDR[(vtf_idx)] &= 0xFFFFFFFE)
 
+void core_delay_init(void);
+void core_delay_us(uint32_t n);
+void core_delay_ms(uint32_t n);
 uint32_t core_get_mstatus(void);
 void core_set_mstatus(uint32_t value);
 uint32_t core_get_misa(void);
@@ -220,3 +221,5 @@ __attribute__( ( always_inline ) ) static inline int32_t core_amoxor(volatile in
             "=r"(result), "+A"(*addr) : "r"(value) : "memory");
     return *addr;
 }
+
+#endif /* _CH32V203_CORE_H_ */

@@ -66,7 +66,7 @@ int main(void)
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOB, GPIO_PIN_4);
 
-    Delay_Init();
+    core_delay_init();
     uart_init(USART1, 115200);
     core_enable_irq(USART1_IRQn);
 
@@ -79,12 +79,12 @@ int main(void)
     // blink the led once
     gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
+    core_delay_ms(100);
     gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    Delay_Ms(100);
+    core_delay_ms(100);
     gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-    Delay_Ms(100);
+    core_delay_ms(100);
     printf("Unicorn\n");
 
     cdc_init();
@@ -92,21 +92,10 @@ int main(void)
     cdc_set_serial_state(0x03);
     uint8_t prev_control_line_state = cdc_control_line_state;
 
-    //extern volatile uint8_t ep2_t0_num_bytes;
-    //extern uint8_t ep2_t0_read_offset;
-    //extern volatile uint8_t ep2_t1_num_bytes;
-    //extern uint8_t ep2_t1_read_offset;
 	while(1)
 	{
 		while(cdc_bytes_available())
 		{
-//			printf("bytes available: %d\n", cdc_bytes_available());
-//			printf("t0 num_bytes: %d\n", ep2_t0_num_bytes);
-//			printf("t0 read offset: %d\n", ep2_t0_read_offset);
-//			printf("t1 num_bytes: %d\n", ep2_t1_num_bytes);
-//			printf("t1 read_offset: %d\n", ep2_t1_read_offset);
-//
-//			while(uart_bytes_available_for_write(uart1_tx_fifo) == 0);
 			gpio_toggle_pin(GPIOA, GPIO_PIN_8);
 			uart_write_byte(USART1, uart1_tx_fifo, cdc_read_byte());
 			gpio_write_pin(GPIOC, GPIO_PIN_13, gpio_read_pin(GPIOA, GPIO_PIN_8));
@@ -130,14 +119,5 @@ int main(void)
 			prev_control_line_state = cdc_control_line_state;
 		}
 	}
-
-//    extern volatile uint16_t sof_count;
-//    extern uint16_t cdc_last_status_time;
-//    while(1)
-//    {
-//    	printf("SOF count: %d\n", sof_count);
-//    	printf("Status time: %d\n", cdc_last_status_time);
-//    	Delay_Ms(750);
-//    }
 }
 

@@ -4,7 +4,8 @@
  *  Created on: Jul 15, 2024
  *      Author: Steve
  */
-#include <stdint.h>
+#include "ch32v20x.h"
+#include "ch32v203_rcc.h"
 #include "ch32v203_core.h"
 
 void NMI_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -18,6 +19,45 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
 	while(1);
+}
+
+static uint8_t  p_us = 0;
+static uint16_t p_ms = 0;
+
+void core_delay_init(void)
+{
+    p_us = rcc_compute_hclk_freq() / 8000000;
+    p_ms = (uint16_t)p_us * 1000;
+}
+
+void core_delay_us(uint32_t n)
+{
+    uint32_t i;
+
+    SysTick->SR &= ~(1 << 0);
+    i = (uint32_t)n * p_us;
+
+    SysTick->CMP = i;
+    SysTick->CTLR |= (1 << 4);
+    SysTick->CTLR |= (1 << 5) | (1 << 0);
+
+    while((SysTick->SR & (1 << 0)) != (1 << 0));
+    SysTick->CTLR &= ~(1 << 0);
+}
+
+void core_delay_ms(uint32_t n)
+{
+    uint32_t i;
+
+    SysTick->SR &= ~(1 << 0);
+    i = (uint32_t)n * p_ms;
+
+    SysTick->CMP = i;
+    SysTick->CTLR |= (1 << 4);
+    SysTick->CTLR |= (1 << 5) | (1 << 0);
+
+    while((SysTick->SR & (1 << 0)) != (1 << 0));
+    SysTick->CTLR &= ~(1 << 0);
 }
 
 //HINT: Return the Machine Status Register

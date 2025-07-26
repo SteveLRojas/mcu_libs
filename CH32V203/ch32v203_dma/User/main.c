@@ -38,14 +38,14 @@ int main(void)
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);	//TXD
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_10);		//RXD
 
-    delay_init();
+    core_delay_init();
 	// blink the led once
 	gpio_set_pin(GPIOA, GPIO_PIN_8 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-	delay_ms(100);
+	core_delay_ms(100);
 	gpio_clear_pin(GPIOA, GPIO_PIN_8 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-	delay_ms(100);
+	core_delay_ms(100);
 	gpio_write_pin(GPIOA, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-	delay_ms(100);
+	core_delay_ms(100);
 
 	cdc_init();
 	cdc_set_serial_state(0x03);

@@ -139,7 +139,7 @@ int main(void)
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOB, GPIO_PIN_4);
 
-    delay_init();
+    core_delay_init();
     uart_init(USART1, 115200);
     core_enable_irq(USART1_IRQn);
 
@@ -152,12 +152,12 @@ int main(void)
     // blink the led once
     gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    delay_ms(100);
+    core_delay_ms(100);
     gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_clear_pin(GPIOA, GPIO_PIN_8);
-    delay_ms(100);
+    core_delay_ms(100);
     gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-    delay_ms(100);
+    core_delay_ms(100);
     printf("Unicorn\n");
 
     usbfsh_init();
@@ -173,16 +173,16 @@ int main(void)
 			if(usbfsh_port_is_attached())
 			{
 				printf("USB device connected\n");
-				delay_ms(50);
+				core_delay_ms(50);
 				usb_state = S_RESET;
 			}
 			break;
 		case S_RESET:
 			usbfsh_begin_port_reset();
-			delay_ms(50);	//reset on root hub port must last at least 50 ms
+			core_delay_ms(50);	//reset on root hub port must last at least 50 ms
 			usbfsh_end_port_reset();
 
-			delay_ms(1);
+			core_delay_ms(1);
 			if(usbfsh_port_is_low_speed())
 			{
 				printf("Found low speed device\n");
@@ -200,7 +200,7 @@ int main(void)
 			break;
 		case S_CONNECTED:
 			gpio_clear_pin(GPIOA, GPIO_PIN_8);
-			delay_ms(10);
+			core_delay_ms(10);
 			usb_state = S_GET_DEV_DESCR;
 			break;
 		case S_IDLE:
@@ -287,7 +287,7 @@ int main(void)
 			}
 			else
 			{
-				delay_ms(9);	// get report every 10 ms
+				core_delay_ms(9);	// get report every 10 ms
 				response = usbfsh_in_transfer(&ep1_info, (uint8_t*)&current_mouse_report, MOUSE_REPORT_LEN);
 
 				if(response == USB_PID_NAK)
@@ -326,7 +326,7 @@ int main(void)
 			break;
 		}
 
-		delay_ms(1);
+		core_delay_ms(1);
 	}
 }
 

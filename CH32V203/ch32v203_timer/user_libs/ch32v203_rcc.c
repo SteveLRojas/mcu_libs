@@ -28,9 +28,12 @@ void rcc_system_init(void)
 		while ((RCC->CFGR0 & RCC_SWS) != RCC_SWS_PLL);
 	}
 #else
+	rcc_hse_off()
 	rcc_hpre_config(RCC_HCLK_FREQ_DIV);
 	rcc_ppre1_config(RCC_PCLK1_FREQ_DIV);
 	rcc_ppre2_config(RCC_PCLK2_FREQ_DIV);
+	rcc_adcpre_config(RCC_ADCCLK_FREQ_DIV);
+	rcc_usbpre_config(RCC_USBCLK_FREQ_DIV);
 
 	rcc_init_pll(RCC_PLL_FREQ_MUL);
 	rcc_sw_config(RCC_SW_PLL);
@@ -107,12 +110,14 @@ uint32_t rcc_compute_sysclk_freq()
 uint32_t rcc_compute_hclk_freq()
 {
 	uint32_t sysclk = rcc_compute_sysclk_freq();
-	uint32_t hclk_div = RCC->CFGR0 & RCC_HPRE;
+	uint32_t hclk_div = (RCC->CFGR0 & RCC_HPRE) >> 4;
 
-	if(hclk_div & RCC_HPRE_3)
+	if(hclk_div & 0x08)
 	{
-		// [7:4] HPRE[3:0]
-		hclk_div = ((hclk_div & ~RCC_HPRE_3) >> 4) + 1; // # times to div sysclk by 2
+		if(hclk_div & 0x04)
+			hclk_div += 2; // # times to div sysclk by 2
+		else
+			hclk_div += 1; // # times to div sysclk by 2
 	}
 	else
 	{
@@ -125,12 +130,12 @@ uint32_t rcc_compute_hclk_freq()
 uint32_t rcc_compute_pclk1_freq()
 {
 	uint32_t hclk = rcc_compute_hclk_freq();
-	uint32_t pclk1_div = RCC->CFGR0 & RCC_PPRE1;
+	uint32_t pclk1_div = (RCC->CFGR0 & RCC_PPRE1) >> 8;
 
-	if(pclk1_div & RCC_PPRE1_2)
+	if(pclk1_div & 0x04)
 	{
-		// [10:8] PPRE1[2:0]
-		pclk1_div = ((pclk1_div & ~RCC_PPRE1_2) >> 8) + 1; // # times to div hclk by 2
+		pclk1_div &= 0x03;
+		pclk1_div += 1; // # times to div hclk by 2
 	}
 	else
 	{
@@ -140,20 +145,48 @@ uint32_t rcc_compute_pclk1_freq()
 	return (hclk >> pclk1_div);
 }
 
+uint32_t rcc_compute_pclk1_tim_freq()
+{
+	uint32_t hclk = rcc_compute_hclk_freq();
+	uint32_t pclk1_div = (RCC->CFGR0 & RCC_PPRE1) >> 8;
+
+	if(!(pclk1_div & 0x04))
+	{
+		pclk1_div = 0;
+	}
+	pclk1_div &= 0x03;
+
+	return (hclk >> pclk1_div);
+}
+
 uint32_t rcc_compute_pclk2_freq()
 {
 	uint32_t hclk = rcc_compute_hclk_freq();
-	uint32_t pclk2_div = RCC->CFGR0 & RCC_PPRE2;
+	uint32_t pclk2_div = (RCC->CFGR0 & RCC_PPRE2) >> 11;
 
-	if(pclk2_div & RCC_PPRE2_2)
+	if(pclk2_div & 0x04)
 	{
-		// [13:11] PPRE2[2:0]
-		pclk2_div = ((pclk2_div & ~RCC_PPRE2_2) >> 11) + 1; // # times to div hclk by 2
+		pclk2_div &= 0x03;
+		pclk2_div += 1; // # times to div hclk by 2
 	}
 	else
 	{
 		pclk2_div = 0;
 	}
+
+	return (hclk >> pclk2_div);
+}
+
+uint32_t rcc_compute_pclk2_tim_freq()
+{
+	uint32_t hclk = rcc_compute_hclk_freq();
+	uint32_t pclk2_div = (RCC->CFGR0 & RCC_PPRE2) >> 11;
+
+	if(!(pclk2_div & 0x04))
+	{
+		pclk2_div = 0;
+	}
+	pclk2_div &= 0x03;
 
 	return (hclk >> pclk2_div);
 }

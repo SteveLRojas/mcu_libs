@@ -63,7 +63,9 @@ void rcc_init_pll(uint32_t pll_options);
 uint32_t rcc_compute_sysclk_freq();
 uint32_t rcc_compute_hclk_freq();
 uint32_t rcc_compute_pclk1_freq();
+uint32_t rcc_compute_pclk1_tim_freq();
 uint32_t rcc_compute_pclk2_freq();
+uint32_t rcc_compute_pclk2_tim_freq();
 uint32_t rcc_compute_adcclk();
 
 #endif /* USER_LIBS_CH32V203_RCC_H_ */

@@ -34,7 +34,6 @@ void rcc_system_init(void)
 	}
 #else
 	rcc_hse_off();
-	rcc_hsi_pre_div1();
 	rcc_hpre_config(RCC_HCLK_FREQ_DIV);
 	rcc_ppre1_config(RCC_PCLK1_FREQ_DIV);
 	rcc_ppre2_config(RCC_PCLK2_FREQ_DIV);

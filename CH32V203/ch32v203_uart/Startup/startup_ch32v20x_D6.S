@@ -246,7 +246,7 @@ handle_reset:
     ori t0, t0, 3           
 	csrw mtvec, t0
 
-    jal  SystemInit
+    jal rcc_system_init
 	la t0, main
 	csrw mepc, t0
 	mret

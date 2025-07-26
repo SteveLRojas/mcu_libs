@@ -29,7 +29,7 @@ int main(void)
 	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOB, GPIO_PIN_4);
 
-    delay_init();
+    core_delay_init();
     uart_init(USART1, 115200);
     core_enable_irq(USART1_IRQn);
 
@@ -42,12 +42,12 @@ int main(void)
     // blink the led once
     gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    delay_ms(100);
+    core_delay_ms(100);
     gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
     gpio_set_pin(GPIOA, GPIO_PIN_8);
-    delay_ms(100);
+    core_delay_ms(100);
     gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-    delay_ms(100);
+    core_delay_ms(100);
     printf("Unicorn\n");
 
     cdc_init();

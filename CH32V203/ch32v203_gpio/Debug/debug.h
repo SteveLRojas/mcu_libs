@@ -26,14 +26,10 @@ extern "C" {
 #define DEBUG_UART4    3
 #define DEBUG_CDC	5
 
-/* DEBUG UATR Definition */
+/* DEBUG UART Definition */
 #ifndef DEBUG
 #define DEBUG   DEBUG_UART1
 #endif
-
-void Delay_Init(void);
-void Delay_Us(uint32_t n);
-void Delay_Ms(uint32_t n);
 
 #if(DEBUG)
   #define PRINT(format, ...)    printf(format, ##__VA_ARGS__)

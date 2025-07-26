@@ -40,8 +40,8 @@ int main(void)
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);	//TXD
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_10);		//RXD
 
-	delay_init();
-	delay_ms(1);
+	core_delay_init();
+	core_delay_ms(1);
 	uart_init(USART1, 115200);
 	core_enable_irq(USART1_IRQn);
 
@@ -53,11 +53,11 @@ int main(void)
 
 	// blink the led once
 	gpio_set_pin(GPIOA, GPIO_PIN_8 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-	delay_ms(100);
+	core_delay_ms(100);
 	gpio_clear_pin(GPIOA, GPIO_PIN_8 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
-	delay_ms(100);
+	core_delay_ms(100);
 	gpio_write_pin(GPIOA, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
-	delay_ms(100);
+	core_delay_ms(100);
 
 	timer_init(TIM1, 96000000 / 10000 - 1, 1000 - 1);	//100us time scale, 100ms period
 	timer_init(TIM2, 96000000 / 1000000 - 1, 1000 - 1);	//1us time scale, 1ms period
