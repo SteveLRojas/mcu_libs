@@ -1,6 +1,14 @@
 # mcu_libs
 Place to keep all my libraries for various MCUs
 
+## How to use these libraries
+Each library is provided with a test project that serves as an example of how to use it.  
+Read the .h files to see all the functions and macros available.  
+
+## How do I compile this stuff?
+The libraries for MCS-51 based MCUs are meant to be compiled with C51 using the large memory model. Most test projects are linked with L51, but a few are linked with LX51. A linker script is provided for all projects that need it.  
+Libraries for ARM and RISC-V MCUs are meant to be compiled with GCC, and the provided test projects are meant to be opened with MounRiver Studio Community.  
+
 ## Things worthy of note
 Some of the supported MCUs have bugs or deficiencies that might make them unsuitable for certain projects. Below are some of the most severe issues I have found so far.  
 
