@@ -1,0 +1,1139 @@
+Archive member included to satisfy reference by file (symbol)
+
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+                              ./Debug/debug.o (__errno)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o) (_impure_ptr)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+                              ./User/main.o (printf)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+                              ./User/main.o (puts)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o) (__swbuf_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o) (__swsetup_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o) (_fflush_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o) (__sinit)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o) (_fwalk)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o) (__retarget_lock_init_recursive)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o) (__smakebuf_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o) (memset)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o) (_free_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o) (_malloc_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o) (_vfprintf_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o) (_printf_i)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o) (_sbrk_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o) (__sread)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o) (_write_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o) (_close_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o) (_fstat_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o) (__sfvwrite_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o) (_isatty_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o) (_lseek_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o) (memchr)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o) (memcpy)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o) (memmove)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o) (__malloc_lock)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o) (_realloc_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o) (_read_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o) (errno)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o) (_malloc_usable_size_r)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o) (_close)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o) (_fstat)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o) (_isatty)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o) (_lseek)
+c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+                              c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o) (_read)
+
+Allocating common symbols
+Common symbol       size              file
+
+__lock___atexit_recursive_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___arc4random_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+errno               0x4               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+__lock___env_recursive_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___sinit_recursive_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___malloc_recursive_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___at_quick_exit_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___dd_hash_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___tz_mutex   0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+__lock___sfp_recursive_mutex
+                    0x1               c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+
+Discarded input sections
+
+ .text          0x00000000        0x0 ./user_libs/fifo.o
+ .data          0x00000000        0x0 ./user_libs/fifo.o
+ .bss           0x00000000        0x0 ./user_libs/fifo.o
+ .text.fifo_read
+                0x00000000       0x64 ./user_libs/fifo.o
+ .text          0x00000000        0x0 ./user_libs/stm32f205_core.o
+ .data          0x00000000        0x0 ./user_libs/stm32f205_core.o
+ .bss           0x00000000        0x0 ./user_libs/stm32f205_core.o
+ .text.core_delay_us
+                0x00000000       0x38 ./user_libs/stm32f205_core.o
+ .text.core_get_psp
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_set_psp
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_get_msp
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_set_msp
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_get_basepri
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_set_basepri
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_get_primask
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_set_primask
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_get_faultmask
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_set_faultmask
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_get_control
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_set_control
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_rev
+                0x00000000        0x4 ./user_libs/stm32f205_core.o
+ .text.core_rev16
+                0x00000000        0x4 ./user_libs/stm32f205_core.o
+ .text.core_revsh
+                0x00000000        0x4 ./user_libs/stm32f205_core.o
+ .text.core_rbit
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_ldrexb
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_ldrexh
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_ldrexw
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text.core_strexb
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_strexh
+                0x00000000        0x8 ./user_libs/stm32f205_core.o
+ .text.core_strexw
+                0x00000000        0x6 ./user_libs/stm32f205_core.o
+ .text          0x00000000        0x0 ./user_libs/stm32f205_gpio.o
+ .data          0x00000000        0x0 ./user_libs/stm32f205_gpio.o
+ .bss           0x00000000        0x0 ./user_libs/stm32f205_gpio.o
+ .text.gpio_lock_pin
+                0x00000000       0x14 ./user_libs/stm32f205_gpio.o
+ .text          0x00000000        0x0 ./user_libs/stm32f205_rcc.o
+ .data          0x00000000        0x0 ./user_libs/stm32f205_rcc.o
+ .bss           0x00000000        0x0 ./user_libs/stm32f205_rcc.o
+ .text.rcc_compute_pclk1_tim_freq
+                0x00000000       0x24 ./user_libs/stm32f205_rcc.o
+ .text.rcc_compute_pclk2_tim_freq
+                0x00000000       0x24 ./user_libs/stm32f205_rcc.o
+ .text          0x00000000        0x0 ./user_libs/stm32f205_uart.o
+ .data          0x00000000        0x0 ./user_libs/stm32f205_uart.o
+ .bss           0x00000000        0x0 ./user_libs/stm32f205_uart.o
+ .text.uart_peek
+                0x00000000        0xa ./user_libs/stm32f205_uart.o
+ .text.uart_read_bytes
+                0x00000000       0x40 ./user_libs/stm32f205_uart.o
+ .text.uart_read_bytes_until
+                0x00000000       0x48 ./user_libs/stm32f205_uart.o
+ .text.uart_get_string
+                0x00000000       0x54 ./user_libs/stm32f205_uart.o
+ .text.uart_bytes_available_for_write
+                0x00000000        0xa ./user_libs/stm32f205_uart.o
+ .text.uart_write_string
+                0x00000000       0x18 ./user_libs/stm32f205_uart.o
+ .bss.uart5_rx_buf
+                0x00000000       0x40 ./user_libs/stm32f205_uart.o
+ .bss.uart5_tx_buf
+                0x00000000       0x40 ./user_libs/stm32f205_uart.o
+ .bss.uart6_rx_buf
+                0x00000000       0x40 ./user_libs/stm32f205_uart.o
+ .bss.uart6_tx_buf
+                0x00000000       0x40 ./user_libs/stm32f205_uart.o
+ .text          0x00000000        0x0 ./User/main.o
+ .data          0x00000000        0x0 ./User/main.o
+ .bss           0x00000000        0x0 ./User/main.o
+ .text          0x00000000       0x14 ./Startup/startup_stm32f205vctx.o
+ .data          0x00000000        0x0 ./Startup/startup_stm32f205vctx.o
+ .bss           0x00000000        0x0 ./Startup/startup_stm32f205vctx.o
+ .text          0x00000000        0x0 ./Debug/debug.o
+ .data          0x00000000        0x0 ./Debug/debug.o
+ .bss           0x00000000        0x0 ./Debug/debug.o
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .text._printf_r
+                0x00000000       0x28 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .text.__swbuf  0x00000000       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .text.fflush   0x00000000       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text.__fp_lock
+                0x00000000       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text.__fp_unlock
+                0x00000000       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text._cleanup
+                0x00000000        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text.__fp_lock_all
+                0x00000000       0x1c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text.__fp_unlock_all
+                0x00000000       0x1c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .text._fwalk   0x00000000       0x3a c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_init
+                0x00000000        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_close
+                0x00000000        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_close_recursive
+                0x00000000        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_acquire
+                0x00000000        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_try_acquire
+                0x00000000        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_try_acquire_recursive
+                0x00000000        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text.__retarget_lock_release
+                0x00000000        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.__sprint_r
+                0x00000000       0x1a c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.vfprintf
+                0x00000000       0x14 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .text.__seofread
+                0x00000000        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .text.__sfvwrite_r
+                0x00000000      0x294 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .debug_frame   0x00000000       0x3c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .ARM.attributes
+                0x00000000       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fvwrite.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .text.memcpy   0x00000000       0x1c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .debug_frame   0x00000000       0x28 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .ARM.attributes
+                0x00000000       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memcpy-stub.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .text.memmove  0x00000000       0x34 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .debug_frame   0x00000000       0x28 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .ARM.attributes
+                0x00000000       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memmove.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .text._realloc_r
+                0x00000000       0x4c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .debug_frame   0x00000000       0x3c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .ARM.attributes
+                0x00000000       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-reallocr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .text.cleanup_glue
+                0x00000000       0x1a c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .text._reclaim_reent
+                0x00000000       0xb8 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .text._malloc_usable_size_r
+                0x00000000       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .debug_frame   0x00000000       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .ARM.attributes
+                0x00000000       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-msizer.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+ .text          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+ .data          0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+ .bss           0x00000000        0x0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x20000000         0x00014000         xrw
+RAM2             0x2001c000         0x00004000         xrw
+FLASH            0x08000000         0x00040000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD ./user_libs/fifo.o
+LOAD ./user_libs/stm32f205_core.o
+LOAD ./user_libs/stm32f205_gpio.o
+LOAD ./user_libs/stm32f205_rcc.o
+LOAD ./user_libs/stm32f205_uart.o
+LOAD ./User/main.o
+LOAD ./Startup/startup_stm32f205vctx.o
+LOAD ./Debug/debug.o
+START GROUP
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/thumb/v7-m/nofp\libgcc.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc_nano.a
+END GROUP
+START GROUP
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/thumb/v7-m/nofp\libgcc.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc_nano.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a
+END GROUP
+START GROUP
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/thumb/v7-m/nofp\libgcc.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc_nano.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a
+END GROUP
+                0x20014000                _estack = (ORIGIN (RAM) + LENGTH (RAM))
+                0x00000200                _Min_Heap_Size = 0x200
+                0x00000400                _Min_Stack_Size = 0x400
+
+.isr_vector     0x08000000      0x184
+                0x08000000                . = ALIGN (0x4)
+ *(.isr_vector)
+ .isr_vector    0x08000000      0x184 ./Startup/startup_stm32f205vctx.o
+                0x08000000                g_pfnVectors
+                0x08000184                . = ALIGN (0x4)
+
+.text           0x08000184     0x18ec
+                0x08000184                . = ALIGN (0x4)
+ *(.text)
+ *(.text*)
+ .text.fifo_init
+                0x08000184        0xc ./user_libs/fifo.o
+                0x08000184                fifo_init
+ .text.fifo_push
+                0x08000190       0x28 ./user_libs/fifo.o
+                0x08000190                fifo_push
+ .text.fifo_pop
+                0x080001b8       0x22 ./user_libs/fifo.o
+                0x080001b8                fifo_pop
+ .text.fifo_write
+                0x080001da       0x64 ./user_libs/fifo.o
+                0x080001da                fifo_write
+ *fill*         0x0800023e        0x2 
+ .text.core_delay_init
+                0x08000240       0x28 ./user_libs/stm32f205_core.o
+                0x08000240                core_delay_init
+ .text.core_delay_ms
+                0x08000268       0x38 ./user_libs/stm32f205_core.o
+                0x08000268                core_delay_ms
+ .text.gpio_set_mode
+                0x080002a0       0x9c ./user_libs/stm32f205_gpio.o
+                0x080002a0                gpio_set_mode
+ .text.gpio_set_alternate_function
+                0x0800033c       0x5a ./user_libs/stm32f205_gpio.o
+                0x0800033c                gpio_set_alternate_function
+ *fill*         0x08000396        0x2 
+ .text.rcc_system_init
+                0x08000398       0xc0 ./user_libs/stm32f205_rcc.o
+                0x08000398                rcc_system_init
+ .text.rcc_compute_sysclk_freq
+                0x08000458       0x4c ./user_libs/stm32f205_rcc.o
+                0x08000458                rcc_compute_sysclk_freq
+ .text.rcc_compute_hclk_freq
+                0x080004a4       0x28 ./user_libs/stm32f205_rcc.o
+                0x080004a4                rcc_compute_hclk_freq
+ .text.rcc_compute_pclk1_freq
+                0x080004cc       0x20 ./user_libs/stm32f205_rcc.o
+                0x080004cc                rcc_compute_pclk1_freq
+ .text.rcc_compute_pclk2_freq
+                0x080004ec       0x20 ./user_libs/stm32f205_rcc.o
+                0x080004ec                rcc_compute_pclk2_freq
+ .text.USART1_IRQHandler
+                0x0800050c       0x44 ./user_libs/stm32f205_uart.o
+                0x0800050c                USART1_IRQHandler
+ .text.USART2_IRQHandler
+                0x08000550       0x58 ./user_libs/stm32f205_uart.o
+                0x08000550                USART2_IRQHandler
+ .text.USART3_IRQHandler
+                0x080005a8       0x48 ./user_libs/stm32f205_uart.o
+                0x080005a8                USART3_IRQHandler
+ .text.UART4_IRQHandler
+                0x080005f0       0x48 ./user_libs/stm32f205_uart.o
+                0x080005f0                UART4_IRQHandler
+ .text.UART5_IRQHandler
+                0x08000638       0x58 ./user_libs/stm32f205_uart.o
+                0x08000638                UART5_IRQHandler
+ .text.USART6_IRQHandler
+                0x08000690       0x58 ./user_libs/stm32f205_uart.o
+                0x08000690                USART6_IRQHandler
+ .text.uart_init
+                0x080006e8       0x78 ./user_libs/stm32f205_uart.o
+                0x080006e8                uart_init
+ .text.uart_bytes_available
+                0x08000760        0x6 ./user_libs/stm32f205_uart.o
+                0x08000760                uart_bytes_available
+ .text.uart_read_byte
+                0x08000766       0x24 ./user_libs/stm32f205_uart.o
+                0x08000766                uart_read_byte
+ .text.uart_write_byte
+                0x0800078a       0x2e ./user_libs/stm32f205_uart.o
+                0x0800078a                uart_write_byte
+ .text.uart_write_bytes
+                0x080007b8       0x72 ./user_libs/stm32f205_uart.o
+                0x080007b8                uart_write_bytes
+ *fill*         0x0800082a        0x2 
+ .text.startup.main
+                0x0800082c      0x180 ./User/main.o
+                0x0800082c                main
+ .text.Reset_Handler
+                0x080009ac       0x4c ./Startup/startup_stm32f205vctx.o
+                0x080009ac                Reset_Handler
+ .text.Default_Handler
+                0x080009f8        0x2 ./Startup/startup_stm32f205vctx.o
+                0x080009f8                RTC_Alarm_IRQHandler
+                0x080009f8                HASH_RNG_IRQHandler
+                0x080009f8                EXTI2_IRQHandler
+                0x080009f8                TIM8_CC_IRQHandler
+                0x080009f8                DebugMon_Handler
+                0x080009f8                TIM1_CC_IRQHandler
+                0x080009f8                DMA2_Stream5_IRQHandler
+                0x080009f8                HardFault_Handler
+                0x080009f8                DMA1_Stream5_IRQHandler
+                0x080009f8                SysTick_Handler
+                0x080009f8                PVD_IRQHandler
+                0x080009f8                SDIO_IRQHandler
+                0x080009f8                TAMP_STAMP_IRQHandler
+                0x080009f8                PendSV_Handler
+                0x080009f8                NMI_Handler
+                0x080009f8                CAN2_RX1_IRQHandler
+                0x080009f8                EXTI3_IRQHandler
+                0x080009f8                TIM8_TRG_COM_TIM14_IRQHandler
+                0x080009f8                TIM1_UP_TIM10_IRQHandler
+                0x080009f8                TIM8_UP_TIM13_IRQHandler
+                0x080009f8                I2C3_ER_IRQHandler
+                0x080009f8                EXTI0_IRQHandler
+                0x080009f8                I2C2_EV_IRQHandler
+                0x080009f8                DMA1_Stream2_IRQHandler
+                0x080009f8                CAN1_RX0_IRQHandler
+                0x080009f8                OTG_HS_WKUP_IRQHandler
+                0x080009f8                UsageFault_Handler
+                0x080009f8                CAN2_SCE_IRQHandler
+                0x080009f8                DMA2_Stream2_IRQHandler
+                0x080009f8                SPI1_IRQHandler
+                0x080009f8                TIM6_DAC_IRQHandler
+                0x080009f8                TIM1_BRK_TIM9_IRQHandler
+                0x080009f8                CAN2_RX0_IRQHandler
+                0x080009f8                DMA2_Stream3_IRQHandler
+                0x080009f8                CAN1_RX1_IRQHandler
+                0x080009f8                DMA2_Stream0_IRQHandler
+                0x080009f8                TIM4_IRQHandler
+                0x080009f8                I2C1_EV_IRQHandler
+                0x080009f8                DMA1_Stream6_IRQHandler
+                0x080009f8                DMA1_Stream1_IRQHandler
+                0x080009f8                TIM3_IRQHandler
+                0x080009f8                RCC_IRQHandler
+                0x080009f8                TIM8_BRK_TIM12_IRQHandler
+                0x080009f8                Default_Handler
+                0x080009f8                EXTI15_10_IRQHandler
+                0x080009f8                ADC_IRQHandler
+                0x080009f8                DMA1_Stream7_IRQHandler
+                0x080009f8                TIM7_IRQHandler
+                0x080009f8                CAN2_TX_IRQHandler
+                0x080009f8                TIM5_IRQHandler
+                0x080009f8                DMA2_Stream7_IRQHandler
+                0x080009f8                I2C3_EV_IRQHandler
+                0x080009f8                EXTI9_5_IRQHandler
+                0x080009f8                RTC_WKUP_IRQHandler
+                0x080009f8                SPI2_IRQHandler
+                0x080009f8                OTG_HS_EP1_IN_IRQHandler
+                0x080009f8                MemManage_Handler
+                0x080009f8                DMA1_Stream0_IRQHandler
+                0x080009f8                CAN1_TX_IRQHandler
+                0x080009f8                SVC_Handler
+                0x080009f8                EXTI4_IRQHandler
+                0x080009f8                FSMC_IRQHandler
+                0x080009f8                OTG_HS_EP1_OUT_IRQHandler
+                0x080009f8                WWDG_IRQHandler
+                0x080009f8                TIM2_IRQHandler
+                0x080009f8                OTG_FS_WKUP_IRQHandler
+                0x080009f8                TIM1_TRG_COM_TIM11_IRQHandler
+                0x080009f8                OTG_HS_IRQHandler
+                0x080009f8                EXTI1_IRQHandler
+                0x080009f8                I2C2_ER_IRQHandler
+                0x080009f8                DMA2_Stream1_IRQHandler
+                0x080009f8                CAN1_SCE_IRQHandler
+                0x080009f8                FLASH_IRQHandler
+                0x080009f8                DMA2_Stream4_IRQHandler
+                0x080009f8                BusFault_Handler
+                0x080009f8                OTG_FS_IRQHandler
+                0x080009f8                SPI3_IRQHandler
+                0x080009f8                DMA1_Stream4_IRQHandler
+                0x080009f8                I2C1_ER_IRQHandler
+                0x080009f8                DMA2_Stream6_IRQHandler
+                0x080009f8                DMA1_Stream3_IRQHandler
+ *fill*         0x080009fa        0x2 
+ .text._write   0x080009fc       0x1c ./Debug/debug.o
+                0x080009fc                _write
+ .text._sbrk    0x08000a18       0x40 ./Debug/debug.o
+                0x08000a18                _sbrk
+ .text.__errno  0x08000a58        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+                0x08000a58                __errno
+ .text.printf   0x08000a64       0x30 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+                0x08000a64                iprintf
+                0x08000a64                printf
+ .text._puts_r  0x08000a94       0xdc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+                0x08000a94                _puts_r
+ .text.puts     0x08000b70       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+                0x08000b70                puts
+ .text.__swbuf_r
+                0x08000b80       0xa4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+                0x08000b80                __swbuf_r
+ .text.__swsetup_r
+                0x08000c24       0xdc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+                0x08000c24                __swsetup_r
+ .text.__sflush_r
+                0x08000d00      0x10c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+                0x08000d00                __sflush_r
+ .text._fflush_r
+                0x08000e0c       0x78 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+                0x08000e0c                _fflush_r
+ .text.std      0x08000e84       0x48 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .text._cleanup_r
+                0x08000ecc        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000ecc                _cleanup_r
+ .text.__sfmoreglue
+                0x08000ed8       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000ed8                __sfmoreglue
+ .text.__sfp_lock_acquire
+                0x08000f04        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000f04                __sfp_lock_acquire
+ .text.__sfp_lock_release
+                0x08000f10        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000f10                __sfp_lock_release
+ .text.__sinit_lock_acquire
+                0x08000f1c        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000f1c                __sinit_lock_acquire
+ .text.__sinit_lock_release
+                0x08000f28        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000f28                __sinit_lock_release
+ .text.__sinit  0x08000f34       0x70 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000f34                __sinit
+ .text.__sfp    0x08000fa4       0x8c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08000fa4                __sfp
+ .text._fwalk_reent
+                0x08001030       0x3e c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+                0x08001030                _fwalk_reent
+ .text.__retarget_lock_init_recursive
+                0x0800106e        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x0800106e                __retarget_lock_init_recursive
+ .text.__retarget_lock_acquire_recursive
+                0x08001070        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x08001070                __retarget_lock_acquire_recursive
+ .text.__retarget_lock_release_recursive
+                0x08001072        0x2 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x08001072                __retarget_lock_release_recursive
+ .text.__swhatbuf_r
+                0x08001074       0x48 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                0x08001074                __swhatbuf_r
+ .text.__smakebuf_r
+                0x080010bc       0x80 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+                0x080010bc                __smakebuf_r
+ .text.memset   0x0800113c       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+                0x0800113c                memset
+ .text._free_r  0x0800114c       0x98 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+                0x0800114c                _free_r
+ .text._malloc_r
+                0x080011e4       0xb4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                0x080011e4                _malloc_r
+ .text.__sfputc_r
+                0x08001298       0x2a c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .text.__sfputs_r
+                0x080012c2       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x080012c2                __sfputs_r
+ *fill*         0x080012e6        0x2 
+ .text._vfprintf_r
+                0x080012e8      0x260 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+                0x080012e8                _vfprintf_r
+                0x080012e8                _vfiprintf_r
+ .text._printf_common
+                0x08001548       0xde c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08001548                _printf_common
+ *fill*         0x08001626        0x2 
+ .text._printf_i
+                0x08001628      0x24c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08001628                _printf_i
+ .text._sbrk_r  0x08001874       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+                0x08001874                _sbrk_r
+ .text.__sread  0x08001894       0x22 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08001894                __sread
+ .text.__swrite
+                0x080018b6       0x38 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x080018b6                __swrite
+ .text.__sseek  0x080018ee       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x080018ee                __sseek
+ .text.__sclose
+                0x08001912        0x8 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+                0x08001912                __sclose
+ *fill*         0x0800191a        0x2 
+ .text._write_r
+                0x0800191c       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+                0x0800191c                _write_r
+ .text._close_r
+                0x08001940       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+                0x08001940                _close_r
+ .text._fstat_r
+                0x08001960       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+                0x08001960                _fstat_r
+ .text._isatty_r
+                0x08001984       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+                0x08001984                _isatty_r
+ .text._lseek_r
+                0x080019a4       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+                0x080019a4                _lseek_r
+ .text.memchr   0x080019c8       0x1c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+                0x080019c8                memchr
+ .text.__malloc_lock
+                0x080019e4        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+                0x080019e4                __malloc_lock
+ .text.__malloc_unlock
+                0x080019f0        0xc c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+                0x080019f0                __malloc_unlock
+ .text._read_r  0x080019fc       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+                0x080019fc                _read_r
+ .text._close   0x08001a20       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+                0x08001a20                _close
+ .text._fstat   0x08001a30       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+                0x08001a30                _fstat
+ .text._isatty  0x08001a40       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+                0x08001a40                _isatty
+ .text._lseek   0x08001a50       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+                0x08001a50                _lseek
+ .text._read    0x08001a60       0x10 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+                0x08001a60                _read
+ *(.glue_7)
+ .glue_7        0x08001a70        0x0 linker stubs
+ *(.glue_7t)
+ .glue_7t       0x08001a70        0x0 linker stubs
+ *(.eh_frame)
+ *(.init)
+ *(.fini)
+                0x08001a70                . = ALIGN (0x4)
+                0x08001a70                _etext = .
+
+.vfp11_veneer   0x08001a70        0x0
+ .vfp11_veneer  0x08001a70        0x0 linker stubs
+
+.v4_bx          0x08001a70        0x0
+ .v4_bx         0x08001a70        0x0 linker stubs
+
+.iplt           0x08001a70        0x0
+ .iplt          0x08001a70        0x0 ./user_libs/fifo.o
+
+.rodata         0x08001a70       0xf8
+                0x08001a70                . = ALIGN (0x4)
+ *(.rodata)
+ *(.rodata*)
+ .rodata.main.str1.1
+                0x08001a70       0x5e ./User/main.o
+ *fill*         0x08001ace        0x2 
+ .rodata._global_impure_ptr
+                0x08001ad0        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+                0x08001ad0                _global_impure_ptr
+ .rodata.__sf_fake_stderr
+                0x08001ad4       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08001ad4                __sf_fake_stderr
+ .rodata.__sf_fake_stdin
+                0x08001af4       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08001af4                __sf_fake_stdin
+ .rodata.__sf_fake_stdout
+                0x08001b14       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+                0x08001b14                __sf_fake_stdout
+ .rodata._vfprintf_r.str1.1
+                0x08001b34       0x11 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .rodata._printf_i.str1.1
+                0x08001b45       0x22 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+                0x08001b68                . = ALIGN (0x4)
+ *fill*         0x08001b67        0x1 
+
+.rel.dyn        0x08001b68        0x0
+ .rel.iplt      0x08001b68        0x0 ./user_libs/fifo.o
+
+.ARM.extab      0x08001b68        0x0
+                0x08001b68                . = ALIGN (0x4)
+ *(.ARM.extab* .gnu.linkonce.armextab.*)
+                0x08001b68                . = ALIGN (0x4)
+
+.ARM            0x08001b68        0x0
+                0x08001b68                . = ALIGN (0x4)
+                0x08001b68                __exidx_start = .
+ *(.ARM.exidx*)
+                0x08001b68                __exidx_end = .
+                0x08001b68                . = ALIGN (0x4)
+
+.preinit_array  0x08001b68        0x0
+                0x08001b68                . = ALIGN (0x4)
+                [!provide]                PROVIDE (__preinit_array_start = .)
+ *(.preinit_array*)
+                [!provide]                PROVIDE (__preinit_array_end = .)
+                0x08001b68                . = ALIGN (0x4)
+
+.init_array     0x08001b68        0x0
+                0x08001b68                . = ALIGN (0x4)
+                [!provide]                PROVIDE (__init_array_start = .)
+ *(SORT_BY_NAME(.init_array.*))
+ *(.init_array*)
+                [!provide]                PROVIDE (__init_array_end = .)
+                0x08001b68                . = ALIGN (0x4)
+
+.fini_array     0x08001b68        0x0
+                0x08001b68                . = ALIGN (0x4)
+                [!provide]                PROVIDE (__fini_array_start = .)
+ *(SORT_BY_NAME(.fini_array.*))
+ *(.fini_array*)
+                [!provide]                PROVIDE (__fini_array_end = .)
+                0x08001b68                . = ALIGN (0x4)
+                0x08001b68                _sidata = LOADADDR (.data)
+
+.data           0x20000000       0x64 load address 0x08001b68
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _sdata = .
+ *(.data)
+ *(.data*)
+ .data._impure_ptr
+                0x20000000        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+                0x20000000                _impure_ptr
+ .data.impure_data
+                0x20000004       0x60 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+ *(.RamFunc)
+ *(.RamFunc*)
+                0x20000064                . = ALIGN (0x4)
+                0x20000064                _edata = .
+
+.igot.plt       0x20000064        0x0 load address 0x08001bcc
+ .igot.plt      0x20000064        0x0 ./user_libs/fifo.o
+                0x20000064                . = ALIGN (0x4)
+
+.bss            0x20000064      0x100 load address 0x08001bcc
+                0x20000064                _sbss = .
+                0x20000064                __bss_start__ = _sbss
+ *(.bss)
+ *(.bss*)
+ .bss.p_ms      0x20000064        0x2 ./user_libs/stm32f205_core.o
+ .bss.p_us      0x20000066        0x1 ./user_libs/stm32f205_core.o
+ .bss.uart2_rx_buf
+                0x20000067       0x40 ./user_libs/stm32f205_uart.o
+                0x20000067                uart2_rx_buf
+ *fill*         0x200000a7        0x1 
+ .bss.uart2_rx_fifo_i
+                0x200000a8       0x10 ./user_libs/stm32f205_uart.o
+                0x200000a8                uart2_rx_fifo_i
+ .bss.uart2_tx_buf
+                0x200000b8       0x40 ./user_libs/stm32f205_uart.o
+                0x200000b8                uart2_tx_buf
+ .bss.uart2_tx_fifo_i
+                0x200000f8       0x10 ./user_libs/stm32f205_uart.o
+                0x200000f8                uart2_tx_fifo_i
+ .bss.uart5_rx_fifo_i
+                0x20000108       0x10 ./user_libs/stm32f205_uart.o
+                0x20000108                uart5_rx_fifo_i
+ .bss.uart5_tx_fifo_i
+                0x20000118       0x10 ./user_libs/stm32f205_uart.o
+                0x20000118                uart5_tx_fifo_i
+ .bss.uart6_rx_fifo_i
+                0x20000128       0x10 ./user_libs/stm32f205_uart.o
+                0x20000128                uart6_rx_fifo_i
+ .bss.uart6_tx_fifo_i
+                0x20000138       0x10 ./user_libs/stm32f205_uart.o
+                0x20000138                uart6_tx_fifo_i
+ .bss.__sbrk_heap_end
+                0x20000148        0x4 ./Debug/debug.o
+ .bss.__malloc_free_list
+                0x2000014c        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                0x2000014c                __malloc_free_list
+ .bss.__malloc_sbrk_start
+                0x20000150        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+                0x20000150                __malloc_sbrk_start
+ *(COMMON)
+ COMMON         0x20000154        0x9 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+                0x20000154                __lock___atexit_recursive_mutex
+                0x20000155                __lock___arc4random_mutex
+                0x20000156                __lock___env_recursive_mutex
+                0x20000157                __lock___sinit_recursive_mutex
+                0x20000158                __lock___malloc_recursive_mutex
+                0x20000159                __lock___at_quick_exit_mutex
+                0x2000015a                __lock___dd_hash_mutex
+                0x2000015b                __lock___tz_mutex
+                0x2000015c                __lock___sfp_recursive_mutex
+ *fill*         0x2000015d        0x3 
+ COMMON         0x20000160        0x4 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+                0x20000160                errno
+                0x20000164                . = ALIGN (0x4)
+                0x20000164                _ebss = .
+                0x20000164                __bss_end__ = _ebss
+
+._user_heap_stack
+                0x20000164      0x604 load address 0x08001bcc
+                0x20000168                . = ALIGN (0x8)
+ *fill*         0x20000164        0x4 
+                [!provide]                PROVIDE (end = .)
+                0x20000168                PROVIDE (_end = .)
+                0x20000368                . = (. + _Min_Heap_Size)
+ *fill*         0x20000168      0x200 
+                0x20000768                . = (. + _Min_Stack_Size)
+ *fill*         0x20000368      0x400 
+                0x20000768                . = ALIGN (0x8)
+
+/DISCARD/
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+
+.ARM.attributes
+                0x00000000       0x2b
+ *(.ARM.attributes)
+ .ARM.attributes
+                0x00000000       0x2d ./user_libs/fifo.o
+ .ARM.attributes
+                0x0000002d       0x2d ./user_libs/stm32f205_core.o
+ .ARM.attributes
+                0x0000005a       0x2d ./user_libs/stm32f205_gpio.o
+ .ARM.attributes
+                0x00000087       0x2d ./user_libs/stm32f205_rcc.o
+ .ARM.attributes
+                0x000000b4       0x2d ./user_libs/stm32f205_uart.o
+ .ARM.attributes
+                0x000000e1       0x2d ./User/main.o
+ .ARM.attributes
+                0x0000010e       0x21 ./Startup/startup_stm32f205vctx.o
+ .ARM.attributes
+                0x0000012f       0x2d ./Debug/debug.o
+ .ARM.attributes
+                0x0000015c       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+ .ARM.attributes
+                0x00000189       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-impure.o)
+ .ARM.attributes
+                0x000001b6       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .ARM.attributes
+                0x000001e3       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+ .ARM.attributes
+                0x00000210       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .ARM.attributes
+                0x0000023d       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+ .ARM.attributes
+                0x0000026a       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .ARM.attributes
+                0x00000297       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .ARM.attributes
+                0x000002c4       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .ARM.attributes
+                0x000002f1       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .ARM.attributes
+                0x0000031e       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+ .ARM.attributes
+                0x0000034b       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+ .ARM.attributes
+                0x00000378       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+ .ARM.attributes
+                0x000003a5       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+ .ARM.attributes
+                0x000003d2       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .ARM.attributes
+                0x000003ff       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .ARM.attributes
+                0x0000042c       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+ .ARM.attributes
+                0x00000459       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .ARM.attributes
+                0x00000486       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+ .ARM.attributes
+                0x000004b3       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+ .ARM.attributes
+                0x000004e0       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+ .ARM.attributes
+                0x0000050d       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+ .ARM.attributes
+                0x0000053a       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+ .ARM.attributes
+                0x00000567       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+ .ARM.attributes
+                0x00000594       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+ .ARM.attributes
+                0x000005c1       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+ .ARM.attributes
+                0x000005ee       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .ARM.attributes
+                0x0000061b       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .ARM.attributes
+                0x00000648       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+ .ARM.attributes
+                0x00000675       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+ .ARM.attributes
+                0x000006a2       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+ .ARM.attributes
+                0x000006cf       0x2d c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+OUTPUT(stm32f205_uart.elf elf32-littlearm)
+LOAD linker stubs
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libc.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libm.a
+LOAD c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/thumb/v7-m/nofp\libgcc.a
+
+.debug_info     0x00000000     0x3c20
+ .debug_info    0x00000000      0x2e6 ./user_libs/fifo.o
+ .debug_info    0x000002e6      0x6b6 ./user_libs/stm32f205_core.o
+ .debug_info    0x0000099c      0x31f ./user_libs/stm32f205_gpio.o
+ .debug_info    0x00000cbb      0x51a ./user_libs/stm32f205_rcc.o
+ .debug_info    0x000011d5      0x9d2 ./user_libs/stm32f205_uart.o
+ .debug_info    0x00001ba7     0x1446 ./User/main.o
+ .debug_info    0x00002fed       0x22 ./Startup/startup_stm32f205vctx.o
+ .debug_info    0x0000300f      0xc11 ./Debug/debug.o
+
+.debug_abbrev   0x00000000      0xcbd
+ .debug_abbrev  0x00000000      0x10e ./user_libs/fifo.o
+ .debug_abbrev  0x0000010e      0x147 ./user_libs/stm32f205_core.o
+ .debug_abbrev  0x00000255      0x155 ./user_libs/stm32f205_gpio.o
+ .debug_abbrev  0x000003aa      0x144 ./user_libs/stm32f205_rcc.o
+ .debug_abbrev  0x000004ee      0x220 ./user_libs/stm32f205_uart.o
+ .debug_abbrev  0x0000070e      0x31c ./User/main.o
+ .debug_abbrev  0x00000a2a       0x12 ./Startup/startup_stm32f205vctx.o
+ .debug_abbrev  0x00000a3c      0x281 ./Debug/debug.o
+
+.debug_loc      0x00000000     0x147a
+ .debug_loc     0x00000000      0x39a ./user_libs/fifo.o
+ .debug_loc     0x0000039a      0x416 ./user_libs/stm32f205_core.o
+ .debug_loc     0x000007b0      0x246 ./user_libs/stm32f205_gpio.o
+ .debug_loc     0x000009f6      0x227 ./user_libs/stm32f205_rcc.o
+ .debug_loc     0x00000c1d      0x6b6 ./user_libs/stm32f205_uart.o
+ .debug_loc     0x000012d3       0xda ./User/main.o
+ .debug_loc     0x000013ad       0xcd ./Debug/debug.o
+
+.debug_aranges  0x00000000      0x2b0
+ .debug_aranges
+                0x00000000       0x40 ./user_libs/fifo.o
+ .debug_aranges
+                0x00000040       0xe0 ./user_libs/stm32f205_core.o
+ .debug_aranges
+                0x00000120       0x30 ./user_libs/stm32f205_gpio.o
+ .debug_aranges
+                0x00000150       0x50 ./user_libs/stm32f205_rcc.o
+ .debug_aranges
+                0x000001a0       0xa0 ./user_libs/stm32f205_uart.o
+ .debug_aranges
+                0x00000240       0x20 ./User/main.o
+ .debug_aranges
+                0x00000260       0x28 ./Startup/startup_stm32f205vctx.o
+ .debug_aranges
+                0x00000288       0x28 ./Debug/debug.o
+
+.debug_ranges   0x00000000      0x280
+ .debug_ranges  0x00000000       0x30 ./user_libs/fifo.o
+ .debug_ranges  0x00000030       0xd0 ./user_libs/stm32f205_core.o
+ .debug_ranges  0x00000100       0x50 ./user_libs/stm32f205_gpio.o
+ .debug_ranges  0x00000150       0x40 ./user_libs/stm32f205_rcc.o
+ .debug_ranges  0x00000190       0x90 ./user_libs/stm32f205_uart.o
+ .debug_ranges  0x00000220       0x28 ./User/main.o
+ .debug_ranges  0x00000248       0x20 ./Startup/startup_stm32f205vctx.o
+ .debug_ranges  0x00000268       0x18 ./Debug/debug.o
+
+.debug_line     0x00000000     0x1dc1
+ .debug_line    0x00000000      0x3da ./user_libs/fifo.o
+ .debug_line    0x000003da      0x463 ./user_libs/stm32f205_core.o
+ .debug_line    0x0000083d      0x363 ./user_libs/stm32f205_gpio.o
+ .debug_line    0x00000ba0      0x3df ./user_libs/stm32f205_rcc.o
+ .debug_line    0x00000f7f      0x7c2 ./user_libs/stm32f205_uart.o
+ .debug_line    0x00001741      0x36d ./User/main.o
+ .debug_line    0x00001aae       0x82 ./Startup/startup_stm32f205vctx.o
+ .debug_line    0x00001b30      0x291 ./Debug/debug.o
+
+.debug_str      0x00000000     0x13be
+ .debug_str     0x00000000      0x220 ./user_libs/fifo.o
+                                0x26b (size before relaxing)
+ .debug_str     0x00000220      0x1f6 ./user_libs/stm32f205_core.o
+                                0x3d6 (size before relaxing)
+ .debug_str     0x00000416       0xc0 ./user_libs/stm32f205_gpio.o
+                                0x299 (size before relaxing)
+ .debug_str     0x000004d6      0x226 ./user_libs/stm32f205_rcc.o
+                                0x3d0 (size before relaxing)
+ .debug_str     0x000006fc      0x2e8 ./user_libs/stm32f205_uart.o
+                                0x54e (size before relaxing)
+ .debug_str     0x000009e4      0x919 ./User/main.o
+                                0xe10 (size before relaxing)
+ .debug_str     0x000012fd       0x31 ./Startup/startup_stm32f205vctx.o
+                                 0x6b (size before relaxing)
+ .debug_str     0x0000132e       0x90 ./Debug/debug.o
+                                0x71d (size before relaxing)
+
+.comment        0x00000000       0x4c
+ .comment       0x00000000       0x4c ./user_libs/fifo.o
+                                 0x4d (size before relaxing)
+ .comment       0x0000004c       0x4d ./user_libs/stm32f205_core.o
+ .comment       0x0000004c       0x4d ./user_libs/stm32f205_gpio.o
+ .comment       0x0000004c       0x4d ./user_libs/stm32f205_rcc.o
+ .comment       0x0000004c       0x4d ./user_libs/stm32f205_uart.o
+ .comment       0x0000004c       0x4d ./User/main.o
+ .comment       0x0000004c       0x4d ./Debug/debug.o
+
+.debug_frame    0x00000000      0xe98
+ .debug_frame   0x00000000       0x88 ./user_libs/fifo.o
+ .debug_frame   0x00000088      0x1a0 ./user_libs/stm32f205_core.o
+ .debug_frame   0x00000228       0x5c ./user_libs/stm32f205_gpio.o
+ .debug_frame   0x00000284       0xa8 ./user_libs/stm32f205_rcc.o
+ .debug_frame   0x0000032c      0x210 ./user_libs/stm32f205_uart.o
+ .debug_frame   0x0000053c       0x38 ./User/main.o
+ .debug_frame   0x00000574       0x40 ./Debug/debug.o
+ .debug_frame   0x000005b4       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-errno.o)
+ .debug_frame   0x000005d4       0x74 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-printf.o)
+ .debug_frame   0x00000648       0x3c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-puts.o)
+ .debug_frame   0x00000684       0x40 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wbuf.o)
+ .debug_frame   0x000006c4       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-wsetup.o)
+ .debug_frame   0x000006f0       0x5c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fflush.o)
+ .debug_frame   0x0000074c      0x14c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-findfp.o)
+ .debug_frame   0x00000898       0x54 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fwalk.o)
+ .debug_frame   0x000008ec       0xb0 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lock.o)
+ .debug_frame   0x0000099c       0x58 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-makebuf.o)
+ .debug_frame   0x000009f4       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memset.o)
+ .debug_frame   0x00000a14       0x38 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-freer.o)
+ .debug_frame   0x00000a4c       0x30 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-mallocr.o)
+ .debug_frame   0x00000a7c       0xac c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf.o)
+ .debug_frame   0x00000b28       0x60 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-nano-vfprintf_i.o)
+ .debug_frame   0x00000b88       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-sbrkr.o)
+ .debug_frame   0x00000bb4       0x88 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-stdio.o)
+ .debug_frame   0x00000c3c       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-writer.o)
+ .debug_frame   0x00000c68       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-closer.o)
+ .debug_frame   0x00000c94       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-fstatr.o)
+ .debug_frame   0x00000cc0       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-isattyr.o)
+ .debug_frame   0x00000cec       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-lseekr.o)
+ .debug_frame   0x00000d18       0x28 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-memchr-stub.o)
+ .debug_frame   0x00000d40       0x30 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-mlock.o)
+ .debug_frame   0x00000d70       0x2c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-readr.o)
+ .debug_frame   0x00000d9c       0x5c c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libg_nano.a(lib_a-reent.o)
+ .debug_frame   0x00000df8       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .debug_frame   0x00000e18       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+ .debug_frame   0x00000e38       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+ .debug_frame   0x00000e58       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+ .debug_frame   0x00000e78       0x20 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+
+.stab           0x00000000       0x84
+ .stab          0x00000000       0x24 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
+ .stab          0x00000024       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(fstat.o)
+                                 0x24 (size before relaxing)
+ .stab          0x0000003c       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(isatty.o)
+                                 0x24 (size before relaxing)
+ .stab          0x00000054       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(lseek.o)
+                                 0x24 (size before relaxing)
+ .stab          0x0000006c       0x18 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(read.o)
+                                 0x24 (size before relaxing)
+
+.stabstr        0x00000000      0x117
+ .stabstr       0x00000000      0x117 c:/mounriver/mrs_community/toolchain/arm-none-eabi-gcc/bin/../lib/gcc/arm-none-eabi/9.3.1/../../../../arm-none-eabi/lib/thumb/v7-m/nofp\libnosys.a(close.o)
