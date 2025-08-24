@@ -4,11 +4,15 @@
 #include "stdio.h"
 
 /* UART Printf Definition */
-#define DEBUG_UART1    1
-#define DEBUG_UART2    2
-#define DEBUG_UART3    3
-#define DEBUG_UART4    3
-#define DEBUG_CDC	5
+#define DEBUG_UART1	1
+#define DEBUG_UART2	2
+#define DEBUG_UART3	3
+#define DEBUG_UART4	4
+#define DEBUG_UART5	5
+#define DEBUG_UART6	6
+#define DEBUG_UART7	7
+#define DEBUG_UART8	8
+#define DEBUG_CDC	9
 
 /* DEBUG UART Definition */
 #ifndef DEBUG

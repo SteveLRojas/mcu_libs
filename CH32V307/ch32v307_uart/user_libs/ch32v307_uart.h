@@ -13,6 +13,10 @@
 #define USE_UART_2 0
 #define USE_UART_3 0
 #define USE_UART_4 0
+#define USE_UART_5 1
+#define USE_UART_6 1
+#define USE_UART_7 1
+#define USE_UART_8 1
 
 //buffer sizes must be powers of 2
 #define UART1_RX_BUF_SIZE 1024
@@ -23,6 +27,14 @@
 #define UART3_TX_BUF_SIZE 64
 #define UART4_RX_BUF_SIZE 64
 #define UART4_TX_BUF_SIZE 64
+#define UART5_RX_BUF_SIZE 64
+#define UART5_TX_BUF_SIZE 64
+#define UART6_RX_BUF_SIZE 64
+#define UART6_TX_BUF_SIZE 64
+#define UART7_RX_BUF_SIZE 64
+#define UART7_TX_BUF_SIZE 64
+#define UART8_RX_BUF_SIZE 64
+#define UART8_TX_BUF_SIZE 64
 
 // HINT: do not change any defines below this line
 extern volatile fifo_t uart1_rx_fifo_i;
@@ -52,6 +64,26 @@ extern volatile fifo_t uart4_tx_fifo_i;
 #if USE_UART_4
 #define uart4_rx_fifo (&uart4_rx_fifo_i)
 #define uart4_tx_fifo (&uart4_tx_fifo_i)
+#endif
+
+#if USE_UART_5
+#define uart5_rx_fifo (&uart5_rx_fifo_i)
+#define uart5_tx_fifo (&uart5_tx_fifo_i)
+#endif
+
+#if USE_UART_6
+#define uart6_rx_fifo (&uart6_rx_fifo_i)
+#define uart6_tx_fifo (&uart6_tx_fifo_i)
+#endif
+
+#if USE_UART_7
+#define uart7_rx_fifo (&uart7_rx_fifo_i)
+#define uart7_tx_fifo (&uart7_tx_fifo_i)
+#endif
+
+#if USE_UART_8
+#define uart8_rx_fifo (&uart8_rx_fifo_i)
+#define uart8_tx_fifo (&uart8_tx_fifo_i)
 #endif
 
 void uart_init(USART_TypeDef* uart, uint32_t baud);

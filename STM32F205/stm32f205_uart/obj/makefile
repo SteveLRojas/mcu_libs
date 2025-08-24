@@ -47,7 +47,7 @@ all: stm32f205_uart.elf secondary-outputs
 stm32f205_uart.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU ARM Cross C Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -T "C:\Users\Steve\mrs_community_workspace\stm32f205_uart\LD\STM32F205VCTX_FLASH.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"stm32f205_uart.map" --specs=nano.specs --specs=nosys.specs -o "stm32f205_uart.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -T "C:\Users\Steve\repos\mcu_libs\STM32F205\stm32f205_uart\LD\STM32F205VCTX_FLASH.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"stm32f205_uart.map" --specs=nano.specs --specs=nosys.specs -o "stm32f205_uart.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -17,7 +17,15 @@ __attribute__((used)) int _write(int fd, char* buf, int size)
 #elif(DEBUG == DEBUG_UART3)
 	uart_write_bytes(USART3, uart3_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #elif(DEBUG == DEBUG_UART4)
-	uart_write_bytes(USART4, uart4_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+	uart_write_bytes(UART4, uart4_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_UART5)
+	uart_write_bytes(UART5, uart5_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_UART6)
+	uart_write_bytes(UART6, uart6_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_UART7)
+	uart_write_bytes(UART7, uart7_tx_fifo, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG == DEBUG_UART8)
+	uart_write_bytes(UART8, uart8_tx_fifo, (uint8_t*)buf, (uint16_t)size);
 #elif(DEBUG == DEBUG_CDC)
 	cdc_write_bytes((uint8_t*)buf, (uint16_t)size);
 #endif

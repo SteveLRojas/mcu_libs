@@ -227,6 +227,20 @@ void uart_init(USART_TypeDef* uart, uint32_t baud)
 			fifo_init((fifo_t*)uart4_tx_fifo, uart4_tx_buf, UART4_TX_BUF_SIZE);
 		}
 #endif
+#if USE_UART_5
+		if(uart == UART5)
+		{
+			fifo_init((fifo_t*)uart5_rx_fifo, uart5_rx_buf, UART5_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart5_tx_fifo, uart5_tx_buf, UART5_TX_BUF_SIZE);
+		}
+#endif
+#if USE_UART_6
+		if(uart == USART6)
+		{
+			fifo_init((fifo_t*)uart6_rx_fifo, uart6_rx_buf, UART6_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart6_tx_fifo, uart6_tx_buf, UART6_TX_BUF_SIZE);
+		}
+#endif
 
 		apbclock = ((uart == USART1) || (uart == USART6)) ? rcc_compute_pclk2_freq() : rcc_compute_pclk1_freq(); // USART1 and USART6 are on APB2, others are on APB1
 		usart_div = ((apbclock << 1) / baud);

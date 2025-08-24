@@ -19,6 +19,10 @@ void USART1_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USART2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void USART3_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 void UART4_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void UART5_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void UART6_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void UART7_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void UART8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 #if USE_UART_1
 uint8_t uart1_rx_buf[UART1_RX_BUF_SIZE];
@@ -58,6 +62,46 @@ volatile fifo_t uart4_tx_fifo_i;
 #else
 #define uart4_rx_fifo (fifo_t*)0
 #define uart4_tx_fifo (fifo_t*)0
+#endif
+
+#if USE_UART_5
+uint8_t uart5_rx_buf[UART5_RX_BUF_SIZE];
+uint8_t uart5_tx_buf[UART5_TX_BUF_SIZE];
+volatile fifo_t uart5_rx_fifo_i;
+volatile fifo_t uart5_tx_fifo_i;
+#else
+#define uart5_rx_fifo (fifo_t*)0
+#define uart5_tx_fifo (fifo_t*)0
+#endif
+
+#if USE_UART_6
+uint8_t uart6_rx_buf[UART6_RX_BUF_SIZE];
+uint8_t uart6_tx_buf[UART6_TX_BUF_SIZE];
+volatile fifo_t uart6_rx_fifo_i;
+volatile fifo_t uart6_tx_fifo_i;
+#else
+#define uart6_rx_fifo (fifo_t*)0
+#define uart6_tx_fifo (fifo_t*)0
+#endif
+
+#if USE_UART_7
+uint8_t uart7_rx_buf[UART7_RX_BUF_SIZE];
+uint8_t uart7_tx_buf[UART7_TX_BUF_SIZE];
+volatile fifo_t uart7_rx_fifo_i;
+volatile fifo_t uart7_tx_fifo_i;
+#else
+#define uart7_rx_fifo (fifo_t*)0
+#define uart7_tx_fifo (fifo_t*)0
+#endif
+
+#if USE_UART_8
+uint8_t uart8_rx_buf[UART8_RX_BUF_SIZE];
+uint8_t uart8_tx_buf[UART8_TX_BUF_SIZE];
+volatile fifo_t uart8_rx_fifo_i;
+volatile fifo_t uart8_tx_fifo_i;
+#else
+#define uart8_rx_fifo (fifo_t*)0
+#define uart8_tx_fifo (fifo_t*)0
 #endif
 
 
@@ -133,6 +177,78 @@ void UART4_IRQHandler()
 	}
 }
 
+void UART5_IRQHandler()
+{
+	if(UART5->STATR & USART_STATR_RXNE)	//receive buffer not empty
+	{
+		UART5->STATR = UART5->STATR & ~USART_STATR_RXNE;
+		fifo_push((fifo_t*)uart5_rx_fifo, (uint8_t)(UART5->DATAR));
+	}
+
+	if(UART5->STATR & USART_STATR_TC)	//transmit buffer empty
+	{
+		UART5->STATR &= ~USART_STATR_TC;
+		if(fifo_num_used(uart5_tx_fifo))
+		{
+			UART5->DATAR = fifo_pop((fifo_t*)uart5_tx_fifo);
+		}
+	}
+}
+
+void UART6_IRQHandler()
+{
+	if(UART6->STATR & USART_STATR_RXNE)	//receive buffer not empty
+	{
+		UART6->STATR = UART6->STATR & ~USART_STATR_RXNE;
+		fifo_push((fifo_t*)uart6_rx_fifo, (uint8_t)(UART6->DATAR));
+	}
+
+	if(UART6->STATR & USART_STATR_TC)	//transmit buffer empty
+	{
+		UART6->STATR &= ~USART_STATR_TC;
+		if(fifo_num_used(uart6_tx_fifo))
+		{
+			UART6->DATAR = fifo_pop((fifo_t*)uart6_tx_fifo);
+		}
+	}
+}
+
+void UART7_IRQHandler()
+{
+	if(UART7->STATR & USART_STATR_RXNE)	//receive buffer not empty
+	{
+		UART7->STATR = UART7->STATR & ~USART_STATR_RXNE;
+		fifo_push((fifo_t*)uart7_rx_fifo, (uint8_t)(UART7->DATAR));
+	}
+
+	if(UART7->STATR & USART_STATR_TC)	//transmit buffer empty
+	{
+		UART7->STATR &= ~USART_STATR_TC;
+		if(fifo_num_used(uart7_tx_fifo))
+		{
+			UART7->DATAR = fifo_pop((fifo_t*)uart7_tx_fifo);
+		}
+	}
+}
+
+void UART8_IRQHandler()
+{
+	if(UART8->STATR & USART_STATR_RXNE)	//receive buffer not empty
+	{
+		UART8->STATR = UART8->STATR & ~USART_STATR_RXNE;
+		fifo_push((fifo_t*)uart8_rx_fifo, (uint8_t)(UART8->DATAR));
+	}
+
+	if(UART8->STATR & USART_STATR_TC)	//transmit buffer empty
+	{
+		UART8->STATR &= ~USART_STATR_TC;
+		if(fifo_num_used(uart8_tx_fifo))
+		{
+			UART8->DATAR = fifo_pop((fifo_t*)uart8_tx_fifo);
+		}
+	}
+}
+
 // HINT: Be sure to enable interrupts in PFIC
 void uart_init(USART_TypeDef* uart, uint32_t baud)
 {
@@ -167,6 +283,34 @@ void uart_init(USART_TypeDef* uart, uint32_t baud)
 		{
 			fifo_init((fifo_t*)uart4_rx_fifo, uart4_rx_buf, UART4_RX_BUF_SIZE);
 			fifo_init((fifo_t*)uart4_tx_fifo, uart4_tx_buf, UART4_TX_BUF_SIZE);
+		}
+#endif
+#if USE_UART_5
+		if(uart == UART5)
+		{
+			fifo_init((fifo_t*)uart5_rx_fifo, uart5_rx_buf, UART5_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart5_tx_fifo, uart5_tx_buf, UART5_TX_BUF_SIZE);
+		}
+#endif
+#if USE_UART_6
+		if(uart == UART6)
+		{
+			fifo_init((fifo_t*)uart6_rx_fifo, uart6_rx_buf, UART6_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart6_tx_fifo, uart6_tx_buf, UART6_TX_BUF_SIZE);
+		}
+#endif
+#if USE_UART_7
+		if(uart == UART7)
+		{
+			fifo_init((fifo_t*)uart7_rx_fifo, uart7_rx_buf, UART7_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart7_tx_fifo, uart7_tx_buf, UART7_TX_BUF_SIZE);
+		}
+#endif
+#if USE_UART_8
+		if(uart == UART8)
+		{
+			fifo_init((fifo_t*)uart8_rx_fifo, uart8_rx_buf, UART8_RX_BUF_SIZE);
+			fifo_init((fifo_t*)uart8_tx_fifo, uart8_tx_buf, UART8_TX_BUF_SIZE);
 		}
 #endif
 
