@@ -1,44 +1,35 @@
-/********************************** (C) COPYRIGHT  *******************************
- * File Name          : debug.h
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2021/06/06
- * Description        : This file contains all the functions prototypes for UART
- *                      Printf , Delay functions.
-*********************************************************************************
-* Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
-* Attention: This software (modified or not) and binary are used for 
-* microcontroller manufactured by Nanjing Qinheng Microelectronics.
-*******************************************************************************/
-#ifndef __DEBUG_H
-#define __DEBUG_H
+#ifndef _DEBUG_H
+#define _DEBUG_H
 
 #include "stdio.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+// Debug interface options
+#define DEBUG_UART_1		1
+#define DEBUG_UART_2		2
+#define DEBUG_UART_3		3
+#define DEBUG_UART_4		4
+#define DEBUG_UART_DMA_1	5
+#define DEBUG_UART_DMA_2	6
+#define DEBUG_UART_DMA_3	7
+#define DEBUG_UART_DMA_4	8
+#define DEBUG_CDC			9
 
-/* UART Printf Definition */
-#define DEBUG_UART1    1
-#define DEBUG_UART2    2
-#define DEBUG_UART3    3
-#define DEBUG_UART4    3
-#define DEBUG_CDC	5
+//UART type options
+#define DEBUG_UART_TYP_INTERRUPT	0
+#define DEBUG_UART_TYP_DMA			1
 
-/* DEBUG UART Definition */
+// Select the debug interface
 #ifndef DEBUG
 #define DEBUG   DEBUG_CDC
 #endif
+
+// Select the UART type
+#define DEBUG_UART_TYP	DEBUG_UART_TYP_INTERRUPT
 
 #if(DEBUG)
   #define PRINT(format, ...)    printf(format, ##__VA_ARGS__)
 #else
   #define PRINT(X...)
-#endif
-
-#ifdef __cplusplus
-}
 #endif
 
 #endif

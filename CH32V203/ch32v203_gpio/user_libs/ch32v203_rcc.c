@@ -26,9 +26,9 @@ void rcc_system_init(void)
 		rcc_init_pll(RCC_PLL_FREQ_MUL | RCC_PLLSRC);
 		rcc_sw_config(RCC_SW_PLL);
 		while ((RCC->CFGR0 & RCC_SWS) != RCC_SWS_PLL);
+		rcc_hsi_off();
 	}
 #else
-	rcc_hse_off()
 	rcc_hpre_config(RCC_HCLK_FREQ_DIV);
 	rcc_ppre1_config(RCC_PCLK1_FREQ_DIV);
 	rcc_ppre2_config(RCC_PCLK2_FREQ_DIV);
@@ -38,6 +38,7 @@ void rcc_system_init(void)
 	rcc_init_pll(RCC_PLL_FREQ_MUL);
 	rcc_sw_config(RCC_SW_PLL);
 	while ((RCC->CFGR0 & RCC_SWS) != RCC_SWS_PLL);
+	rcc_hse_off()
 #endif
 }
 
@@ -114,6 +115,7 @@ uint32_t rcc_compute_hclk_freq()
 
 	if(hclk_div & 0x08)
 	{
+		hclk_div &= 0x07;
 		if(hclk_div & 0x04)
 			hclk_div += 2; // # times to div sysclk by 2
 		else
