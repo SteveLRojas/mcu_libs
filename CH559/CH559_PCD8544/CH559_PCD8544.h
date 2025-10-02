@@ -13,7 +13,7 @@
 #define PCD8544_SPI_CLK_DIV	12
 #define PCD8544_SPI_MODULE	SPI_0
 
-//HINT: Defualt settings
+//HINT: Default settings
 #define PCD8544_DEF_CONTRAST	0x31
 #define PCD8544_DEF_BIAS		0x03
 #define PCD8544_DEF_T_COEF		0x00
