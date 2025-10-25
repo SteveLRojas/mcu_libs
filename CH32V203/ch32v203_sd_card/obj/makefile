@@ -31,47 +31,47 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 SECONDARY_FLASH += \
-ch32v203_timer.hex \
+ch32v203_sd_card.hex \
 
 SECONDARY_LIST += \
-ch32v203_timer.lst \
+ch32v203_sd_card.lst \
 
 SECONDARY_SIZE += \
-ch32v203_timer.siz \
+ch32v203_sd_card.siz \
 
 
 # All Target
-all: ch32v203_timer.elf secondary-outputs
+all: ch32v203_sd_card.elf secondary-outputs
 
 # Tool invocations
-ch32v203_timer.elf: $(OBJS) $(USER_OBJS)
+ch32v203_sd_card.elf: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU RISC-V Cross C Linker'
-	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -T "/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/CH32V203/ch32v203_timer/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"ch32v203_timer.map" --specs=nano.specs --specs=nosys.specs -o "ch32v203_timer.elf" $(OBJS) $(USER_OBJS) $(LIBS)
+	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -T "/home/dragomir/mrs_community-workspace/ch32v203_sd_card/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -Wl,-Map,"ch32v203_sd_card.map" --specs=nano.specs --specs=nosys.specs -o "ch32v203_sd_card.elf" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
-ch32v203_timer.hex: ch32v203_timer.elf
+ch32v203_sd_card.hex: ch32v203_sd_card.elf
 	@echo 'Invoking: GNU RISC-V Cross Create Flash Image'
-	riscv-none-embed-objcopy -O ihex "ch32v203_timer.elf"  "ch32v203_timer.hex"
+	riscv-none-embed-objcopy -O ihex "ch32v203_sd_card.elf"  "ch32v203_sd_card.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-ch32v203_timer.lst: ch32v203_timer.elf
+ch32v203_sd_card.lst: ch32v203_sd_card.elf
 	@echo 'Invoking: GNU RISC-V Cross Create Listing'
-	riscv-none-embed-objdump --all-headers --demangle --disassemble "ch32v203_timer.elf" > "ch32v203_timer.lst"
+	riscv-none-embed-objdump --all-headers --demangle --disassemble "ch32v203_sd_card.elf" > "ch32v203_sd_card.lst"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-ch32v203_timer.siz: ch32v203_timer.elf
+ch32v203_sd_card.siz: ch32v203_sd_card.elf
 	@echo 'Invoking: GNU RISC-V Cross Print Size'
-	riscv-none-embed-size --format=berkeley "ch32v203_timer.elf"
+	riscv-none-embed-size --format=berkeley "ch32v203_sd_card.elf"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(SECONDARY_FLASH)$(SECONDARY_LIST)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS) ch32v203_timer.elf
+	-$(RM) $(OBJS)$(SECONDARY_FLASH)$(SECONDARY_LIST)$(SECONDARY_SIZE)$(ASM_DEPS)$(S_UPPER_DEPS)$(C_DEPS) ch32v203_sd_card.elf
 	-@echo ' '
 
 secondary-outputs: $(SECONDARY_FLASH) $(SECONDARY_LIST) $(SECONDARY_SIZE)

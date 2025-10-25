@@ -17,7 +17,7 @@ C_DEPS += \
 Debug/%.o: ../Debug/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU RISC-V Cross C Compiler'
-	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/CH32V203/ch32v203_timer/Debug" -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/CH32V203/ch32v203_timer/user_libs" -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/CH32V203/ch32v203_timer/User" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -I"/home/dragomir/mrs_community-workspace/ch32v203_sd_card/Debug" -I"/home/dragomir/mrs_community-workspace/ch32v203_sd_card/User" -I"/home/dragomir/mrs_community-workspace/ch32v203_sd_card/user_libs" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

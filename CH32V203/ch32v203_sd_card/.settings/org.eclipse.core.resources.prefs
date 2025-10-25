@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//Debug/debug.c=GBK
+encoding//Debug/debug.h=GBK
+encoding//User/main.c=GBK
+encoding//User/support.c=GBK
+encoding//user_libs/ch32v203_core.h=GBK
+encoding//user_libs/ch32v203_gpio.h=GBK
+encoding//user_libs/ch32v203_sd_card.c=GBK
+encoding//user_libs/ch32v203_sd_card.h=GBK
+encoding//user_libs/ch32v203_spi.c=GBK
+encoding//user_libs/ch32v203_spi.h=GBK
+encoding//user_libs/ch32v203_timer.c=GBK
+encoding//user_libs/ch32v203_timer.h=GBK
+encoding//user_libs/ch32v203_usbd_cdc.h=GBK
+encoding//user_libs/pseudo_random.c=GBK
+encoding//user_libs/pseudo_random.h=GBK
