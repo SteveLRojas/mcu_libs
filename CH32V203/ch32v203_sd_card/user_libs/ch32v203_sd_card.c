@@ -168,10 +168,7 @@ uint8_t sd_card_send_command(uint8_t command, uint32_t value, uint8_t resp_size)
 	datagram[4] = ((uint8_t*)&value)[0];
 	datagram[5] = (sd_card_calc_crc7(datagram, 5) << 1) | 0x01;
 
-	for(uint8_t d = 0; d < 6; ++d)
-	{
-		spi_transfer(SD_CARD_SPI_MODULE, datagram[d]);
-	}
+	spi_bulk_out_8b(SD_CARD_SPI_MODULE, datagram, 6);
 
 	for(uint8_t d = 0; d < 9; ++d)
 	{
@@ -258,10 +255,7 @@ void sd_card_read_block(uint32_t block, uint8_t* dest)
 		return;
 	}
 
-	for(uint16_t d = 0; d < 512; ++d)
-	{
-		dest[d] = (uint8_t)spi_transfer(SD_CARD_SPI_MODULE, 0xFF);
-	}
+	spi_bulk_in_8b(SD_CARD_SPI_MODULE, dest, 0xFF, 512);
 
 	// discard CRC bytes
 	spi_transfer(SD_CARD_SPI_MODULE, 0xFF);
@@ -311,10 +305,7 @@ void sd_card_write_block(uint32_t block, uint8_t* source)
 	spi_transfer(SD_CARD_SPI_MODULE, 0xFF);
 	spi_transfer(SD_CARD_SPI_MODULE, 0xFE);
 
-	for(uint16_t d = 0; d < 512; ++d)
-	{
-		spi_transfer(SD_CARD_SPI_MODULE, source[d]);
-	}
+	spi_bulk_out_8b(SD_CARD_SPI_MODULE, source, 512);
 
 	// Send dummy CRC
 	spi_transfer(SD_CARD_SPI_MODULE, 0xFF);
@@ -369,10 +360,7 @@ uint32_t sd_card_get_num_blocks(void)
 		return 0;
 	}
 
-	for(uint16_t d = 0; d < 16; ++d)
-	{
-		csd[d] = (uint8_t)spi_transfer(SD_CARD_SPI_MODULE, 0xFF);
-	}
+	spi_bulk_in_8b(SD_CARD_SPI_MODULE, csd, 0xFF, 16);
 
 	// discard CRC bytes
 	spi_transfer(SD_CARD_SPI_MODULE, 0xFF);

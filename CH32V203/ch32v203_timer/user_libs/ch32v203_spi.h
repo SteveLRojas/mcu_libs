@@ -30,5 +30,11 @@
 
 void spi_init(SPI_TypeDef* spi, uint16_t config);
 uint16_t spi_transfer(SPI_TypeDef* spi, uint16_t val);
+void spi_bulk_transfer_8b(SPI_TypeDef* spi, uint8_t* source, uint8_t* dest, uint16_t len);
+void spi_bulk_transfer_16b(SPI_TypeDef* spi, uint16_t* source, uint16_t* dest, uint16_t len);
+void spi_bulk_in_8b(SPI_TypeDef* spi, uint8_t* dest, uint8_t out_val, uint16_t len);
+void spi_bulk_in_16b(SPI_TypeDef* spi, uint16_t* dest, uint16_t out_val, uint16_t len);
+uint8_t spi_bulk_out_8b(SPI_TypeDef* spi, uint8_t* source, uint16_t len);
+uint16_t spi_bulk_out_16b(SPI_TypeDef* spi, uint16_t* source, uint16_t len);
 
 #endif /* _CH32V203_SPI_H_ */
