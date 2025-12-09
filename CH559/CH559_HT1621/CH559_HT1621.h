@@ -1,6 +1,10 @@
 #ifndef _CH559_HT1621_H_
 #define _CH559_HT1621_H_
 
+//HINT: The glass type defines the order and mapping of the display segments
+#define HT1621_GLASS_TYP_STANDARD	0
+#define HT1621_GLASS_TYP_GDM0103	1
+
 //HINT: Pin options. Use defines from GPIO library.
 #define HT1621_PORT_CS		GPIO_PORT_0
 #define HT1621_PORT_WR		GPIO_PORT_0
@@ -9,7 +13,9 @@
 #define HT1621_PIN_WR		GPIO_PIN_6
 #define HT1621_PIN_DATA		GPIO_PIN_7
 
-#define HT1621_BUF_SIZE	6
+//HINT: Display options
+#define HT1621_GLASS_TYPE	HT1621_GLASS_TYP_GDM0103
+#define HT1621_NUM_DIGITS	8
 
 #define HT1621_CMD_SYS_DIS	0x00
 #define HT1621_CMD_SYS_EN	0x01
@@ -46,6 +52,16 @@
 #define HT1621_COM_3	0x04
 #define HT1621_COM_4	0x08
 
+#if (HT1621_GLASS_TYPE == HT1621_GLASS_TYP_GDM0103)
+#define HT1621_SEG_A	0x08
+#define HT1621_SEG_B	0x04
+#define HT1621_SEG_C	0x02
+#define HT1621_SEG_D	0x10
+#define HT1621_SEG_E	0x20
+#define HT1621_SEG_F	0x80
+#define HT1621_SEG_G	0x40
+#define HT1621_SEG_DP	0x01
+#else
 #define HT1621_SEG_A	0x01
 #define HT1621_SEG_B	0x02
 #define HT1621_SEG_C	0x04
@@ -54,9 +70,10 @@
 #define HT1621_SEG_F	0x10
 #define HT1621_SEG_G	0x20
 #define HT1621_SEG_DP	0x08
+#endif
 
 extern UINT8 code ht1621_hex_tab[16];
-extern UINT8 ht1621_buf[HT1621_BUF_SIZE];
+extern UINT8 ht1621_buf[HT1621_NUM_DIGITS];
 
 #define ht1621_set_digit(idx, val) (ht1621_buf[idx] = ht1621_hex_tab[val])
 #define ht1621_set_dp(idx, val) (ht1621_buf[idx] = val ? (ht1621_buf[idx] | HT1621_SEG_DP) : (ht1621_buf[idx] & ~ HT1621_SEG_DP))

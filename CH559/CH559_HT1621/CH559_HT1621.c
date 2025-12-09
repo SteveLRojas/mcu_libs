@@ -23,12 +23,11 @@ UINT8 code ht1621_hex_tab[16] =
 	HT1621_SEG_A | HT1621_SEG_E | HT1621_SEG_F | HT1621_SEG_G
 };
 
-UINT8 ht1621_buf[HT1621_BUF_SIZE];
+UINT8 ht1621_buf[HT1621_NUM_DIGITS];
 	
 void ht1621_init(void)
 {
 	UINT8 count;
-	UINT8 addr;
 	
 	gpio_set_pin(HT1621_PORT_CS, HT1621_PIN_CS);
 	gpio_set_pin(HT1621_PORT_WR, HT1621_PIN_WR);
@@ -36,15 +35,14 @@ void ht1621_init(void)
 	
 	ht1621_send_command(HT1621_CMD_SYS_EN);
 	ht1621_send_command(HT1621_CMD_RC_256K);
-	ht1621_send_command(HT1621_CMD_BIAS_COM | HT1621_COM_4 | HT1621_BIAS_1_2);
+	ht1621_send_command(HT1621_CMD_BIAS_COM | HT1621_COM_4 | HT1621_BIAS_1_3);
 	ht1621_send_command(HT1621_CMD_LCD_ON);
 	
-	for(count = 0; count < HT1621_BUF_SIZE; ++count)
+	for(count = 0; count < HT1621_NUM_DIGITS; ++count)
 	{
-		addr = count << 1;
-		ht1621_send_data(addr, 0x00);
-		ht1621_send_data(++addr, 0x02);
+		ht1621_buf[count] = HT1621_SEG_G;
 	}
+	ht1621_update();
 }
 
 void ht1621_send_command(UINT8 command)
@@ -129,12 +127,30 @@ void ht1621_update(void)
 	UINT8 count;
 	UINT8 digit;
 	UINT8 addr;
-	
-	for(count = 0; count < HT1621_BUF_SIZE; count += 1)
+#if (HT1621_GLASS_TYPE == HT1621_GLASS_TYP_GDM0103)
+	for(count = 0; count < HT1621_NUM_DIGITS; count += 1)
+	{
+		addr = count << 1;
+		if(count < 4)
+		{
+			digit = ht1621_buf[7 - count];
+			ht1621_send_data(addr, digit >> 4);
+			ht1621_send_data(addr + 1, digit & 0x0F);
+		}
+		else
+		{
+			digit = ht1621_buf[count - 4];
+			ht1621_send_data(addr, digit & 0x0F);
+			ht1621_send_data(addr + 1, digit >> 4);
+		}
+	}
+#else
+	for(count = 0; count < HT1621_NUM_DIGITS; count += 1)
 	{
 		digit = ht1621_buf[count];
 		addr = count << 1;
 		ht1621_send_data(addr, digit & 0x0F);
 		ht1621_send_data(addr + 1, digit >> 4);
 	}
+#endif
 }

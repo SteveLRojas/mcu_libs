@@ -234,7 +234,7 @@ int main()
 					break;
 				
 				case 0x16:
-					for(count = 0; count < HT1621_BUF_SIZE; ++count)
+					for(count = 0; count < HT1621_NUM_DIGITS; ++count)
 					{
 						ht1621_set_digit(count, count);
 					}
@@ -258,13 +258,13 @@ int main()
 					ht1621_set_dp(5, 1);
 					break;
 				case 0x1D:
-					for(count = 0; count < HT1621_BUF_SIZE; ++count)
+					for(count = 0; count < HT1621_NUM_DIGITS; ++count)
 					{
 						ht1621_set_digit(count, 0x00);
 					}
 					break;
 				case 0x1E:
-					for(count = 0; count < HT1621_BUF_SIZE; ++count)
+					for(count = 0; count < HT1621_NUM_DIGITS; ++count)
 					{
 						ht1621_digit_off(count);
 					}
