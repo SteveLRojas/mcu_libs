@@ -12,6 +12,11 @@ Libraries for ARM and RISC-V MCUs are meant to be compiled with GCC, and the pro
 ## Things worthy of note
 Some of the supported MCUs have bugs or deficiencies that might make them unsuitable for certain projects. Below are some of the most severe issues I have found so far.  
 
+### CH547
+- The built in temperature sensor is very noisy, and is significantly affected by the ADC clock speed.  
+- The comparator interrupts cannot be enabled separately from the ADC interrupts.  
+- The non-inverting input of the comparator is is always tied to the ADC input.  
+
 ### CH552
 - The analog comparator cannot generate interrupts, it has to be polled.  
 - The USB controller has a bug that prevents interrupt transfers from working when SOF interrupts are enabled.  
@@ -20,8 +25,6 @@ Some of the supported MCUs have bugs or deficiencies that might make them unsuit
 - When multiple GPIO interrupt pins are enabled there is no way to know which one triggered the interrupt.  
 
 ### CH559
-- The analog comparator cannot generate interrupts, it has to be polled.  
-- The ADC gives nonsense readings when sampling a low voltage.  
 - The ADC is missing clock domain crossing for the trigger input. The trigger pulse has to be timed by the software.  
 - The USB controller has a bug that prevents interrupt transfers from working when SOF interrupts are enabled.  
 - Although there are 2 USB ports there is only one USB controller. It is not possible to have a USB host and a USB device simultaneously, and only one port can act as a USB device.  

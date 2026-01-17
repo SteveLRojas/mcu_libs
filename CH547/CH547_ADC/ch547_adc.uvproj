@@ -13,14 +13,14 @@
       <uAC6>0</uAC6>
       <TargetOption>
         <TargetCommonOption>
-          <Device>CH559</Device>
+          <Device>CH547</Device>
           <Vendor>WCH</Vendor>
-          <Cpu>IRAM(0-0xFF) XRAM(0-0x3FFF)  IROM(0-0x3FFF) CLOCK(56000000)</Cpu>
+          <Cpu>IRAM(0-0xFF) XRAM(0-0x3FFF)  IROM(0-0x3FFF) CLOCK(48000000)</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
           <StartupFile>"LIB\STARTUP.A51" ("Standard 8051 Startup Code")</StartupFile>
           <FlashDriverDll></FlashDriverDll>
           <DeviceId>0</DeviceId>
-          <RegisterFile>CH559.H</RegisterFile>
+          <RegisterFile>CH547.H</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch559_adc</OutputName>
+          <OutputName>ch547_adc</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -177,7 +177,7 @@
           </Flash1>
           <bUseTDR>0</bUseTDR>
           <Flash2></Flash2>
-          <Flash3>"" ()</Flash3>
+          <Flash3></Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -206,7 +206,7 @@
             <Mode2>0</Mode2>
             <useCB>0</useCB>
             <useXB>0</useXB>
-            <useL251>0</useL251>
+            <useL251>1</useL251>
             <useA251>0</useA251>
             <Mx51>0</Mx51>
             <ModC812>0</ModC812>
@@ -346,18 +346,19 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?CDC_INIT?CH559_USB_CDC ~ (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC), ?PR?USB_ISR?CH559_USB ! (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC), ?PR?MAIN?MAIN ~ ?PR?ON_ADC_DONE?MAIN, ?PR?ADC_ISR?CH559_ADC ! ?PR?ON_ADC_DONE?MAIN</OverlayString>
-            <MiscControls></MiscControls>
-            <DisableWarningNumbers>16</DisableWarningNumbers>
+            <OverlayString>?PR?CDC_INIT?CH547_USB_CDC ~ (?PR?CDC_ON_SOF?CH547_USB_CDC, ?PR?_CDC_ON_OUT?CH547_USB_CDC, ?PR?_CDC_ON_IN?CH547_USB_CDC, ?PR?_CDC_ON_SETUP?CH547_USB_CDC, ?PR?CDC_ON_RST?CH547_USB_CDC), ?PR?USB_ISR?CH547_USB ! (?PR?CDC_ON_SOF?CH547_USB_CDC, ?PR?_CDC_ON_OUT?CH547_USB_CDC, ?PR?_CDC_ON_IN?CH547_USB_CDC, ?PR?_CDC_ON_SETUP?CH547_USB_CDC, ?PR?CDC_ON_RST?CH547_USB_CDC), ?PR?MAIN?MAIN ~ (?PR?ON_ADC_DONE?MAIN, ?PR?ON_CMP_CHANGE?MAIN), ?PR?ADC_ISR?CH547_ADC ! (?PR?ON_ADC_DONE?MAIN, ?PR?ON_CMP_CHANGE?MAIN)</OverlayString>
+            <MiscControls>REMOVEUNUSED</MiscControls>
+            <DisableWarningNumbers></DisableWarningNumbers>
             <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
-            <UserClasses></UserClasses>
+            <UserClasses>XDATA (X:0x0-X:0x03FF), HDATA (X:0x0-X:0x03FF), CODE (C:0x0-C:0xF3FF), CONST (C:0x0-C:0xF3FF), 
+ECODE (C:0x0-C:0xF3FF), HCONST (C:0x0-C:0xF3FF)</UserClasses>
             <CSection></CSection>
             <UserSection></UserSection>
-            <CodeBaseAddress>0X0000-0XF3FF</CodeBaseAddress>
-            <XDataBaseAddress>0X0000-0X17FF</XDataBaseAddress>
+            <CodeBaseAddress></CodeBaseAddress>
+            <XDataBaseAddress></XDataBaseAddress>
             <PDataBaseAddress></PDataBaseAddress>
             <BitBaseAddress></BitBaseAddress>
             <DataBaseAddress></DataBaseAddress>
@@ -382,29 +383,59 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>CH559.H</FileName>
+              <FileName>CH547.H</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH559.H</FilePath>
+              <FilePath>.\CH547.H</FilePath>
             </File>
             <File>
-              <FileName>CH559_GPIO.c</FileName>
+              <FileName>CH547_GPIO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH559_GPIO.c</FilePath>
+              <FilePath>.\CH547_GPIO.c</FilePath>
             </File>
             <File>
-              <FileName>CH559_GPIO.h</FileName>
+              <FileName>CH547_GPIO.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH559_GPIO.h</FilePath>
+              <FilePath>.\CH547_GPIO.h</FilePath>
             </File>
             <File>
-              <FileName>CH559_TIMER.c</FileName>
+              <FileName>CH547_RCC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH559_TIMER.c</FilePath>
+              <FilePath>.\CH547_RCC.c</FilePath>
             </File>
             <File>
-              <FileName>CH559_TIMER.h</FileName>
+              <FileName>CH547_RCC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH559_TIMER.h</FilePath>
+              <FilePath>.\CH547_RCC.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_TIMER.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_TIMER.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_TIMER.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_TIMER.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_USB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_USB.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_USB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_USB.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_USB_CDC.h</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
@@ -412,44 +443,14 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>CH559_ADC.c</FileName>
+              <FileName>CH547_ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH559_ADC.c</FilePath>
+              <FilePath>.\CH547_ADC.c</FilePath>
             </File>
             <File>
-              <FileName>CH559_ADC.h</FileName>
+              <FileName>CH547_ADC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH559_ADC.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_RCC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_RCC.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_RCC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_RCC.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_USB.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_USB.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_USB.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_USB.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_USB_CDC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_USB_CDC.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_USB_CDC.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_USB_CDC.h</FilePath>
+              <FilePath>.\CH547_ADC.h</FilePath>
             </File>
           </Files>
         </Group>

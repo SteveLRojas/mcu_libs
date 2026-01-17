@@ -2,12 +2,13 @@
 #include "CH559.H"
 #include "CH559_ADC.h"
 
-UINT16 adc_results[8];
-UINT8 adc_schedule[8];
+volatile UINT16 adc_results[ADC_MAX_SCHEDULE_LEN];
+UINT8 adc_schedule[ADC_MAX_SCHEDULE_LEN];
 UINT8 adc_schedule_len;
-
 UINT8 adc_state;
-UINT8 adc_pending_samples;
+volatile UINT8 adc_pending_samples;
+
+void (*adc_done_callback)(void) = NULL;
 
 void adc_isr(void) interrupt INT_NO_ADC
 {
@@ -16,12 +17,18 @@ void adc_isr(void) interrupt INT_NO_ADC
 #endif
 	adc_results[adc_state] = ADC_FIFO;
 	
-	if(--adc_pending_samples)
+	++adc_state;
+	if(adc_state == adc_schedule_len)
 	{
-		++adc_state;
-		if(adc_state == adc_schedule_len)
-			adc_state = 0;
-		
+		adc_state = 0;
+		if(adc_done_callback)
+		{
+			adc_done_callback();
+		}
+	}
+	
+	if(--adc_pending_samples)
+	{	
 		ADC_CHANN = adc_schedule[adc_state];
 #if ADC_TRIG_MODE == 0
 		ADC_CTRL = bADC_SAMPLE;

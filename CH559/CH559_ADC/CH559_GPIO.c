@@ -7,6 +7,16 @@ UINT8 p1_last_write = 0xFF;
 UINT8 p2_last_write = 0xFF;
 UINT8 p3_last_write = 0xFF;
 
+#if USE_GPIO_INTERRUPTS
+void (*gpio_callback)(void) = NULL;
+
+void gpio_isr(void) interrupt INT_NO_GPIO
+{
+	if(gpio_callback)
+		gpio_callback();
+}
+#endif
+
 void gpio_set_pin_mode(UINT8 mode, UINT8 port, UINT8 pins)
 {
 	UINT8 pn_dir;
@@ -87,7 +97,7 @@ void gpio_set_pin_mode(UINT8 mode, UINT8 port, UINT8 pins)
 	}
 }
 
-#ifdef USE_PORT_FUNCS
+#if USE_PORT_FUNCS
 void gpio_write_port(UINT8 port, UINT8 write_data)
 {
 	switch(port)
