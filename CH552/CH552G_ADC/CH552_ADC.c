@@ -1,24 +1,30 @@
 #include "CH552.H"
-#include "System.h"
 #include "CH552_ADC.h"
 
-UINT8 adc_results[4];
-UINT8 adc_schedule[4];
+volatile UINT8 adc_results[ADC_MAX_SCHEDULE_LEN];
+UINT8 adc_schedule[ADC_MAX_SCHEDULE_LEN];
 UINT8 adc_schedule_len;
-
 UINT8 adc_state;
-UINT8 adc_pending_samples;
+volatile UINT8 adc_pending_samples;
+
+void (*adc_done_callback)(void) = NULL;
 
 void adc_isr(void) interrupt INT_NO_ADC
 {
 	adc_results[adc_state] = ADC_DATA;
 	
+	++adc_state;
+	if(adc_state == adc_schedule_len)
+	{
+		adc_state = 0;
+		if(adc_done_callback)
+		{
+			adc_done_callback();
+		}
+	}
+	
 	if(--adc_pending_samples)
 	{
-		++adc_state;
-		if(adc_state == adc_schedule_len)
-			adc_state = 0;
-		
 		ADC_CHAN1 = 0;
 		ADC_CHAN0 = 0;
 		ADC_CTRL |= adc_schedule[adc_state];
@@ -78,8 +84,7 @@ UINT8 adc_read_single(UINT8 channel)
 	return ADC_DATA;
 }
 
-//HINT: The comparator is mostly useless since it cannot generate interrupts...
-#ifdef USE_CMP
+#if ADC_USE_CMP
 void cmp_init(UINT8 pin_cfg)
 {
 	ADC_CTRL &= 0xF0;

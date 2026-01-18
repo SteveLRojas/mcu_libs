@@ -161,3 +161,18 @@ void gpio_clear_pin(UINT8 port, UINT8 pin)
 			return;
 	}
 }
+
+void gpio_toggle_pin(UINT8 port, UINT8 pins)
+{
+	switch(port)
+	{
+		case GPIO_PORT_1:
+			P1 = (p1_last_write ^= pins);
+			break;
+		case GPIO_PORT_3:
+			P3 = (p3_last_write ^= pins);
+			break;
+		default:
+			return;
+	}
+}

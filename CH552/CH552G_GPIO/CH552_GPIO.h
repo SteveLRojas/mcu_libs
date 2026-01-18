@@ -52,5 +52,6 @@ void gpio_write_pin(UINT8 port, UINT8 pin, UINT8 write_data);
 UINT8 gpio_read_pin(UINT8 port, UINT8 pin);
 void gpio_set_pin(UINT8 port, UINT8 pin);
 void gpio_clear_pin(UINT8 port, UINT8 pin);
+void gpio_toggle_pin(UINT8 port, UINT8 pins);
 
 #endif

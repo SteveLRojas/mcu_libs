@@ -16,9 +16,11 @@ Some of the supported MCUs have bugs or deficiencies that might make them unsuit
 - The built in temperature sensor is very noisy, and is significantly affected by the ADC clock speed.  
 - The comparator interrupts cannot be enabled separately from the ADC interrupts.  
 - The non-inverting input of the comparator is is always tied to the ADC input.  
+- Enabling the comparator also enables wake up when the comparator output changes.  
 
 ### CH552
 - The analog comparator cannot generate interrupts, it has to be polled.  
+- The non-inverting input of the comparator is is always tied to the ADC input.  
 - The USB controller has a bug that prevents interrupt transfers from working when SOF interrupts are enabled.  
 - Low write endurance of about 200 cycles, and must be powered from 5V for programming.  
 - When writing data flash interrupts must be manually disabled, otherwise very strange behaviour can occur.  

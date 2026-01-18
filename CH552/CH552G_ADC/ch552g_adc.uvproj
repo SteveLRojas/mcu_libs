@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?CDC_INIT?CH552_USB_CDC ~ (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC), ?PR?USB_ISR?CH552_USB ! (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC), ?PR?MAIN?MAIN ~ ?PR?ON_ADC_DONE?MAIN, ?PR?ADC_ISR?CH552_ADC ! ?PR?ON_ADC_DONE?MAIN</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -412,16 +412,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>System.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
-            </File>
-            <File>
-              <FileName>System.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552_ADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH552_ADC.c</FilePath>
@@ -432,24 +422,34 @@
               <FilePath>.\CH552_ADC.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_FIFO.c</FileName>
+              <FileName>CH552_RCC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH552_FIFO.c</FilePath>
+              <FilePath>.\CH552_RCC.c</FilePath>
             </File>
             <File>
-              <FileName>CH552_FIFO.h</FileName>
+              <FileName>CH552_RCC.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH552_FIFO.h</FilePath>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART.c</FileName>
+              <FileName>CH552_USB.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH552_UART.c</FilePath>
+              <FilePath>.\CH552_USB.c</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART.h</FileName>
+              <FileName>CH552_USB.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH552_UART.h</FilePath>
+              <FilePath>.\CH552_USB.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB_CDC.h</FilePath>
             </File>
           </Files>
         </Group>
