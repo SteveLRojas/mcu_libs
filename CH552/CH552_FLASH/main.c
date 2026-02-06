@@ -1,5 +1,5 @@
 #include "CH552.H"
-#include "System.h"
+#include "CH552_RCC.h"
 #include "CH552_GPIO.h"
 #include "CH552_TIMER.h"
 #include "CH552_USB_CDC.h"
@@ -43,18 +43,6 @@ void cdc_print_bytes(UINT8* src, UINT8 num_bytes)
 	}
 }
 
-void cdc_write_string(char* src)
-{
-	UINT16 len = 0;
-	char* src_copy = src;
-	while(*src_copy)
-	{
-		++len;
-		++src_copy;
-	}
-	cdc_write_bytes(src, len);
-}
-
 int main()
 {
 	char last_keep_str[4];
@@ -67,7 +55,8 @@ int main()
 	UINT8* test_buf_8 = (UINT8*)test_buf_16;
 	UINT8 code* prg_read_ptr;
 	
-	CfgFsys();
+	rcc_set_clk_freq(RCC_CLK_FREQ_24M);
+	
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_1, GPIO_PIN_6 | GPIO_PIN_7);
 	timer_init(TIMER_0, NULL);
 	timer_set_period(TIMER_0, FREQ_SYS / 1000ul);	//period is 1ms
@@ -89,6 +78,21 @@ int main()
 	cdc_write_string(test_string);
 	
 	byte_to_hex(RESET_KEEP, last_keep_str);
+	last_keep_str[2] = '\n';
+	last_keep_str[3] = '\0';
+	cdc_write_string(last_keep_str);
+	
+	//Print unique ID
+	prg_read_ptr = 0x3FFF;
+	last_keep_str[0] = '\n';
+	last_keep_str[1] = '\0';
+	for(count = 0; count < 6; ++count)
+	{
+		cdc_write_string(last_keep_str);
+		temp = *prg_read_ptr;
+		byte_to_hex(temp, last_keep_str);
+		prg_read_ptr -= 1;
+	}
 	last_keep_str[2] = '\n';
 	last_keep_str[3] = '\0';
 	cdc_write_string(last_keep_str);

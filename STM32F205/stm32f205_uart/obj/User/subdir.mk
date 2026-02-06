@@ -17,7 +17,7 @@ C_DEPS += \
 User/%.o: ../User/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU ARM Cross C Compiler'
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -I"C:\Users\Steve\repos\mcu_libs\STM32F205\stm32f205_uart\user_libs" -I"C:\Users\Steve\repos\mcu_libs\STM32F205\stm32f205_uart\Debug" -I"C:\Users\Steve\repos\mcu_libs\STM32F205\stm32f205_uart\User" -std=gnu11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/STM32F205/stm32f205_uart/user_libs" -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/STM32F205/stm32f205_uart/Debug" -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/STM32F205/stm32f205_uart/User" -std=gnu11 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

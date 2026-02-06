@@ -2,6 +2,7 @@
 #define _CH552_USB_CDC_H_
 
 #define CDC_TIMEOUT_MS 25
+#define CDC_USE_UNIQUE_ID 1
 
 #define CDC_ENDP0_SIZE 8
 #define CDC_ENDP1_SIZE 16
@@ -50,5 +51,6 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes);
 UINT16 cdc_bytes_available_for_write(void);
 void cdc_write_byte(UINT8 val);
 void cdc_write_bytes(UINT8* src, UINT16 num_bytes);
+void cdc_write_string(char* src);
 
 #endif

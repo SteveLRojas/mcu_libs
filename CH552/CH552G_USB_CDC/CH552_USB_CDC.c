@@ -42,8 +42,11 @@ volatile UINT8 ep3_t1_num_bytes;
 UINT8 cdc_setup_req;
 UINT8 cdc_setup_type;
 UINT16 cdc_setup_len;
-
 UINT8 code* descriptor_ptr;
+#if CDC_USE_UNIQUE_ID
+UINT8 cdc_string_serial_offset;
+#endif
+
 UINT8 cdc_address;
 volatile UINT8 cdc_config;
 
@@ -163,12 +166,16 @@ UINT8 code cdc_string_product[] =
 };
 
 /* USB Device String Serial */
+#if CDC_USE_UNIQUE_ID
+UINT8 code cdc_string_serial[] = {22, 0x03};
+#else
 UINT8 code cdc_string_serial[] =
 {
-	22,          
-	0x03,                   
+	22,
+	0x03,
 	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '1', 0
 };
+#endif
 
 UINT8 code cdc_serial_state[] = {0xA1, 0x20, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00};
 
@@ -184,6 +191,47 @@ void cdc_copy_descriptor(UINT8 len)
 		--len;
 	}
 }
+
+#if CDC_USE_UNIQUE_ID
+void cdc_gen_string_serial(UINT8 len)
+{
+	UINT8* dest = ep0_buffer;
+	UINT16 chip_id;
+	UINT8 id_hex;
+	while(len && (cdc_string_serial_offset < 2))
+	{
+		*dest = cdc_string_serial[cdc_string_serial_offset];
+		dest += 1;
+		cdc_string_serial_offset += 1;
+		len -= 1;
+	}
+	
+	while(len)
+	{
+		if(cdc_string_serial_offset & 0x01)
+		{
+			*dest = 0x00;
+		}
+		else
+		{
+			chip_id = ROM_CHIP_ID_HX | 0x01;	//The LSB is set here and byte order reversed later to skip constant at 0x3FFB
+			chip_id = (chip_id + ((cdc_string_serial_offset - 2) >> 2)) ^ 0x01;
+			id_hex = *((UINT8 code*)chip_id);
+			if((cdc_string_serial_offset >> 1) & 0x01)
+				id_hex = id_hex >> 4;
+			id_hex &= 0x0F;
+			if(id_hex < 10)
+				id_hex += '0';
+			else
+				id_hex += 'A' - 10;
+			*dest = id_hex;
+		}
+		dest += 1;
+		cdc_string_serial_offset += 1;
+		len -= 1;
+	}
+}
+#endif
 
 // HINT: This library contains some nasty hacks to work around bugs in CH552.
 // Enabling SOF interrupts makes interrupt transfers fail, since the SOF triggers UIF_TRANSFER (all enpoints respond with NAK while UIF_TRANSFER is set).
@@ -271,7 +319,14 @@ void cdc_on_in(UINT8 ep)
 			{
 				case USB_GET_DESCRIPTOR:
 					len = cdc_setup_len >= CDC_ENDP0_SIZE ? CDC_ENDP0_SIZE : cdc_setup_len;
+#if CDC_USE_UNIQUE_ID
+					if(cdc_string_serial_offset)
+						cdc_gen_string_serial(len);
+					else
+						cdc_copy_descriptor(len);
+#else
 					cdc_copy_descriptor(len);
+#endif
 					cdc_setup_len -= len;
 					usb_set_ep0_tx_len(len);
 					usb_toggle_ep0_in_toggle();
@@ -341,6 +396,9 @@ void cdc_on_setup(UINT8 ep)
 		cdc_setup_req = cdc_setup_buf->bRequest;
 		cdc_setup_type = cdc_setup_buf->bRequestType;
 		descriptor_ptr = (UINT8 code*)NULL;
+#if CDC_USE_UNIQUE_ID
+		cdc_string_serial_offset = 0;
+#endif
 		len = 0;
 		
 		if((cdc_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_STANDARD)
@@ -372,12 +430,15 @@ void cdc_on_setup(UINT8 ep)
 									break;
 								case 3:
 									descriptor_ptr = cdc_string_serial;
+#if CDC_USE_UNIQUE_ID
+									cdc_string_serial_offset = 0xFF;
+#endif
 									break;
 								case 4:
 									descriptor_ptr = cdc_string_product;
 									break;
 								default:
-									descriptor_ptr = cdc_string_serial;
+									descriptor_ptr = cdc_string_product;
 									break;
 							}
 							len = descriptor_ptr[0];
@@ -532,9 +593,19 @@ void cdc_on_setup(UINT8 ep)
 			if(cdc_setup_len > len)
 				cdc_setup_len = len;
 			len = (cdc_setup_len > CDC_ENDP0_SIZE) ? CDC_ENDP0_SIZE : cdc_setup_len;
-			
+
+#if CDC_USE_UNIQUE_ID			
+			if(cdc_string_serial_offset)
+			{
+				cdc_string_serial_offset = 0;
+				cdc_gen_string_serial(len);
+			}
+			else if(descriptor_ptr != (UINT8 code*)NULL)
+				cdc_copy_descriptor(len);
+#else
 			if(descriptor_ptr != (UINT8 code*)NULL)
 				cdc_copy_descriptor(len);
+#endif
 			
 			cdc_setup_len -= len;
 			usb_set_ep0_tx_len(len);
@@ -849,4 +920,16 @@ void cdc_write_bytes(UINT8* src, UINT16 num_bytes)
 		}
 	}
 	ep3_wip = 0;
+}
+
+void cdc_write_string(char* src)
+{
+	UINT16 len = 0;
+	char* src_copy = src;
+	while(*src_copy)
+	{
+		++len;
+		++src_copy;
+	}
+	cdc_write_bytes(src, len);
 }

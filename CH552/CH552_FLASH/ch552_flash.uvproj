@@ -382,11 +382,6 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>System.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552.H</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552.H</FilePath>
@@ -437,11 +432,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>System.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
-            </File>
-            <File>
               <FileName>pseudo_random.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\pseudo_random.c</FilePath>
@@ -460,6 +450,16 @@
               <FileName>CH552_FLASH.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_FLASH.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

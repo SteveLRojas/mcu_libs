@@ -432,16 +432,6 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>System.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
-            </File>
-            <File>
-              <FileName>System.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552_FIFO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH552_FIFO.c</FilePath>
@@ -460,6 +450,16 @@
               <FileName>CH552_USB_CDC.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_USB_CDC.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

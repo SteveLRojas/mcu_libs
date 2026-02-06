@@ -17,7 +17,7 @@ S_UPPER_DEPS += \
 Startup/%.o: ../Startup/%.S
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU ARM Cross Assembler'
-	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -x assembler-with-cpp -I"C:\Users\Steve\repos\mcu_libs\STM32F205\stm32f205_uart\Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -mthumb-interwork -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common  -g -x assembler-with-cpp -I"/media/dragomir/lnx_hdd/lnx_home/repos/mcu_libs/STM32F205/stm32f205_uart/Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
