@@ -2,6 +2,7 @@
 #define _CH559_USB_CDC_H_
 
 #define CDC_TIMEOUT_MS 25
+#define CDC_USE_UNIQUE_ID 1
 
 // Endpoint sizes must be a multiple of 2 in order to keep the buffers aligned. CH559 does not support odd addresses.
 #define CDC_ENDP0_SIZE 8

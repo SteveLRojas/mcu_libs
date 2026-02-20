@@ -9,6 +9,7 @@
 #define USE_EXT_CLK 0
 
 char code test_string[] = "Unicorn\n";
+char code str_unique_id[] = "Chip ID:";
 char code str_bad_command[] = "Bad command!\n";
 
 //Pins:
@@ -101,6 +102,41 @@ int main()
 	last_keep_str[2] = '\n';
 	last_keep_str[3] = '\0';
 	cdc_write_string(last_keep_str);
+	
+	//Print unique ID
+	cdc_write_string(str_unique_id);
+	prg_read_ptr = 0x0027;
+	last_keep_str[0] = ' ';
+	last_keep_str[1] = '\0';
+	for(count = 0; count < 8; ++count)
+	{
+		cdc_write_string(last_keep_str);
+		E_DIS = 1;
+		temp = *prg_read_ptr;
+		E_DIS = 0;
+		byte_to_hex(temp, last_keep_str);
+		prg_read_ptr -= 1;
+	}
+	last_keep_str[2] = '\n';
+	last_keep_str[3] = '\0';
+	cdc_write_string(last_keep_str);
+	
+//What happens if E_DIS is not set?
+	/*prg_read_ptr = 0x0027;
+	last_keep_str[0] = '\n';
+	last_keep_str[1] = '\0';
+	for(count = 0; count < 8; ++count)
+	{
+		cdc_write_string(last_keep_str);
+		temp = *prg_read_ptr;
+		byte_to_hex(temp, last_keep_str);
+		prg_read_ptr -= 1;
+	}
+	last_keep_str[2] = '\n';
+	last_keep_str[3] = '\0';
+	cdc_write_string(last_keep_str);*/
+//Interesting... With E_DIS cleared the program reads the code flash as expected.
+//E_DIS is not needed here to prevent the program from crashing, but to swap out the code flash for the "special read-only register".
 	
 	while(TRUE)
 	{
