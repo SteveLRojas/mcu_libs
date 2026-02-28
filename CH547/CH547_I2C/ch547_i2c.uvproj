@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch547_spi</OutputName>
+          <OutputName>ch547_i2c</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0xffff</Size>
+                <Size>0x10000</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -451,6 +451,16 @@ ECODE (C:0x0-C:0xF3FF), HCONST (C:0x0-C:0xF3FF)</UserClasses>
               <FileName>CH547_SPI.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH547_SPI.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_I2C.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH547_I2C.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH547_I2C.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH547_I2C.h</FilePath>
             </File>
           </Files>
         </Group>

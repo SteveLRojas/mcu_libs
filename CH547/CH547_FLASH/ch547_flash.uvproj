@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch547_spi</OutputName>
+          <OutputName>ch547_flash</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0xffff</Size>
+                <Size>0x10000</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -340,7 +340,7 @@
             </VariousControls>
           </Ax51>
           <Lx51>
-            <useFile>0</useFile>
+            <useFile>1</useFile>
             <linkonly>0</linkonly>
             <UseMemoryFromTarget>0</UseMemoryFromTarget>
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
@@ -443,14 +443,24 @@ ECODE (C:0x0-C:0xF3FF), HCONST (C:0x0-C:0xF3FF)</UserClasses>
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>CH547_SPI.c</FileName>
+              <FileName>CH547_FLASH.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH547_SPI.c</FilePath>
+              <FilePath>.\CH547_FLASH.c</FilePath>
             </File>
             <File>
-              <FileName>CH547_SPI.h</FileName>
+              <FileName>CH547_FLASH.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH547_SPI.h</FilePath>
+              <FilePath>.\CH547_FLASH.h</FilePath>
+            </File>
+            <File>
+              <FileName>pseudo_random.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\pseudo_random.c</FilePath>
+            </File>
+            <File>
+              <FileName>pseudo_random.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\pseudo_random.h</FilePath>
             </File>
           </Files>
         </Group>
