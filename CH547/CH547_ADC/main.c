@@ -10,8 +10,12 @@ char code str_bad_command[] = "Bad command!\n";
 char code str_comp_changed[] = "Comparator output changed!\n";
 
 volatile UINT8 adc_done_flag = 0;
-volatile UINT8 cmp_change_flag = 0;
 UINT8 monitor_adc = 0;
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+volatile UINT8 tkey_done_flag = 0;
+UINT8 monitor_tkey = 0;
+#endif
+volatile UINT8 cmp_change_flag = 0;
 UINT8 monitor_cmp = 0;
 
 //Pins:
@@ -101,7 +105,13 @@ void on_adc_done(void)
 	gpio_toggle_pin(GPIO_PORT_2, GPIO_PIN_2);
 	adc_done_flag = 1;
 }
-
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+void on_tkey_done(void)
+{
+	gpio_toggle_pin(GPIO_PORT_2, GPIO_PIN_2 | GPIO_PIN_3);
+	tkey_done_flag = 1;
+}
+#endif
 void on_cmp_change(void)
 {
 	gpio_toggle_pin(GPIO_PORT_2, GPIO_PIN_3);
@@ -148,7 +158,10 @@ int main()
 	cdc_write_string(last_keep_str);
 	
 	adc_done_callback = on_adc_done;
-	cmp_change_callback = on_cmp_change;
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+	adc_tkey_done_callback = on_tkey_done;
+#endif
+	adc_cmp_change_callback = on_cmp_change;
 	adc_init(ADC_CLK_750K);
 	timer_start(TIMER_0);
 
@@ -261,18 +274,18 @@ int main()
 					break;
 				
 				case 0x10:
-					cmp_init(ADC_CHAN_AIN0_P10, CMP_INN_AIN1_P11);
+					adc_cmp_init(ADC_CHAN_AIN0_P10, CMP_INN_AIN1_P11);
 					break;
 				case 0x11:
-					temp = cmp_get_result();
+					temp = adc_cmp_get_result();
 					byte_to_hex(temp, last_keep_str);
 					cdc_write_string(last_keep_str);
 					break;
 				case 0x12:
-					cmp_enable();
+					adc_cmp_enable();
 					break;
 				case 0x13:
-					cmp_disable();
+					adc_cmp_disable();
 					break;
 				
 				case 0x14:
@@ -337,7 +350,119 @@ int main()
 				case 0x1B:
 					print_temp(2244);
 					break;
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+				case 0x1C:
+					adc_tkey_schedule[0] = ADC_CHAN_AIN0_P10;
+					adc_tkey_schedule[1] = ADC_CHAN_AIN1_P11;
+					adc_tkey_schedule[2] = ADC_CHAN_AIN2_P12;
+					adc_tkey_schedule[3] = ADC_CHAN_AIN3_P13;
+					adc_tkey_schedule_len = 4;
+					adc_tkey_init_schedule();
+					break;
+				case 0x1D:
+					adc_tkey_calibrate();
+					last_keep_str[1] = ':';
+					for(count = 0; count < adc_tkey_schedule_len; ++count)
+					{
+						last_keep_str[0] = hex_table[count];
+						word_to_hex(adc_tkey_offsets[count], last_keep_str + 2);
+						last_keep_str[6] = '\n';
+						last_keep_str[7] = '\0';
+						cdc_write_string(last_keep_str);
+					}
+					cdc_write_byte('\n');
+					break;
+				case 0x1E:
+					adc_tkey_run_schedule(4);
+					break;
+				case 0x1F:
+					last_keep_str[1] = ':';
+					for(count = 0; count < adc_tkey_schedule_len; ++count)
+					{
+						last_keep_str[0] = hex_table[count];
+						word_to_hex(adc_tkey_results_raw[count], last_keep_str + 2);
+						last_keep_str[6] = '\n';
+						last_keep_str[7] = '\0';
+						cdc_write_string(last_keep_str);
+					}
+					cdc_write_byte('\n');
+					
+					for(count = 0; count < adc_tkey_schedule_len; ++count)
+					{
+						last_keep_str[0] = hex_table[count];
+						byte_to_hex(adc_tkey_results[count], last_keep_str + 2);
+						last_keep_str[4] = '\n';
+						last_keep_str[5] = '\0';
+						cdc_write_string(last_keep_str);
+					}
+					cdc_write_byte('\n');
+					break;
 				
+				case 0x20:
+					temp = adc_tkey_read_single(0);
+					byte_to_hex(temp, last_keep_str);
+					last_keep_str[2] = '\n';
+					last_keep_str[3] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x21:
+					temp = adc_tkey_read_single(1);
+					byte_to_hex(temp, last_keep_str);
+					last_keep_str[2] = '\n';
+					last_keep_str[3] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x22:
+					temp = adc_tkey_read_single(2);
+					byte_to_hex(temp, last_keep_str);
+					last_keep_str[2] = '\n';
+					last_keep_str[3] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x23:
+					temp = adc_tkey_read_single(3);
+					byte_to_hex(temp, last_keep_str);
+					last_keep_str[2] = '\n';
+					last_keep_str[3] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				
+				case 0x24:
+					adc_val = adc_tkey_read_single_raw(0);
+					word_to_hex(adc_val, last_keep_str);
+					last_keep_str[4] = '\n';
+					last_keep_str[5] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x25:
+					adc_val = adc_tkey_read_single_raw(1);
+					word_to_hex(adc_val, last_keep_str);
+					last_keep_str[4] = '\n';
+					last_keep_str[5] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x26:
+					adc_val = adc_tkey_read_single_raw(2);
+					word_to_hex(adc_val, last_keep_str);
+					last_keep_str[4] = '\n';
+					last_keep_str[5] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				case 0x27:
+					adc_val = adc_tkey_read_single_raw(3);
+					word_to_hex(adc_val, last_keep_str);
+					last_keep_str[4] = '\n';
+					last_keep_str[5] = '\0';
+					cdc_write_string(last_keep_str);
+					break;
+				
+				case 0x28:
+					monitor_tkey = 1;
+					break;
+				case 0x29:
+					monitor_tkey = 0;
+					break;
+#endif
 				default:
 					cdc_write_string(str_bad_command);
 					break;
@@ -352,18 +477,24 @@ int main()
 			{
 				adc_run_schedule(adc_schedule_len);
 			}
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+			if(monitor_tkey)
+			{
+				adc_tkey_run_schedule(adc_tkey_schedule_len);
+			}
+#endif
 			if(monitor_cmp)
 			{
 				last_keep_str[0] = 'R';
 				last_keep_str[1] = ':';
-				temp = cmp_get_result();
+				temp = adc_cmp_get_result();
 				byte_to_hex(temp, last_keep_str + 2);
 				last_keep_str[4] = '\n';
 				last_keep_str[5] = '\0';
 				cdc_write_string(last_keep_str);
 				
 				last_keep_str[0] = 'C';
-				temp = cmp_get_change();
+				temp = adc_cmp_get_change();
 				byte_to_hex(temp, last_keep_str + 2);
 				last_keep_str[4] = '\n';
 				last_keep_str[5] = '\0';
@@ -385,7 +516,22 @@ int main()
 			}
 			cdc_write_byte('\n');
 		}
-		
+#if ADC_TKEY_MAX_SCHEDULE_LEN
+		if(tkey_done_flag)
+		{
+			tkey_done_flag = 0;
+			last_keep_str[1] = ':';
+			for(count = 0; count < adc_tkey_schedule_len; ++count)
+			{
+				last_keep_str[0] = hex_table[count];
+				byte_to_hex(adc_tkey_results[count], last_keep_str + 2);
+				last_keep_str[4] = '\n';
+				last_keep_str[5] = '\0';
+				cdc_write_string(last_keep_str);
+			}
+			cdc_write_byte('\n');
+		}
+#endif
 		if(cmp_change_flag)
 		{
 			cmp_change_flag = 0;
