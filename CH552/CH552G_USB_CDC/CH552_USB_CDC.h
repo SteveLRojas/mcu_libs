@@ -5,7 +5,7 @@
 #define CDC_USE_UNIQUE_ID 1
 
 #define CDC_ENDP0_SIZE 8
-#define CDC_ENDP1_SIZE 16
+#define CDC_ENDP1_SIZE 10
 #define CDC_ENDP2_SIZE 64
 #define CDC_ENDP3_SIZE 64
 
