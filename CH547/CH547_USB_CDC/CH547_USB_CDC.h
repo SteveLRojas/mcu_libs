@@ -1,13 +1,14 @@
 #ifndef _CH547_USB_CDC_H_
 #define _CH547_USB_CDC_H_
 
-#define CDC_TIMEOUT_MS 25
+#define CDC_TIMEOUT_MS	25
 #define CDC_USE_UNIQUE_ID 1
+#define CDC_HANDLE_ZLP	1
 
-#define CDC_ENDP0_SIZE 8
-#define CDC_ENDP1_SIZE 16
-#define CDC_ENDP2_SIZE 64
-#define CDC_ENDP3_SIZE 64
+#define CDC_ENDP0_SIZE	8
+#define CDC_ENDP1_SIZE	10
+#define CDC_ENDP2_SIZE	64
+#define CDC_ENDP3_SIZE	64
 
 // CH552 writes the CRC when receiving: the buffer can be overflown by up to 2 bytes, but never past 64 bytes...
 #define CDC_ENDP0_BUF_SIZE ((CDC_ENDP0_SIZE + 2) > 64) ? 64 : (CDC_ENDP0_SIZE + 2)

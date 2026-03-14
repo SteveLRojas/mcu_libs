@@ -16,8 +16,7 @@
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
-volatile UINT8 cdc_tx_enabled;
-volatile UINT8 cdc_rx_enabled;
+volatile UINT8 cdc_tx_enabled;	//TODO: this may be bugged (cdc_rx_enabled was bugged)
 
 // Buffers must be kept aligned to even addresses.
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
@@ -28,6 +27,10 @@ volatile UINT8 xdata ep2_t1_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0040;
 volatile UINT8 xdata ep3_t0_buffer[CDC_ENDP3_SIZE] _at_ 0x0080;
 volatile UINT8 xdata ep3_t1_buffer[CDC_ENDP3_SIZE] _at_ 0x00C0;
 
+#if CDC_HANDLE_ZLP
+volatile UINT8 ep2_t0_zlp;	//set when a ZLP is received in t0
+volatile UINT8 ep2_t1_zlp;
+#endif
 UINT8 ep2_read_select;
 volatile UINT8 ep2_t0_num_bytes;
 UINT8 ep2_t0_read_offset;
@@ -50,7 +53,7 @@ UINT8 cdc_string_serial_offset;
 #endif
 
 UINT8 cdc_address;
-UINT8 cdc_config;
+volatile UINT8 cdc_config;
 
 volatile cdc_line_coding_t cdc_line_coding = {0x48, 0xE8, 0x01, 0x00, 0x00, 0x00, 0x08};	//125K baud, 1 stop, no parity, 8 data
 volatile UINT8 cdc_control_line_state = 0;
@@ -61,7 +64,7 @@ UINT8 code cdc_device_descriptor[] =
     CDC_DEV_DESCR_SIZE,				// bLength
     0x01,                           // bDescriptorType
     0x10, 0x01,                     // bcdUSB
-    0x02,                           // bDeviceClass
+    0x02,                           // bDeviceClass	(Communications Device Class)
     0x00,                           // bDeviceSubClass
     0x00,                           // bDeviceProtocol
     CDC_ENDP0_SIZE,					// bMaxPacketSize0
@@ -292,19 +295,23 @@ void cdc_on_out(UINT8 ep)
 		if(usb_get_ep2_out_toggle())
 		{
 			ep2_t0_num_bytes = usb_get_rx_len();
+#if CDC_HANDLE_ZLP
+			ep2_t0_zlp = !ep2_t0_num_bytes;
+#endif
 			if(ep2_t1_num_bytes)
 			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
-				cdc_rx_enabled = 0;
 			}
 		}
 		else
 		{
 			ep2_t1_num_bytes = usb_get_rx_len();
+#if CDC_HANDLE_ZLP
+			ep2_t1_zlp = ! ep2_t1_num_bytes;
+#endif
 			if(ep2_t0_num_bytes)
 			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
-				cdc_rx_enabled = 0;
 			}
 		}
 	}
@@ -596,7 +603,7 @@ void cdc_on_setup(UINT8 ep)
 			if(cdc_setup_len > len)
 				cdc_setup_len = len;
 			len = (cdc_setup_len > CDC_ENDP0_SIZE) ? CDC_ENDP0_SIZE : cdc_setup_len;
-			
+
 #if CDC_USE_UNIQUE_ID			
 			if(cdc_string_serial_offset)
 			{
@@ -620,7 +627,11 @@ void cdc_on_setup(UINT8 ep)
 void cdc_on_rst(void)
 {
 	usb_disable_interrupts(USB_INT_SOF);
-	
+
+#if CDC_HANDLE_ZLP
+	ep2_t0_zlp = 0;
+	ep2_t1_zlp = 0;
+#endif
 	ep2_read_select = 0;
 	ep2_t0_num_bytes = 0;
 	ep2_t0_read_offset = 0;
@@ -642,7 +653,6 @@ void cdc_on_rst(void)
 	sof_count = 0;
 	cdc_config = 0;
 	cdc_tx_enabled = 0;
-	cdc_rx_enabled = 1;
 }
 
 void cdc_enable_tx(void)
@@ -659,10 +669,9 @@ void cdc_enable_tx(void)
 void cdc_enable_rx(void)
 {
 	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
-	if(!cdc_rx_enabled && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
+	if(usb_get_ep2_out_res() && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
 	{
 		usb_set_ep2_out_res(USB_OUT_RES_ACK);
-		cdc_rx_enabled = 1;
 	}
 }
 
@@ -717,6 +726,21 @@ UINT16 cdc_bytes_available(void)
 
 UINT8 cdc_peek(void)
 {
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		cdc_enable_rx();
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		cdc_enable_rx();
+	}
+#endif
+	
 	if(ep2_read_select)
 		return ep2_t1_buffer[ep2_t1_read_offset];
 	else
@@ -728,6 +752,20 @@ UINT8 cdc_read_byte(void)
 	UINT8 read_val;
 	
 	while(!cdc_bytes_available());
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		cdc_enable_rx();
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		cdc_enable_rx();
+	}
+#endif
 	
 	if(ep2_read_select)
 	{
@@ -767,7 +805,17 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 		{
 			num_to_read = ep2_t1_num_bytes - ep2_t1_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t1_zlp)
+				{
+					ep2_t1_zlp = 0;
+					ep2_read_select = 0;
+					cdc_enable_rx();
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;
@@ -793,7 +841,17 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 		{
 			num_to_read = ep2_t0_num_bytes - ep2_t0_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t0_zlp)
+				{
+					ep2_t0_zlp = 0;
+					ep2_read_select = 1;
+					cdc_enable_rx();
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;

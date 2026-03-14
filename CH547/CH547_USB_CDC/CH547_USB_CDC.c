@@ -15,8 +15,7 @@
 
 UINT16 cdc_last_data_time;
 UINT16 cdc_last_status_time;
-volatile UINT8 cdc_tx_enabled;
-volatile UINT8 cdc_rx_enabled;
+volatile UINT8 cdc_tx_enabled;	//TODO: is this one also bugged (cdc_rx_enabled was bugged)?
 
 // t1 buffers must be placed 64 bytes after the corresponding t0 buffer.
 UINT8 xdata ep0_buffer[CDC_ENDP0_BUF_SIZE];
@@ -26,6 +25,10 @@ volatile UINT8 xdata ep2_t1_buffer[CDC_ENDP2_BUF_SIZE] _at_ 0x0040;
 volatile UINT8 xdata ep3_t0_buffer[CDC_ENDP3_SIZE] _at_ 0x0080;
 volatile UINT8 xdata ep3_t1_buffer[CDC_ENDP3_SIZE] _at_ 0x00C0;
 
+#if CDC_HANDLE_ZLP
+volatile UINT8 ep2_t0_zlp;	//set when a ZLP is received in t0
+volatile UINT8 ep2_t1_zlp;
+#endif
 UINT8 ep2_read_select;
 volatile UINT8 ep2_t0_num_bytes;
 UINT8 ep2_t0_read_offset;
@@ -244,7 +247,7 @@ void cdc_gen_string_serial(UINT8 len)
 }
 #endif
 
-// HINT: This library contains some nasty hacks to work around bugs in CH552.
+// HINT: This library contains some nasty hacks to work around bugs in CH547.
 // Enabling SOF interrupts makes interrupt transfers fail, since the SOF triggers UIF_TRANSFER (all enpoints respond with NAK while UIF_TRANSFER is set).
 // When a notification needs to be sent the SOF interrupts are disabled so that the interrupt transfer can happen.
 // SOF interrupts are re-enabled after the interrupt transfer completes.
@@ -300,19 +303,23 @@ void cdc_on_out(UINT8 ep)
 		if(usb_get_ep2_out_toggle())
 		{
 			ep2_t0_num_bytes = usb_get_rx_len();
+#if CDC_HANDLE_ZLP
+			ep2_t0_zlp = !ep2_t0_num_bytes;
+#endif
 			if(ep2_t1_num_bytes)
 			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
-				cdc_rx_enabled = 0;
 			}
 		}
 		else
 		{
 			ep2_t1_num_bytes = usb_get_rx_len();
+#if CDC_HANDLE_ZLP
+			ep2_t1_zlp = ! ep2_t1_num_bytes;
+#endif
 			if(ep2_t0_num_bytes)
 			{
 				usb_set_ep2_out_res(USB_OUT_RES_NAK);
-				cdc_rx_enabled = 0;
 			}
 		}
 	}
@@ -628,7 +635,11 @@ void cdc_on_setup(UINT8 ep)
 void cdc_on_rst(void)
 {
 	usb_disable_interrupts(USB_INT_SOF);
-	
+
+#if CDC_HANDLE_ZLP
+	ep2_t0_zlp = 0;
+	ep2_t1_zlp = 0;
+#endif
 	ep2_read_select = 0;
 	ep2_t0_num_bytes = 0;
 	ep2_t0_read_offset = 0;
@@ -650,7 +661,6 @@ void cdc_on_rst(void)
 	sof_count = 0;
 	cdc_config = 0;
 	cdc_tx_enabled = 0;
-	cdc_rx_enabled = 1;
 }
 
 void cdc_enable_tx(void)
@@ -667,10 +677,9 @@ void cdc_enable_tx(void)
 void cdc_enable_rx(void)
 {
 	// check toggle, if the buffer pointed to by the toggle is empty then enable receiving
-	if(!cdc_rx_enabled && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
+	if(usb_get_ep2_out_res() && ((usb_get_ep2_out_toggle() ? ep2_t1_num_bytes : ep2_t0_num_bytes) == 0))
 	{
 		usb_set_ep2_out_res(USB_OUT_RES_ACK);
-		cdc_rx_enabled = 1;
 	}
 }
 
@@ -725,6 +734,21 @@ UINT16 cdc_bytes_available(void)
 
 UINT8 cdc_peek(void)
 {
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		cdc_enable_rx();
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		cdc_enable_rx();
+	}
+#endif
+	
 	if(ep2_read_select)
 		return ep2_t1_buffer[ep2_t1_read_offset];
 	else
@@ -736,6 +760,20 @@ UINT8 cdc_read_byte(void)
 	UINT8 read_val;
 	
 	while(!cdc_bytes_available());
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		cdc_enable_rx();
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		cdc_enable_rx();
+	}
+#endif
 	
 	if(ep2_read_select)
 	{
@@ -775,7 +813,17 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 		{
 			num_to_read = ep2_t1_num_bytes - ep2_t1_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t1_zlp)
+				{
+					ep2_t1_zlp = 0;
+					ep2_read_select = 0;
+					cdc_enable_rx();
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;
@@ -801,7 +849,17 @@ void cdc_read_bytes(UINT8* dest, UINT16 num_bytes)
 		{
 			num_to_read = ep2_t0_num_bytes - ep2_t0_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t0_zlp)
+				{
+					ep2_t0_zlp = 0;
+					ep2_read_select = 1;
+					cdc_enable_rx();
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;
