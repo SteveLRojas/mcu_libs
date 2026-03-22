@@ -14,6 +14,8 @@
 //Writing to the odd numbered words will write to the even numbered word at the even address below. Attempting to write single bytes writes to both bytes in the word.
 //PMA access is slower than memory access, avoid frequent access to the PMA.
 
+#define USBD_DMA_CHANNEL DMA1_Channel2
+
 typedef struct _USBD_ENDPOINT_ENTRY
 {
 	volatile uint16_t EPR;
@@ -203,6 +205,8 @@ void usbd_init(const usbd_config_t* usbd_config);
 void usbd_disable(void);
 void usbd_write_to_pma(uint16_t offset, const uint16_t* source, uint16_t num_words);
 void usbd_read_from_pma(uint16_t offset, uint16_t* dest, uint16_t num_words);
+void usbd_write_bytes_to_pma(uint16_t byte_offset, const uint8_t* source, uint16_t num_bytes);
+void usbd_read_bytes_from_pma(uint16_t byte_offset, uint8_t* dest, uint16_t num_bytes);
 void usbd_init_pma_val(uint16_t offset, uint16_t val, uint16_t num_words);
 
 #endif /* USER_LIBS_CH32V203_USBD_H_ */

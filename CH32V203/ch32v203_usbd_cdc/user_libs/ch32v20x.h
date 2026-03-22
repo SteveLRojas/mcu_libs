@@ -1540,6 +1540,7 @@ typedef struct
 
 /******************  Bit definition for FLASH_STATR register  *******************/
 #define FLASH_STATR_BSY                         ((uint8_t)0x01) /* Busy */
+#define FLASH_STATR_WRBSY                       ((uint8_t)0x02)
 #define FLASH_STATR_PGERR                       ((uint8_t)0x04) /* Programming Error */
 #define FLASH_STATR_WRPRTERR                    ((uint8_t)0x10) /* Write Protection Error */
 #define FLASH_STATR_EOP                         ((uint8_t)0x20) /* End of operation */

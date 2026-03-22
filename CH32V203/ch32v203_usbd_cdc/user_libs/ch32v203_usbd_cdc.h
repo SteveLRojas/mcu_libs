@@ -7,8 +7,10 @@
 
 #ifndef _CH32V203_USBD_CDC_H_
 #define _CH32V203_USBD_CDC_H_
+//HINT: The USBD library uses DMA. Be sure to enable the DMA clock before initializing this library.
 
 #define CDC_TIMEOUT_MS 25
+#define CDC_USE_UNIQUE_ID 1
 
 #define CDC_ENDP0_SIZE 8
 #define CDC_ENDP1_SIZE 16
@@ -50,5 +52,6 @@ void cdc_read_bytes(uint8_t* dest, uint16_t num_bytes);
 uint16_t cdc_bytes_available_for_write(void);
 void cdc_write_byte(uint8_t val);
 void cdc_write_bytes(const uint8_t* src, uint16_t num_bytes);
+void cdc_write_string(const char* src);
 
 #endif /* _CH32V203_USBD_CDC_H_ */

@@ -59,6 +59,7 @@ int main(void)
 {
 	rcc_apb2_clk_enable(RCC_AFIOEN | RCC_IOPAEN | RCC_IOPBEN | RCC_IOPCEN | RCC_TIM1EN | RCC_SPI1EN | RCC_USART1EN);
 	rcc_apb1_clk_enable(RCC_TIM2EN | RCC_USBEN);
+	rcc_ahb_clk_enable(RCC_DMA1EN);
 
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_10);
@@ -87,10 +88,13 @@ int main(void)
     core_delay_ms(100);
     printf("Unicorn\n");
 
+    printf("Unique ID: 0x%08X%08X\n", *(uint32_t*)0x1FFFF7EC, *(uint32_t*)0x1FFFF7E8);
+
     cdc_init();
     usbd_scrutinize();
-    cdc_set_serial_state(0x03);
+    cdc_set_serial_state(CDC_SS_TXCARRIER | CDC_SS_RXCARRIER);
     uint8_t prev_control_line_state = cdc_control_line_state;
+    while(!cdc_config);	//Wait for host to configure the CDC interface
 
 	while(1)
 	{

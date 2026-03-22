@@ -6,6 +6,7 @@
  */
 #include "ch32v20x.h"
 #include "ch32v203_core.h"
+#include "ch32v203_dma.h"
 #include "ch32v203_usbd.h"
 
 void USB_HP_CAN1_TX_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
@@ -223,25 +224,112 @@ void usbd_disable(void)
 
 void usbd_write_to_pma(uint16_t offset, const uint16_t* source, uint16_t num_words)
 {
-	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + (offset << 1));
-
-	while(num_words--)
-	{
-		*pma = *source;
-		pma += 2;
-		++source;
-	}
+	dma_channel_config(USBD_DMA_CHANNEL, DMA_CFG_MEM2MEM_ON | DMA_CFG_PRI_HIGH | DMA_CFG_MSIZE_16 | DMA_CFG_PSIZE_32 | DMA_CFG_MINC_ON | DMA_CFG_PINC_ON | DMA_CFG_MEM_TO_PERIPH | DMA_CFG_TCIE_OFF);
+	dma_set_mem_addr(USBD_DMA_CHANNEL, (uint32_t)source);
+	dma_set_periph_addr(USBD_DMA_CHANNEL, USBD_PMA_BASE + (offset << 1));
+	dma_set_num_words(USBD_DMA_CHANNEL, num_words);
+	dma_enable(USBD_DMA_CHANNEL);
+	while(dma_get_pending_transfers(USBD_DMA_CHANNEL));
+	dma_disable(USBD_DMA_CHANNEL);
 }
 
 void usbd_read_from_pma(uint16_t offset, uint16_t* dest, uint16_t num_words)
 {
-	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + (offset << 1));
+	dma_channel_config(USBD_DMA_CHANNEL, DMA_CFG_MEM2MEM_ON | DMA_CFG_PRI_HIGH | DMA_CFG_MSIZE_16 | DMA_CFG_PSIZE_32 | DMA_CFG_MINC_ON | DMA_CFG_PINC_ON | DMA_CFG_PERIPH_TO_MEM | DMA_CFG_TCIE_OFF);
+	dma_set_mem_addr(USBD_DMA_CHANNEL, (uint32_t)dest);
+	dma_set_periph_addr(USBD_DMA_CHANNEL, USBD_PMA_BASE + (offset << 1));
+	dma_set_num_words(USBD_DMA_CHANNEL, num_words);
+	dma_enable(USBD_DMA_CHANNEL);
+	while(dma_get_pending_transfers(USBD_DMA_CHANNEL));
+	dma_disable(USBD_DMA_CHANNEL);
+}
 
-	while(num_words--)
+//As far as I can see there is no nice way to do this with the available DMA controller.
+//DMA can be used if both or none of the buffers are misaligned (the alignment can be fixed if they are both misaligned).
+//If only one buffer is misaligned fixing its alignment breaks the alignment of the other.
+void usbd_write_bytes_to_pma(uint16_t byte_offset, const uint8_t* source, uint16_t num_bytes)
+{
+	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + ((byte_offset & 0xFFFE) << 1));
+	uint16_t num_words;
+	uint16_t pma_word;
+
+	//Align PMA
+	if(byte_offset & 0x01)
 	{
-		*dest = *pma;
+		pma_word = *pma;
+		((uint8_t*)(&pma_word))[1] = *source;
+		*pma = pma_word;
+		--num_bytes;
+		pma += 2;
+		++source;
+	}
+
+	num_words = (num_bytes + 1) >> 1;
+
+	//check if source is misaligned
+	if(0x01 & (uint32_t)source)
+	{
+		while(num_words--)
+		{
+			((uint8_t*)(&pma_word))[0] = *source;
+			++source;
+			((uint8_t*)(&pma_word))[1] = *source;
+			++source;
+			*pma = pma_word;
+			pma += 2;
+		}
+	}
+	else
+	{
+		dma_channel_config(USBD_DMA_CHANNEL, DMA_CFG_MEM2MEM_ON | DMA_CFG_PRI_HIGH | DMA_CFG_MSIZE_16 | DMA_CFG_PSIZE_32 | DMA_CFG_MINC_ON | DMA_CFG_PINC_ON | DMA_CFG_MEM_TO_PERIPH | DMA_CFG_TCIE_OFF);
+		dma_set_mem_addr(USBD_DMA_CHANNEL, (uint32_t)source);
+		dma_set_periph_addr(USBD_DMA_CHANNEL, (uint32_t)pma);
+		dma_set_num_words(USBD_DMA_CHANNEL, num_words);
+		dma_enable(USBD_DMA_CHANNEL);
+		while(dma_get_pending_transfers(USBD_DMA_CHANNEL));
+		dma_disable(USBD_DMA_CHANNEL);
+	}
+}
+
+void usbd_read_bytes_from_pma(uint16_t byte_offset, uint8_t* dest, uint16_t num_bytes)
+{
+	uint16_t* pma = (uint16_t*)(USBD_PMA_BASE + ((byte_offset & 0xFFFE) << 1));
+	uint16_t num_words;
+	uint16_t pma_word;
+
+	//Align PMA
+	if(byte_offset & 0x01)
+	{
+		*dest = (uint8_t)(*pma >> 8);
+		--num_bytes;
 		pma += 2;
 		++dest;
+	}
+
+	num_words = (num_bytes + 1) >> 1;
+
+	//check if dest is misaligned
+	if(0x01 & (uint32_t)dest)
+	{
+		while(num_words--)
+		{
+			pma_word = *pma;
+			*dest = ((uint8_t*)(&pma_word))[0];
+			++dest;
+			*dest = ((uint8_t*)(&pma_word))[1];
+			++dest;
+			pma += 2;
+		}
+	}
+	else
+	{
+		dma_channel_config(USBD_DMA_CHANNEL, DMA_CFG_MEM2MEM_ON | DMA_CFG_PRI_HIGH | DMA_CFG_MSIZE_16 | DMA_CFG_PSIZE_32 | DMA_CFG_MINC_ON | DMA_CFG_PINC_ON | DMA_CFG_PERIPH_TO_MEM | DMA_CFG_TCIE_OFF);
+		dma_set_mem_addr(USBD_DMA_CHANNEL, (uint32_t)dest);
+		dma_set_periph_addr(USBD_DMA_CHANNEL, (uint32_t)pma);
+		dma_set_num_words(USBD_DMA_CHANNEL, num_words);
+		dma_enable(USBD_DMA_CHANNEL);
+		while(dma_get_pending_transfers(USBD_DMA_CHANNEL));
+		dma_disable(USBD_DMA_CHANNEL);
 	}
 }
 
