@@ -7,7 +7,7 @@
 #include "ch32v20x.h"
 #include "ch32v203_usbd.h"
 #include "ch32v203_usbd_cdc.h"
-//TODO: what happens if EP_2 receives a zero length packet?
+
 //HINT: For double-buffered endpoints the CH32V203 reference manual does not say when the SW and HW toggles are compared. It also does not say when the STAT_RX/STAT_TX fields are updated and how the endpoint response is determined.
 //Here is my current understanding: A double buffered endpoint will respond with ACK only if the SW and HW toggles are different and the STAT_RX/STAT_TX field is set to ACK, otherwise the response is NAK or as specified by STAT_RX/STAT_TX.
 //At certain times the STAT_RX/STAT_TX field will be set to NAK by the hardware, this seems to happen when the CTR_RX/CTR_TX flag is cleared if the HW and SW toggles are equal.
@@ -85,6 +85,12 @@ uint16_t cdc_last_status_time;
 //HINT: RX rules:
 //1: If HW_toggle (EP_2 DTOG_RX) matches SW_toggle (EP_2 DTOG_TX) then move SW_toggle to match ep2_read_select when ep2_read_select changes.
 //2: If HW_toggle (EP_2 DTOG_RX) moves then update SW_toggle (EP_2 DTOG_TX) to match ep2_read_select.
+//If ZLP handling is enabled rule 2 becomes:
+//2: If HW toggle (EP_2 DTOG_RX) moves then check rx_len. If rx_len == 0 then SW_toggle (EP_2 DTOG_TX) = !HW_toggle, else SW_toggle = ep2_read_select.
+#if CDC_HANDLE_ZLP
+volatile uint8_t ep2_t0_zlp;	//set when a ZLP is received in t0
+volatile uint8_t ep2_t1_zlp;
+#endif
 uint8_t ep2_read_select;
 volatile uint8_t ep2_t0_num_bytes;
 uint8_t ep2_t0_read_offset;
@@ -333,6 +339,30 @@ void cdc_on_out(uint8_t ep)
 
 	if(ep == EP_2)
 	{
+#if CDC_HANDLE_ZLP
+		uint16_t ep2_out_tog = usbd_get_out_toggle(EP_2);
+		//auto-toggle is enabled, so here the toggle should point to the next buffer that will receive
+		if(ep2_out_tog)
+		{
+			ep2_t0_num_bytes = usbd_get_rx_0_len(EP_2);
+			ep2_t0_zlp = !ep2_t0_num_bytes;
+			//EP_2 response set to NAK automatically if IN toggle still points to t1 buffer.
+			if(ep2_t0_num_bytes)
+				usbd_set_in_toggle(EP_2, ep2_read_select ? USBD_IN_TOG_1 : USBD_IN_TOG_0);
+			else
+				usbd_set_in_toggle(EP_2, ep2_out_tog ? USBD_IN_TOG_0 : USBD_IN_TOG_1);
+		}
+		else
+		{
+			ep2_t1_num_bytes = usbd_get_rx_1_len(EP_2);
+			ep2_t1_zlp = !ep2_t1_num_bytes;
+			//EP_2 response set to NAK automatically if IN toggle still points to t0 buffer.
+			if(ep2_t1_num_bytes)
+				usbd_set_in_toggle(EP_2, ep2_read_select ? USBD_IN_TOG_1 : USBD_IN_TOG_0);
+			else
+				usbd_set_in_toggle(EP_2, ep2_out_tog ? USBD_IN_TOG_0 : USBD_IN_TOG_1);
+		}
+#else
 		//auto-toggle is enabled, so here the toggle should point to the next buffer that will receive
 		if(usbd_get_out_toggle(EP_2))
 		{
@@ -345,6 +375,7 @@ void cdc_on_out(uint8_t ep)
 			//EP_2 response set to NAK automatically if IN toggle still points to t0 buffer.
 		}
 		usbd_set_in_toggle(EP_2, ep2_read_select ? USBD_IN_TOG_1 : USBD_IN_TOG_0);
+#endif
 	}
 }
 
@@ -622,6 +653,10 @@ void cdc_on_setup(uint8_t ep)
 
 void cdc_on_rst(void)
 {
+#if CDC_HANDLE_ZLP
+	ep2_t0_zlp = 0;
+	ep2_t1_zlp = 0;
+#endif
 	ep2_read_select = 0;	//EP_2 IN toggle must be initialized to 1 (RX initially enabled)
 	ep2_t0_num_bytes = 0;
 	ep2_t0_read_offset = 0;
@@ -687,6 +722,28 @@ uint8_t cdc_peek(void)
 {
 	uint16_t pma_word;
 	uint8_t byte_select;
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+		{
+			usbd_set_in_toggle(EP_2, USBD_IN_TOG_0);
+			usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+		}
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+		{
+			usbd_set_in_toggle(EP_2, USBD_IN_TOG_1);
+			usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+		}
+	}
+#endif
 
 	if(ep2_read_select)
 	{
@@ -707,6 +764,29 @@ uint8_t cdc_read_byte(void)
 	uint8_t byte_select;
 
 	while(!cdc_bytes_available());
+
+#if CDC_HANDLE_ZLP
+	if(ep2_read_select && ep2_t1_zlp)
+	{
+		ep2_t1_zlp = 0;
+		ep2_read_select = 0;
+		if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+		{
+			usbd_set_in_toggle(EP_2, USBD_IN_TOG_0);
+			usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+		}
+	}
+	else if(!ep2_read_select && ep2_t0_zlp)
+	{
+		ep2_t0_zlp = 0;
+		ep2_read_select = 1;
+		if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+		{
+			usbd_set_in_toggle(EP_2, USBD_IN_TOG_1);
+			usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+		}
+	}
+#endif
 
 	if(ep2_read_select)
 	{
@@ -755,7 +835,21 @@ void cdc_read_bytes(uint8_t* dest, uint16_t num_bytes)
 		{
 			num_to_read = ep2_t1_num_bytes - ep2_t1_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t1_zlp)
+				{
+					ep2_t1_zlp = 0;
+					ep2_read_select = 0;
+					if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+					{
+						usbd_set_in_toggle(EP_2, USBD_IN_TOG_0);
+						usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+					}
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;
@@ -782,7 +876,21 @@ void cdc_read_bytes(uint8_t* dest, uint16_t num_bytes)
 		{
 			num_to_read = ep2_t0_num_bytes - ep2_t0_read_offset;
 			if(!num_to_read)
+			{
+#if CDC_HANDLE_ZLP
+				if(ep2_t0_zlp)
+				{
+					ep2_t0_zlp = 0;
+					ep2_read_select = 1;
+					if((usbd_get_out_toggle(EP_2) && usbd_get_in_toggle(EP_2)) || (!usbd_get_out_toggle(EP_2) && !usbd_get_in_toggle(EP_2)))
+					{
+						usbd_set_in_toggle(EP_2, USBD_IN_TOG_1);
+						usbd_set_out_res(EP_2, USBD_OUT_RES_ACK);
+					}
+				}
+#endif
 				continue;
+			}
 			if(num_to_read > num_bytes)
 			{
 				num_to_read = num_bytes;
