@@ -189,6 +189,10 @@ extern volatile uint16_t sof_count;
 #define usbd_get_out_res(ep) (USBD_ENDPOINT[ep].EPR & USBD_STAT_RX)
 #define usbd_get_in_res(ep) (USBD_ENDPOINT[ep].EPR & USBD_STAT_TX)
 
+#define usbd_set_out_tog_res(ep, tog_res) (USBD_ENDPOINT[ep].EPR = (USBD_ENDPOINT[ep].EPR & ~(USBD_DTOG_TX | USBD_STAT_TX)) ^ (tog_res))
+#define usbd_set_in_tog_res(ep, tog_res) (USBD_ENDPOINT[ep].EPR = (USBD_ENDPOINT[ep].EPR & ~(USBD_DTOG_RX | USBD_STAT_RX)) ^ (tog_res))
+#define usbd_set_in_tog_out_res(ep, tog_res) (USBD_ENDPOINT[ep].EPR = (USBD_ENDPOINT[ep].EPR & ~(USBD_DTOG_RX | USBD_STAT_TX)) ^ (tog_res))
+#define usbd_set_out_tog_in_res(ep, tog_res) (USBD_ENDPOINT[ep].EPR = (USBD_ENDPOINT[ep].EPR & ~(USBD_STAT_RX | USBD_DTOG_TX)) ^ (tog_res))
 #define usbd_set_tog_res(ep, tog_res) (USBD_ENDPOINT[ep].EPR ^= (tog_res))
 
 //HINT: usbd_read_pma_word and usbd_write_pma_word take an offset in bytes (the offset must be an even number).

@@ -11,8 +11,8 @@
 // HINT: user options
 #define USE_UART_DMA_1 1
 #define USE_UART_DMA_2 1
-#define USE_UART_DMA_3 1
-#define USE_UART_DMA_4 1
+#define USE_UART_DMA_3 0
+#define USE_UART_DMA_4 0
 
 //buffer sizes must be powers of 2
 #define UART_DMA_1_RX_BUF_SIZE 512
@@ -75,5 +75,6 @@ uint16_t uart_dma_get_string(uart_dma_t* uart_dma, char* dest, uint16_t buf_size
 void uart_dma_write_byte(uart_dma_t* uart_dma, uint8_t val);
 uint16_t uart_dma_write_string(uart_dma_t* uart_dma, char* str);
 void uart_dma_write_bytes(uart_dma_t* uart_dma, uint8_t* src, uint16_t num_bytes);
+void uart_dma_debug_write(USART_TypeDef* uart, uint8_t* source, uint16_t num_bytes);
 
 #endif /* _CH32V203_UART_H_ */
