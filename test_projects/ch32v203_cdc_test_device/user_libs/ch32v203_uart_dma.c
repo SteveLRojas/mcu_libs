@@ -533,3 +533,20 @@ void uart_dma_write_bytes(uart_dma_t* uart_dma, uint8_t* src, uint16_t num_bytes
 		}
 	}
 }
+
+//Blocking write function intended to be called from interrupt handlers. Does not use DMA or interrupts.
+void uart_dma_debug_write(USART_TypeDef* uart, uint8_t* source, uint16_t num_bytes)
+{
+	uart->CTLR3 &= ~(USART_CTLR3_DMAT | USART_CTLR3_DMAR);	//Disable DMA
+
+	while(num_bytes)
+	{
+		num_bytes -= 1;
+		while(!(uart->STATR & USART_STATR_TXE));
+		uart->DATAR = *source;
+		source += 1;
+	}
+	while(!(uart->STATR & USART_STATR_TC));
+
+	uart->CTLR3 |= USART_CTLR3_DMAT | USART_CTLR3_DMAR;	//Enable DMA
+}

@@ -8,37 +8,26 @@
 #include "ch32v203_usbd.h"	//for usbd_cdc_scrutinize
 #include "ch32v203_usbd_cdc.h"
 #include "debug.h"
-
+//TODO: setup pins for UART2
 //Pins:
-// LED3 = PA8
-// TXD = PA9
-// RXD = PA10
+// LED = PA8
+// TXD1 = PA9
+// RXD1 = PA10
 // UDM = PA11
 // UDP = PA12
-// LED2 = PC13
-// LED1 = PC14
-// LED0 = PC15
 
-static const char hex_table[16] = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46};
-void cdc_print_bytes(uint8_t* src, uint16_t num_bytes)
-{
-	uint8_t count = 0;
-	uint8_t value;
-	while(num_bytes)
-	{
-		value = *src;
-		while(cdc_bytes_available_for_write() < 3);
-		cdc_write_byte(hex_table[(value >> 4) & 0x0f]);
-		cdc_write_byte(hex_table[(value) & 0x0f]);
-		--num_bytes;
-		++count;
-		++src;
-		if(!(count & 0x0F))
-		{
-			cdc_write_byte('\n');
-		}
-	}
-}
+extern volatile uint8_t ep2_t0_zlp;
+extern volatile uint8_t ep2_t1_zlp;
+extern volatile uint8_t ep2_read_select;
+extern volatile uint8_t ep2_t0_num_bytes;
+extern uint8_t ep2_t0_read_offset;
+extern volatile uint8_t ep2_t1_num_bytes;
+extern uint8_t ep2_t1_read_offset;
+extern volatile uint8_t ep3_wip;
+extern volatile uint8_t ep3_write_select;
+extern volatile uint8_t ep3_t0_num_bytes;
+extern volatile uint8_t ep3_t1_num_bytes;
+extern uint8_t cdc_address;
 
 void usbd_cdc_scrutinize(void)
 {
@@ -101,23 +90,20 @@ int main(void)
 	rcc_ahb_clk_enable(RCC_DMA1EN);
 	afio_pcfr1_remap(AFIO_PCFR1_SWJ_CFG_DISABLE);
 
-	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);
-	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_10);
-	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_8);
-	gpio_set_mode(GPIOC, GPIO_DIR_SPD_OUT_2MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
+	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_8);	//LED
+	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);	//TXD1
+	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_PULL_IN, GPIO_PIN_10);		//RXD1
 
 	core_delay_init();
 	dma_init();
 	uart_dma_init(USART1, 125000);
 
 	// blink the led once
-	gpio_set_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_set_pin(GPIOA, GPIO_PIN_8);
 	core_delay_ms(100);
-	gpio_clear_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);
 	gpio_clear_pin(GPIOA, GPIO_PIN_8);
 	core_delay_ms(100);
-	gpio_write_pin(GPIOC, GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, 1);
+	gpio_set_pin(GPIOA, GPIO_PIN_8);
 	core_delay_ms(100);
 
 	cdc_init();
@@ -137,6 +123,10 @@ int main(void)
 	uint8_t datagram[2];
 	uint16_t bytes_available;
 	uint8_t temp;
+	uint8_t cdc_buf[256] __attribute__ ((aligned(2)));
+	uint8_t cdc_idx = 0;
+	uint8_t line_coding_idx = 0;
+	uint8_t cdc_byte_read = 0;
     while(1)
 	{
     	bytes_available = uart_dma_bytes_available(uart_dma_1);
@@ -147,7 +137,40 @@ int main(void)
 
 			switch(datagram[0] & 0x7F)
 			{
-
+				case 0x08:
+					cdc_idx = datagram[1];
+					break;
+				case 0x09:
+					cdc_buf[cdc_idx] = datagram[1];
+					break;
+				case 0x0B:
+					line_coding_idx = datagram[1];
+					break;
+				case 0x0C:
+					((uint8_t*)&cdc_line_coding)[line_coding_idx & 0x07] = datagram[1];
+					line_coding_idx += 1;
+					break;
+				case 0x0E:
+					cdc_init();
+					break;
+				case 0x0F:
+					cdc_set_serial_state(datagram[1]);
+					break;
+				case 0x12:
+					cdc_byte_read = cdc_read_byte();
+					break;
+				case 0x13:
+					cdc_read_bytes(cdc_buf, datagram[1]);
+					break;
+				case 0x15:
+					cdc_write_byte(datagram[1]);
+					break;
+				case 0x16:
+					cdc_write_bytes(cdc_buf, datagram[1]);
+					break;
+				case 0x17:
+					cdc_write_string((char*)cdc_buf);
+					break;
 			}
 		}
 		else if(bytes_available && !(temp & 0x80))	//handle read datagram
@@ -156,7 +179,59 @@ int main(void)
 
 			switch(datagram[0])
 			{
+				case 0x00: //device_id[0]
+					datagram[0] = 'C';
+					break;
+				case 0x01:	//device_id[1]
+					datagram[0] = 'D';
+					break;
+				case 0x02:	//device_id[2]
+					datagram[0] = 'C';
+					break;
+				case 0x03:	//device_id[3]
+					datagram[0] = '1';
+					break;
+				case 0x04:	//unique_id[0]
+					datagram[0] = *(uint8_t*)0x1FFFF7E8;
+					break;
+				case 0x05:	//unique_id[1]
+					datagram[0] = *(uint8_t*)0x1FFFF7E9;
+					break;
+				case 0x06:	//unique_id[2]
+					datagram[0] = *(uint8_t*)0x1FFFF7EA;
+					break;
+				case 0x07:	//unique_id[3]
+					datagram[0] = *(uint8_t*)0x1FFFF7EB;
+					break;
 
+				case 0x0A:
+					datagram[0] = cdc_config;
+					break;
+				case 0x0B:
+					datagram[0] = line_coding_idx;
+					break;
+				case 0x0C:
+					datagram[0] = ((uint8_t*)&cdc_line_coding)[line_coding_idx];
+					line_coding_idx += 1;
+					break;
+				case 0x0D:
+					datagram[0] = cdc_control_line_state;
+					break;
+				case 0x10:
+					datagram[0] = (uint8_t)cdc_bytes_available();
+					break;
+				case 0x11:
+					datagram[0] = cdc_peek();
+					break;
+				case 0x12:
+					datagram[0] = cdc_byte_read;
+					break;
+				case 0x14:
+					datagram[0] = cdc_bytes_available_for_write();
+					break;
+				default:
+					datagram[0] = 0x00;
+					break;
 			}
 		}
 

@@ -12,11 +12,11 @@
 //UART type options
 #define DEBUG_UART		USART1
 #define DEBUG_TX_FIFO	uart1_tx_fifo
-#define DEBUG_UART_DMA	uart_dma_1
+#define DEBUG_UART_DMA	uart_dma_2
 
 // Select the debug interface
 #ifndef DEBUG_TYP
-#define DEBUG_TYP   DEBUG_TYP_UART_DBG
+#define DEBUG_TYP   DEBUG_TYP_UART_DMA
 #endif
 
 #if(DEBUG)
