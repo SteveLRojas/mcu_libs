@@ -123,10 +123,18 @@ int main(void)
 	uint8_t datagram[2];
 	uint16_t bytes_available;
 	uint8_t temp;
+
 	uint8_t cdc_buf[256] __attribute__ ((aligned(2)));
 	uint8_t cdc_idx = 0;
 	uint8_t line_coding_idx = 0;
 	uint8_t cdc_byte_read = 0;
+
+	uint8_t usbd_config[64] __attribute__ ((aligned(2)));	//only 50 bytes are needed, power of 2 to simplify address limiting
+	uint8_t config_idx = 0;
+	uint8_t usbd_packet[64] __attribute__ ((aligned(2)));
+	uint8_t packet_idx = 0;
+	uint8_t ep_sel = 0;
+	uint16_t arg16 = 0;
     while(1)
 	{
     	bytes_available = uart_dma_bytes_available(uart_dma_1);
@@ -142,6 +150,7 @@ int main(void)
 					break;
 				case 0x09:
 					cdc_buf[cdc_idx] = datagram[1];
+					cdc_idx += 1;
 					break;
 				case 0x0B:
 					line_coding_idx = datagram[1];
@@ -171,6 +180,66 @@ int main(void)
 				case 0x17:
 					cdc_write_string((char*)cdc_buf);
 					break;
+
+				case 0x18:
+					config_idx = datagram[1];
+					break;
+				case 0x19:
+					usbd_config[config_idx & 0x3F] = datagram[1];
+					++config_idx;
+					break;
+				case 0x1A:
+					packet_idx = datagram[1];
+					break;
+				case 0x1B:
+					usbd_packet[packet_idx & 0x3F] = datagram[1];
+					++packet_idx;
+					break;
+				case 0x1C:
+					ep_sel = datagram[1] & 0x07;
+					break;
+				case 0x1F:
+					usbd_init((usbd_config_t*)usbd_config);
+					break;
+				case 0x20:
+					usbd_disable();
+					break;
+				case 0x21:
+					usbd_write_to_pma(usbd_get_tx_0_buf_offset(ep_sel), (uint16_t*)usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x22:
+					usbd_write_to_pma(usbd_get_tx_1_buf_offset(ep_sel), (uint16_t*)usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x23:
+					usbd_read_from_pma(usbd_get_rx_0_buf_offset(ep_sel), (uint16_t*)usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x24:
+					usbd_read_from_pma(usbd_get_rx_1_buf_offset(ep_sel), (uint16_t*)usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x25:
+					usbd_write_bytes_to_pma(usbd_get_tx_0_buf_offset(ep_sel), usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x26:
+					usbd_write_bytes_to_pma(usbd_get_tx_1_buf_offset(ep_sel), usbd_packet, (uint16_t)datagram[1]);
+					break;
+				case 0x27:
+					arg16 &= 0xFF00;
+					arg16 |= datagram[1];
+					break;
+				case 0x28:
+					arg16 &= 0x00FF;
+					arg16 |= ((uint16_t)datagram[1]) << 8;
+					break;
+				case 0x29:
+					usbd_enable_interrupts(arg16);
+					break;
+				case 0x2A:
+					usbd_disable_interrupts(arg16);
+					break;
+				case 0x2B:
+					usbd_set_addr(datagram[1]);
+					break;
+				//TODO: rest of macros
 			}
 		}
 		else if(bytes_available && !(temp & 0x80))	//handle read datagram
@@ -204,6 +273,13 @@ int main(void)
 					datagram[0] = *(uint8_t*)0x1FFFF7EB;
 					break;
 
+				case 0x08:
+					datagram[0] = cdc_idx;
+					break;
+				case 0x09:
+					datagram[0] = cdc_buf[cdc_idx];
+					cdc_idx += 1;
+					break;
 				case 0x0A:
 					datagram[0] = cdc_config;
 					break;
@@ -229,10 +305,41 @@ int main(void)
 				case 0x14:
 					datagram[0] = cdc_bytes_available_for_write();
 					break;
+
+				case 0x18:
+					datagram[0] = config_idx;
+					break;
+				case 0x19:
+					datagram[0] = usbd_config[config_idx];
+					++config_idx;
+					break;
+				case 0x1A:
+					datagram[0] = packet_idx;
+					break;
+				case 0x1B:
+					datagram[0] = usbd_packet[packet_idx];
+					++packet_idx;
+					break;
+				case 0x1C:
+					datagram[0] = ep_sel;
+					break;
+				case 0x1D:
+					datagram[0] = (uint8_t)sof_count;
+					break;
+				case 0x1E:
+					datagram[0] = (uint8_t)(sof_count >> 8);
+					break;
+				case 0x27:
+					datagram[0] = (uint8_t)arg16;
+					break;
+				case 0x28:
+					datagram[0] = (uint8_t)(arg16 >> 8);
+					break;
 				default:
 					datagram[0] = 0x00;
 					break;
 			}
+			uart_dma_write_byte(uart_dma_1, datagram[0]);
 		}
 
     	if(prev_control_line_state != cdc_control_line_state)
