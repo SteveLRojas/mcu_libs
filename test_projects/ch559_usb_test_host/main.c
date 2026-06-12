@@ -176,8 +176,8 @@ int main()
 	uart_write_string(UART_0, line_buf);
 	
 	usbh_init();
-	usbh_in_transfer_nak_limit = 0;	//no NAK retry for interrupt transfers
-	usbh_out_transfer_nak_limit = 0xFFFF;
+	usbh_in_transfer_nak_limit = 0;
+	usbh_out_transfer_nak_limit = 0;
 	
 	timer_start(TIMER_0);
 	next_state_time = timer_overflow_counts[TIMER_0];
@@ -244,6 +244,22 @@ int main()
 					break;
 				case 0x17:
 					response = usbh_transact(0);
+					break;
+				case 0x18:
+					usbh_in_transfer_nak_limit &= 0xFF00;
+					usbh_in_transfer_nak_limit |= (UINT16)datagram[1];
+					break;
+				case 0x19:
+					usbh_in_transfer_nak_limit &= 0x00FF;
+					usbh_in_transfer_nak_limit |= (UINT16)datagram[1] << 8;
+					break;
+				case 0x1A:
+					usbh_out_transfer_nak_limit &= 0xFF00;
+					usbh_out_transfer_nak_limit |= (UINT16)datagram[1];
+					break;
+				case 0x1B:
+					usbh_out_transfer_nak_limit &= 0x00FF;
+					usbh_out_transfer_nak_limit |= (UINT16)datagram[1] << 8;
 					break;
 			}
 		}
@@ -325,6 +341,18 @@ int main()
 				case 0x13:
 					datagram[0] = transfer_buf[transfer_idx];
 					transfer_idx += 1;
+					break;
+				case 0x18:
+					datagram[0] = (UINT8)usbh_in_transfer_nak_limit;
+					break;
+				case 0x19:
+					datagram[0] = (UINT8)(usbh_in_transfer_nak_limit >> 8);
+					break;
+				case 0x1A:
+					datagram[0] = (UINT8)usbh_out_transfer_nak_limit;
+					break;
+				case 0x1B:
+					datagram[0] = (UINT8)(usbh_out_transfer_nak_limit >> 8);
 					break;
 			}
 			uart_write_byte(UART_1, datagram[0]);

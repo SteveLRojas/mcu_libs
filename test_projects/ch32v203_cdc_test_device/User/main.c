@@ -8,8 +8,10 @@
 #include "ch32v203_usbd.h"	//for usbd_cdc_scrutinize
 #include "ch32v203_usbd_cdc.h"
 #include "debug.h"
-//TODO: setup pins for UART2
+
 //Pins:
+// TXD2 = PA2
+// RXD2 = PA3
 // LED = PA8
 // TXD1 = PA9
 // RXD1 = PA10
@@ -91,12 +93,13 @@ int main(void)
 	afio_pcfr1_remap(AFIO_PCFR1_SWJ_CFG_DISABLE);
 
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_8);	//LED
-	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);	//TXD1
-	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_PULL_IN, GPIO_PIN_10);		//RXD1
+	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_2 | GPIO_PIN_9);	//TXD2, TXD1
+	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_PULL_IN, GPIO_PIN_3 | GPIO_PIN_10);		//RXD2, RXD1
 
 	core_delay_init();
 	dma_init();
 	uart_dma_init(USART1, 125000);
+	uart_dma_init(USART2, 125000);
 
 	// blink the led once
 	gpio_set_pin(GPIOA, GPIO_PIN_8);
@@ -239,7 +242,24 @@ int main(void)
 				case 0x2B:
 					usbd_set_addr(datagram[1]);
 					break;
-				//TODO: rest of macros
+				case 0x2C:
+					usbd_set_tx_0_len(ep_sel, (uint16_t)datagram[1]);
+					break;
+				case 0x2D:
+					usbd_set_tx_1_len(ep_sel, (uint16_t)datagram[1]);
+					break;
+				case 0x2E:
+					usbd_set_out_toggle(ep_sel, datagram[1] ? USBD_OUT_TOG_1 : USBD_OUT_TOG_0);
+					break;
+				case 0x2F:
+					usbd_set_in_toggle(ep_sel, datagram[1] ? USBD_IN_TOG_1 : USBD_IN_TOG_0);
+					break;
+				case 0x30:
+					usbd_set_out_res(ep_sel, (uint16_t)(datagram[1] & 0x30) << 8);
+					break;
+				case 0x31:
+					usbd_set_in_res(ep_sel, (uint16_t)(datagram[1] & 0x30));
+					break;
 			}
 		}
 		else if(bytes_available && !(temp & 0x80))	//handle read datagram
@@ -334,6 +354,24 @@ int main(void)
 					break;
 				case 0x28:
 					datagram[0] = (uint8_t)(arg16 >> 8);
+					break;
+				case 0x2C:
+					datagram[0] = (uint8_t)usbd_get_rx_0_len(ep_sel);
+					break;
+				case 0x2D:
+					datagram[0] = (uint8_t)usbd_get_rx_1_len(ep_sel);
+					break;
+				case 0x2E:
+					datagram[0] = (usbd_get_out_toggle(ep_sel) != 0);
+					break;
+				case 0x2F:
+					datagram[0] = (usbd_get_in_toggle(ep_sel) != 0);
+					break;
+				case 0x30:
+					datagram[0] = (uint8_t)(usbd_get_out_res(ep_sel) >> 8);
+					break;
+				case 0x31:
+					datagram[0] = (uint8_t)usbd_get_in_res(ep_sel);
 					break;
 				default:
 					datagram[0] = 0x00;
