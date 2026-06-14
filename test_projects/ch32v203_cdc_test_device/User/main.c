@@ -88,7 +88,7 @@ void usbd_cdc_scrutinize(void)
 int main(void)
 {
 	rcc_apb2_clk_enable(RCC_AFIOEN | RCC_IOPAEN | RCC_IOPBEN | RCC_IOPCEN | RCC_ADC1EN | RCC_ADC2EN | RCC_TIM1EN | RCC_SPI1EN | RCC_USART1EN);
-	rcc_apb1_clk_enable(RCC_TIM2EN | RCC_USBEN);
+	rcc_apb1_clk_enable(RCC_TIM2EN | RCC_USBEN | RCC_USART2EN);
 	rcc_ahb_clk_enable(RCC_DMA1EN);
 	afio_pcfr1_remap(AFIO_PCFR1_SWJ_CFG_DISABLE);
 

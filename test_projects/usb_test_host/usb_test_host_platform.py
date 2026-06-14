@@ -180,10 +180,13 @@ def init(unique_id = 0):
 	ser.write_timeout = 1.0
 
 	for port in display_ports:
-		ser.port = port
-		ser.open()
-		time.sleep(0.5)
-		ser.reset_input_buffer()
+		try:
+			ser.port = port
+			ser.open()
+			time.sleep(0.5)
+			ser.reset_input_buffer()
+		except Exception:
+			continue
 
 		device_id = get_device_id()
 		if device_id != 0x31425355:
