@@ -32,54 +32,56 @@ def get_unique_id():
 	response = (response << 8) | read_reg(regs.R_UNIQUE_ID_LL)
 	return response
 
-def get_state_str():
-	state = read_reg(regs.R_STATE)
-	if state == 0x00:
+def get_state_str(state=None):
+	if state is None:
+		state = read_reg(regs.R_STATE)
+	if state == defs.S_DISCONNECTED:
 		return "S_DISCONNECTED"
-	elif state == 0x01:
+	elif state == defs.S_RESET_START:
 		return "S_RESET_START"
-	elif state == 0x02:
+	elif state == defs.S_RESET_END:
 		return "S_RESET_END"
-	elif state == 0x03:
+	elif state == defs.S_SET_SPEED:
 		return "S_SET_SPEED"
-	elif state == 0x04:
+	elif state == defs.S_CONNECTED:
 		return "S_CONNECTED"
-	elif state == 0x05:
+	elif state == defs.S_GET_DEV_DESCR:
 		return "S_GET_DEV_DESCR"
-	elif state == 0x06:
+	elif state == defs.S_SET_ADDR:
 		return "S_SET_ADDR"
-	elif state == 0x07:
+	elif state == defs.S_CONFIGURE:
 		return "S_CONFIGURE"
-	elif state == 0x08:
+	elif state == defs.S_IDLE:
 		return "S_IDLE"
-	elif state == 0x09:
+	elif state == defs.S_RUN:
 		return "S_RUN"
 	else:
 		return f"Invalid state: {state:02X}"
 
-def get_response_str():
-	response = read_reg(regs.R_RESPONSE)
-	if response == 0x00:
+def get_response_str(response=None):
+	if response is None:
+		response = read_reg(regs.R_RESPONSE)
+	if response == defs.USB_PID_NULL:
 		return "No response"
-	elif response == 0x01:
+	elif response == defs.USB_PID_OUT:
 		return "PID_OUT"
-	elif response == 0x02:
+	elif response == defs.USB_PID_ACK:
 		return "PID_ACK"
-	elif response == 0x03:
+	elif response == defs.USB_PID_DATA0:
 		return "PID_DATA0"
-	elif response == 0x05:
+	elif response == defs.USB_PID_SOF:
 		return "PID_SOF"
-	elif response == 0x09:
+	elif response == defs.USB_PID_IN:
 		return "PID_IN"
-	elif response == 0x0A:
+	elif response == defs.USB_PID_NAK:
 		return "PID_NAK"
-	elif response == 0x0B:
+	elif response == defs.USB_PID_DATA1:
 		return "PID_DATA1"
-	elif response == 0x0C:
+	elif response == defs.USB_PID_PRE:
 		return "PID_PRE"
-	elif response == 0x0D:
+	elif response == defs.USB_PID_SETUP:
 		return "PID_SETUP"
-	elif response == 0x0E:
+	elif response == defs.USB_PID_STALL:
 		return "PID_STALL"
 	else:
 		return f"Invalid response: {response:02X}"
