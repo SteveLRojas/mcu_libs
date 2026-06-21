@@ -2,7 +2,7 @@ import serial
 import serial.tools.list_ports
 import time
 import usb_test_host_regs as regs
-import usbh_defs as defs
+import usb_test_host_defs as defs
 
 baud = 125000
 ser = serial.Serial()
@@ -55,6 +55,8 @@ def get_state_str(state=None):
 		return "S_IDLE"
 	elif state == defs.S_RUN:
 		return "S_RUN"
+	elif state == defs.S_BYPASS:
+		return "S_BYPASS"
 	else:
 		return f"Invalid state: {state:02X}"
 
@@ -210,6 +212,9 @@ def init(unique_id = 0):
 
 def stop():
 	if ser.is_open:
+		state = read_reg(regs.R_STATE)
+		if state == defs.S_BYPASS:
+			write_reg(regs.R_STATE, defs.S_RUN)
 		ser.close()
 
 def print_usb_device_descriptor(desc: bytearray):

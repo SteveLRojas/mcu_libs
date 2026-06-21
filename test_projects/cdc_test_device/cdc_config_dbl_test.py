@@ -51,7 +51,11 @@ def main():
 	print(f"OUT toggle: {cdc.read_reg(cdc.regs.R_USBD_OUT_TOGGLE):02X}")
 	print(f"IN toggle: {cdc.read_reg(cdc.regs.R_USBD_IN_TOGGLE):02X}")
 	print(f"OUT res: {cdc.res_type_to_str(cdc.read_reg(cdc.regs.R_USBD_OUT_RES))}")
+
+	usbh.write_reg(usbh.regs.R_STATE, usbh.defs.S_BYPASS)
+	print(f"State: {usbh.get_state_str()}")
 	
+	usbh.stop()
 	cdc.stop()
 
 if __name__ == "__main__":

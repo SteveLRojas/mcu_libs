@@ -274,6 +274,11 @@ int main(void)
 				case 0x31:
 					usbd_set_in_res(ep_sel, (uint16_t)(datagram[1] & 0x30));
 					break;
+				case 0x32:
+					rcc_apb1_reset_begin(RCC_APB1_RST_USBD);
+					core_delay_us(1);
+					rcc_apb1_reset_end(RCC_APB1_RST_USBD);
+					break;
 			}
 		}
 		else if(bytes_available && !(temp & 0x80))	//handle read datagram

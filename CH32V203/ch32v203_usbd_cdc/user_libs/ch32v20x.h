@@ -2006,40 +2006,7 @@ typedef struct
 #define RCC_PLLRDYC                             ((uint32_t)0x00100000) /* PLL Ready Interrupt Clear */
 #define RCC_CSSC                                ((uint32_t)0x00800000) /* Clock Security System Interrupt Clear */
 
-/*****************  Bit definition for RCC_APB2PRSTR register  *****************/
-#define RCC_AFIORST                             ((uint32_t)0x00000001) /* Alternate Function I/O reset */
-#define RCC_IOPARST                             ((uint32_t)0x00000004) /* I/O port A reset */
-#define RCC_IOPBRST                             ((uint32_t)0x00000008) /* I/O port B reset */
-#define RCC_IOPCRST                             ((uint32_t)0x00000010) /* I/O port C reset */
-#define RCC_IOPDRST                             ((uint32_t)0x00000020) /* I/O port D reset */
-#define RCC_ADC1RST                             ((uint32_t)0x00000200) /* ADC 1 interface reset */
-
-#define RCC_ADC2RST                             ((uint32_t)0x00000400) /* ADC 2 interface reset */
-
-#define RCC_TIM1RST                             ((uint32_t)0x00000800) /* TIM1 Timer reset */
-#define RCC_SPI1RST                             ((uint32_t)0x00001000) /* SPI 1 reset */
-#define RCC_USART1RST                           ((uint32_t)0x00004000) /* USART1 reset */
-
-#define RCC_IOPERST                             ((uint32_t)0x00000040) /* I/O port E reset */
-
-/*****************  Bit definition for RCC_APB1PRSTR register  *****************/
-#define RCC_TIM2RST                             ((uint32_t)0x00000001) /* Timer 2 reset */
-#define RCC_TIM3RST                             ((uint32_t)0x00000002) /* Timer 3 reset */
-#define RCC_WWDGRST                             ((uint32_t)0x00000800) /* Window Watchdog reset */
-#define RCC_USART2RST                           ((uint32_t)0x00020000) /* USART 2 reset */
-#define RCC_I2C1RST                             ((uint32_t)0x00200000) /* I2C 1 reset */
-
-#define RCC_CAN1RST                             ((uint32_t)0x02000000) /* CAN1 reset */
-
-#define RCC_BKPRST                              ((uint32_t)0x08000000) /* Backup interface reset */
-#define RCC_PWRRST                              ((uint32_t)0x10000000) /* Power interface reset */
-
-#define RCC_TIM4RST                             ((uint32_t)0x00000004) /* Timer 4 reset */
-#define RCC_SPI2RST                             ((uint32_t)0x00004000) /* SPI 2 reset */
-#define RCC_USART3RST                           ((uint32_t)0x00040000) /* USART 3 reset */
-#define RCC_I2C2RST                             ((uint32_t)0x00400000) /* I2C 2 reset */
-
-#define RCC_USBRST                              ((uint32_t)0x00800000) /* USB Device reset */
+//HINT: Bit definitions for AHB, APB1, and APB2 reset registers are in ch32v203_rcc.h
 
 /******************  Bit definition for RCC_AHBPCENR register  ******************/
 #define RCC_DMA1EN                              ((uint16_t)0x0001) /* DMA1 clock enable */

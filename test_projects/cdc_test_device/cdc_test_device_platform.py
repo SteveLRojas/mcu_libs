@@ -2,7 +2,7 @@ import serial
 import serial.tools.list_ports
 import time
 import cdc_test_device_regs as regs
-import cdc_defs as defs
+import cdc_test_device_defs as defs
 
 baud = 125000
 ser = serial.Serial()

@@ -23,6 +23,50 @@
 #define RCC_ADCCLK_FREQ_DIV RCC_ADCPRE_DIV8
 
 // Do not modify anything below this line
+#define RCC_AHB_RST_ETHMAC	0x00004000
+#define RCC_AHB_RST_DVP		0x00002000
+#define RCC_AHB_RST_USBHD	0x00001000
+
+#define RCC_APB1_RST_DAC	0x20000000
+#define RCC_APB1_RST_PWR	0x10000000
+#define RCC_APB1_RST_BKP	0x08000000
+#define RCC_APB1_RST_CAN2	0x04000000
+#define RCC_APB1_RST_CAN1	0x02000000
+#define RCC_APB1_RST_USBD	0x00800000
+#define RCC_APB1_RST_I2C2	0x00400000
+#define RCC_APB1_RST_I2C1	0x00200000
+#define RCC_APB1_RST_USART5	0x00100000
+#define RCC_APB1_RST_USART4	0x00080000
+#define RCC_APB1_RST_USART3	0x00040000
+#define RCC_APB1_RST_USART2	0x00020000
+#define RCC_APB1_RST_SPI3	0x00008000
+#define RCC_APB1_RST_SPI2	0x00004000
+#define RCC_APB1_RST_WWDG	0x00000800
+#define RCC_APB1_RST_USART8	0x00000100
+#define RCC_APB1_RST_USART7	0x00000080
+#define RCC_APB1_RST_USART6	0x00000040
+#define RCC_APB1_RST_TIM7	0x00000020
+#define RCC_APB1_RST_TIM6	0x00000010
+#define RCC_APB1_RST_TIM5	0x00000008
+#define RCC_APB1_RST_TIM4	0x00000004
+#define RCC_APB1_RST_TIM3	0x00000002
+#define RCC_APB1_RST_TIM2	0x00000001
+
+#define RCC_APB2_RST_TIM10	0x00100000
+#define RCC_APB2_RST_TIM9	0x00080000
+#define RCC_APB2_RST_USART1	0x00004000
+#define RCC_APB2_RST_TIM8	0x00002000
+#define RCC_APB2_RST_SPI1	0x00001000
+#define RCC_APB2_RST_TIM1	0x00000800
+#define RCC_APB2_RST_ADC2	0x00000400
+#define RCC_APB2_RST_ADC1	0x00000200
+#define RCC_APB2_RST_IOPE	0x00000040
+#define RCC_APB2_RST_IOPD	0x00000020
+#define RCC_APB2_RST_IOPC	0x00000010
+#define RCC_APB2_RST_IOPB	0x00000008
+#define RCC_APB2_RST_IOPA	0x00000004
+#define RCC_APB2_RST_AFIO	0x00000001
+
 #define rcc_hse_on() (RCC->CTLR |= RCC_HSEON)
 #define rcc_hse_off() (RCC->CTLR &= ~RCC_HSEON)
 #define rcc_hsi_on() (RCC->CTLR |= RCC_HSION)
@@ -56,6 +100,13 @@
 #define rcc_apb2_clk_disable(clock) (RCC->APB2PCENR &= ~(clock))
 #define rcc_apb1_clk_enable(clock) (RCC->APB1PCENR |= (clock))
 #define rcc_apb1_clk_disable(clock) (RCC->APB1PCENR &= ~(clock))
+
+#define rcc_ahb_reset_begin(periph) (RCC->AHBRSTR |= (periph))
+#define rcc_ahb_reset_end(periph) (RCC->AHBRSTR &= ~(periph))
+#define rcc_apb1_reset_begin(periph) (RCC->APB1PRSTR |= (periph))
+#define rcc_apb1_reset_end(periph) (RCC->APB1PRSTR &= ~(periph))
+#define rcc_apb2_reset_begin(periph) (RCC->APB2PRSTR |= (periph))
+#define rcc_apb2_reset_end(periph) (RCC->APB2PRSTR &= ~(periph))
 
 void rcc_system_init(void);
 uint8_t rcc_hse_init(uint32_t hse_options);

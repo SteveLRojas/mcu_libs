@@ -1,1 +1,0 @@
-../usb_test_host/usbh_defs.py
