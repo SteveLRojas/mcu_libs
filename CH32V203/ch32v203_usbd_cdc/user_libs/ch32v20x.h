@@ -434,7 +434,6 @@ typedef struct
     __IO uint32_t APB1PCENR;
     __IO uint32_t BDCTLR;
     __IO uint32_t RSTSCKR;
-
     __IO uint32_t AHBRSTR;
     __IO uint32_t CFGR2;
 } RCC_TypeDef;

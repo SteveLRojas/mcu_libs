@@ -111,9 +111,8 @@
 							</tool>
 						</toolChain>
 					</folderInfo>
-					<fileInfo id="ilg.gnumcueclipse.managedbuild.cross.riscv.config.elf.release.1008047074.264565902" name="support.h" rcbsApplicability="disable" resourcePath="User/support.h" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="Peripheral/src/ch32v20x_wwdg.c|Peripheral/src/ch32v20x_tim.c|Peripheral/inc/ch32v20x_wwdg.h|Peripheral/inc/ch32v20x_tim.h|Peripheral/src/ch32v20x_pwr.c|Peripheral/inc/ch32v20x_pwr.h|Peripheral/src/ch32v20x_i2c.c|Peripheral/inc/ch32v20x_i2c.h|Peripheral/src/ch32v20x_dma.c|Peripheral/src/ch32v20x_can.c|Peripheral/src/ch32v20x_bkp.c|Peripheral/src/ch32v20x_adc.c|Peripheral/inc/ch32v20x_can.h|Peripheral/inc/ch32v20x_dma.h|Peripheral/inc/ch32v20x_bkp.h|Peripheral/inc/ch32v20x_adc.h|Peripheral/src/ch32v20x_rcc.c|Peripheral/inc/ch32v20x_rcc.h|User/system_ch32v20x.h|User/system_ch32v20x.c|User/support.h|User/support.c|Startup/startup_ch32v20x_D8W.S|Startup/startup_ch32v20x_D8.S" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="Peripheral/src/ch32v20x_wwdg.c|Peripheral/src/ch32v20x_tim.c|Peripheral/inc/ch32v20x_wwdg.h|Peripheral/inc/ch32v20x_tim.h|Peripheral/src/ch32v20x_pwr.c|Peripheral/inc/ch32v20x_pwr.h|Peripheral/src/ch32v20x_i2c.c|Peripheral/inc/ch32v20x_i2c.h|Peripheral/src/ch32v20x_dma.c|Peripheral/src/ch32v20x_can.c|Peripheral/src/ch32v20x_bkp.c|Peripheral/src/ch32v20x_adc.c|Peripheral/inc/ch32v20x_can.h|Peripheral/inc/ch32v20x_dma.h|Peripheral/inc/ch32v20x_bkp.h|Peripheral/inc/ch32v20x_adc.h|Peripheral/src/ch32v20x_rcc.c|Peripheral/inc/ch32v20x_rcc.h|User/system_ch32v20x.h|User/system_ch32v20x.c|Startup/startup_ch32v20x_D8W.S|Startup/startup_ch32v20x_D8.S" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -135,5 +134,9 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets"/>
-	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="obj">
+			<resource resourceType="PROJECT" workspacePath="/ch32v203_rcc"/>
+		</configuration>
+	</storageModule>
 </cproject>

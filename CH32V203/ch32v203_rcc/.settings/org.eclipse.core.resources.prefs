@@ -1,0 +1,8 @@
+eclipse.preferences.version=1
+encoding//Debug/debug.c=GBK
+encoding//Debug/debug.h=GBK
+encoding//User/main.c=GBK
+encoding//user_libs/ch32v203_rcc.c=GBK
+encoding//user_libs/ch32v203_rcc.h=GBK
+encoding//user_libs/ch32v203_spi.h=GBK
+encoding//user_libs/ch32v203_uart.h=GBK
