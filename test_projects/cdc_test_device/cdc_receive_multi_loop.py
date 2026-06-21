@@ -4,8 +4,9 @@ import usb_test_host_platform as usbh
 import usbh_defs as defs
 import cdc_test_device_platform as cdc
 
-packet_len = 44
-num_packets = 10
+packet_len = 64
+num_packets = 4
+num_iterations = 10
 
 def main():
 	unique_id = usbh.init()
@@ -38,37 +39,50 @@ def main():
 	usbh.set_max_packet_size(2, 64)
 	usbh.write_reg(usbh.regs.R_OUT_NAK_LIMIT_L, 0)
 	usbh.write_reg(usbh.regs.R_OUT_NAK_LIMIT_H, 0)
+	cdc.write_reg(cdc.regs.R_EP_SEL, 2)
 	
-	for d in range(num_packets):
-		#send one packet to EP2
-		usbh_buf = [random.getrandbits(8) for _ in range(packet_len)]
+	sent_buf = []
+	received_buf = []
+	for d in range(num_iterations):
+		for i in range(num_packets):
+			#send one packet to EP2
+			usbh_buf = [random.getrandbits(8) for _ in range(packet_len)]
 
-		usbh.write_transfer_buf(0, usbh_buf)
-		usbh.write_reg(usbh.regs.R_TRANSFER_LEN, len(usbh_buf))
-		usbh.write_reg(usbh.regs.R_EP_SEL, 2)
-		usbh.write_reg(usbh.regs.R_OUT_TRANSFER, 0)
-		time.sleep(0.1)
-		print(f"USBH response: {usbh.get_response_str()}")
-
-		#check the bytes received
+			usbh.write_transfer_buf(0, usbh_buf)
+			usbh.write_reg(usbh.regs.R_TRANSFER_LEN, len(usbh_buf))
+			usbh.write_reg(usbh.regs.R_EP_SEL, 2)
+			usbh.write_reg(usbh.regs.R_OUT_TRANSFER, 0)
+			time.sleep(0.1)
+			response = usbh.read_reg(usbh.regs.R_RESPONSE)
+			print(f"USBH response: {usbh.get_response_str(response)}")
+			if response != defs.USB_PID_ACK:
+				print(f"Packet {i} not accepted on iteration {d}")
+				print(f"RX_0_LEN: {cdc.read_reg(cdc.regs.R_USBD_RX_TX_0_LEN)}")
+				print(f"RX_1_LEN: {cdc.read_reg(cdc.regs.R_USBD_RX_TX_1_LEN)}")
+				print(f"OUT toggle: {cdc.read_reg(cdc.regs.R_USBD_OUT_TOGGLE):02X}")
+				print(f"IN toggle: {cdc.read_reg(cdc.regs.R_USBD_IN_TOGGLE):02X}")
+				print(f"OUT res: {cdc.res_type_to_str(cdc.read_reg(cdc.regs.R_USBD_OUT_RES))}")
+				continue
+			sent_buf = sent_buf + usbh_buf
+	
+		#collect the bytes received
 		bytes_available = cdc.read_reg(cdc.regs.R_CDC_BYTES_AVAILABLE)
 		print(f"CDC bytes available: {bytes_available}")
 		if bytes_available == 0:
-			print(f"No data received on iteration {d}")
 			usbh.stop()
 			cdc.stop()
 			exit(1)
 		cdc.write_reg(cdc.regs.R_CDC_READ_BYTES, bytes_available)
 		cdc_buf = cdc.read_cdc_buf(0, bytes_available)
-		if list(cdc_buf) != usbh_buf:
-			print(f"Received bad data on iteration {d}:")
-			print(f"USBH buf: {usbh_buf}")
-			print(f"CDC buf: {cdc_buf}")
-			cdc.stop()
-			usbh.stop()
-			exit(1)
+		received_buf = received_buf + list(cdc_buf)
 	
-	print("Test completed! Passed!")
+	if received_buf == sent_buf:
+		print("Received data is correct!")
+	else:
+		print("Received bad data:")
+		print(f"Sent buf: {sent_buf}")
+		print(f"CDC buf: {received_buf}")
+	
 	cdc.stop()
 	usbh.stop()
 

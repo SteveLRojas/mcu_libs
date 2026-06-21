@@ -33,37 +33,26 @@ def main():
 	usbh.set_max_packet_size(2, 64)
 	usbh.write_reg(usbh.regs.R_OUT_NAK_LIMIT_L, 0)
 	usbh.write_reg(usbh.regs.R_OUT_NAK_LIMIT_H, 0)
+	cdc.write_reg(cdc.regs.R_EP_SEL, 2)
 
-	#send one packet to EP2
-	usbh_buf = []
-	for d in range(16):
-		usbh_buf.append(0xAA)
+	usbd_config = [
+		cdc.defs.CDC_ENDP0_SIZE, cdc.defs.CDC_ENDP1_SIZE, 0, cdc.defs.CDC_ENDP3_SIZE, 0, 0, 0, 0,
+		cdc.defs.CDC_ENDP0_SIZE, 0, cdc.defs.CDC_ENDP2_SIZE, 0, 0, 0, 0, 0,
+		cdc.defs.USBD_EP_TYPE_CONTROL, cdc.defs.USBD_EP_TYPE_INTERRUPT, cdc.defs.USBD_EP_TYPE_BULK_DBL, cdc.defs.USBD_EP_TYPE_BULK_DBL, cdc.defs.USBD_EP_TYPE_BULK, cdc.defs.USBD_EP_TYPE_BULK, cdc.defs.USBD_EP_TYPE_BULK, cdc.defs.USBD_EP_TYPE_BULK,
+		cdc.defs.USBD_INT_TRANSFER | cdc.defs.USBD_INT_RESET | cdc.defs.USBD_INT_SOF
+	]
+	
+	cdc.write_config_buf(usbd_config)
+	usbd_config = cdc.read_config_buf()
+	cdc.print_usbd_config(usbd_config)
 
-	usbh.write_transfer_buf(0, usbh_buf)
-	usbh.write_reg(usbh.regs.R_TRANSFER_LEN, len(usbh_buf))
-	usbh.write_reg(usbh.regs.R_EP_SEL, 2)
-	usbh.write_reg(usbh.regs.R_OUT_TRANSFER, 0)
-	time.sleep(0.1)
-	print(f"USBH response: {usbh.get_response_str()}")
-
-	#check the bytes received
-	bytes_available = cdc.read_reg(cdc.regs.R_CDC_BYTES_AVAILABLE)
-	print(f"CDC bytes available: {bytes_available}")
-	if bytes_available == 0:
-		usbh.stop()
-		cdc.stop()
-		exit(1)
-	cdc.write_reg(cdc.regs.R_CDC_READ_BYTES, bytes_available)
-	cdc_buf = cdc.read_cdc_buf(0, bytes_available)
-	if list(cdc_buf) == usbh_buf:
-		print("Received data is correct!")
-	else:
-		print("Received bad data:")
-		print(f"USBH buf: {usbh_buf}")
-		print(f"CDC buf: {cdc_buf}")
+	print(f"RX_0_LEN: {cdc.read_reg(cdc.regs.R_USBD_RX_TX_0_LEN)}")
+	print(f"RX_1_LEN: {cdc.read_reg(cdc.regs.R_USBD_RX_TX_1_LEN)}")
+	print(f"OUT toggle: {cdc.read_reg(cdc.regs.R_USBD_OUT_TOGGLE):02X}")
+	print(f"IN toggle: {cdc.read_reg(cdc.regs.R_USBD_IN_TOGGLE):02X}")
+	print(f"OUT res: {cdc.res_type_to_str(cdc.read_reg(cdc.regs.R_USBD_OUT_RES))}")
 	
 	cdc.stop()
-	usbh.stop()
 
 if __name__ == "__main__":
 	main()

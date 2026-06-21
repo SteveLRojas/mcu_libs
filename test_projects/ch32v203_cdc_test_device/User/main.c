@@ -31,6 +31,14 @@ extern volatile uint8_t ep3_t0_num_bytes;
 extern volatile uint8_t ep3_t1_num_bytes;
 extern uint8_t cdc_address;
 
+static const usbd_config_t usbd_default_config =
+{
+	{CDC_ENDP0_SIZE, CDC_ENDP1_SIZE, 0, CDC_ENDP3_SIZE, 0, 0, 0, 0},
+	{CDC_ENDP0_SIZE, 0, CDC_ENDP2_SIZE, 0, 0, 0, 0, 0},
+	{USBD_EP_TYPE_CONTROL, USBD_EP_TYPE_INTERRUPT, USBD_EP_TYPE_BULK_DBL, USBD_EP_TYPE_BULK_DBL, USBD_EP_TYPE_BULK, USBD_EP_TYPE_BULK, USBD_EP_TYPE_BULK, USBD_EP_TYPE_BULK},
+	USBD_INT_TRANSFER | USBD_INT_RESET | USBD_INT_SOF
+};
+
 void usbd_cdc_scrutinize(void)
 {
 	//CDC variables
@@ -138,6 +146,12 @@ int main(void)
 	uint8_t packet_idx = 0;
 	uint8_t ep_sel = 0;
 	uint16_t arg16 = 0;
+
+	for(uint8_t d = 0; d < 50; ++d)
+	{
+		usbd_config[d] = ((uint8_t*)&usbd_default_config)[d];
+	}
+
     while(1)
 	{
     	bytes_available = uart_dma_bytes_available(uart_dma_1);
