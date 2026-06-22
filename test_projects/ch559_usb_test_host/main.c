@@ -120,12 +120,14 @@ void print_bytes_as_hex(UINT8* source, UINT8 num_bytes)
 #define S_CONFIGURE		0x07
 #define S_IDLE			0x08
 #define S_RUN			0x09
+#define S_BYPASS		0x0A
 
 int main()
 {
 	UINT8 usb_state;
 	UINT8 response;
-	UINT16 next_state_time;
+	UINT16 last_state_time;
+	UINT16 next_state_time;	//relative to last_state_time
 	UINT8 datagram[2];
 	UINT16 bytes_available;
 	UINT8 temp;
@@ -159,6 +161,8 @@ int main()
 	uart1_init(BAUD_RATE, UART_1_P26_P27);
 	timer_init(TIMER_0, NULL);
 	timer_set_period(TIMER_0, FREQ_SYS / 1000ul);	//period is 1ms
+	timer_init(TIMER_2, NULL);
+	timer_set_period(TIMER_2, FREQ_SYS / 1000ul);	//period is 1ms
 	EA = 1;	//enable interupts
 	E_DIS = 0;
 	
@@ -180,8 +184,8 @@ int main()
 	usbh_out_transfer_nak_limit = 0;
 	
 	timer_start(TIMER_0);
-	next_state_time = timer_overflow_counts[TIMER_0];
-	
+	last_state_time = timer_overflow_counts[TIMER_0];
+	next_state_time = 0;
 	
 	usb_state = S_DISCONNECTED;
 	while(TRUE)
@@ -261,6 +265,32 @@ int main()
 					usbh_out_transfer_nak_limit &= 0x00FF;
 					usbh_out_transfer_nak_limit |= (UINT16)datagram[1] << 8;
 					break;
+				case 0x1C:
+					usbh_configure_port0(datagram[1]);
+					break;
+				case 0x1D:
+					usbh_configure_port1(datagram[1]);
+					break;
+				case 0x1E:
+					if(datagram[1])
+						usbh_ctrl_set_low_speed();
+					else
+						usbh_ctrl_set_full_speed();
+					break;
+				case 0x1F:
+					if(datagram[1])
+					{
+						usbh_begin_port1_reset();
+						timer_long_delay(TIMER_2, 50);
+						usbh_end_port1_reset();
+					}
+					else
+					{
+						usbh_begin_port0_reset();
+						timer_long_delay(TIMER_2, 50);
+						usbh_end_port0_reset();
+					}
+					break;			
 			}
 		}
 		if(bytes_available && !(temp & 0x80))	//handle read datagram
@@ -354,31 +384,41 @@ int main()
 				case 0x1B:
 					datagram[0] = (UINT8)(usbh_out_transfer_nak_limit >> 8);
 					break;
+				case 0x1C:
+					datagram[0] = UHUB0_CTRL;
+					break;
+				case 0x1D:
+					datagram[0] = UHUB1_CTRL;
+					break;
+				case 0x1E:
+					datagram[0] = (USB_CTRL & bUC_LOW_SPEED) ? 0x01 : 0x00;
+					break;
 			}
 			uart_write_byte(UART_1, datagram[0]);
 		}
 		
-		if(timer_overflow_counts[TIMER_0] >= next_state_time)
+		if((timer_overflow_counts[TIMER_0] - last_state_time) >= next_state_time)
 		{
+			last_state_time = timer_overflow_counts[TIMER_0];
 			switch(usb_state)
 			{
 				case S_DISCONNECTED:
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					if(usbh_port0_is_attached())
 					{
 						uart_write_string(UART_0, str_attached);
-						next_state_time = timer_overflow_counts[TIMER_0] + 50;
+						next_state_time = 50;
 						usb_state = S_RESET_START;
 					}
 					break;
 				case S_RESET_START:
 					usbh_begin_port0_reset();
-					next_state_time = timer_overflow_counts[TIMER_0] + 50;	//reset on root hub port must last at least 50 ms
+					next_state_time = 50;	//reset on root hub port must last at least 50 ms
 					usb_state = S_RESET_END;
 					break;
 				case S_RESET_END:
 					usbh_end_port0_reset();
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					usb_state = S_SET_SPEED;
 					break;
 				case S_SET_SPEED:
@@ -396,15 +436,15 @@ int main()
 					}
 					usbh_set_address(0x00);
 					usb_state = S_CONNECTED;
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					break;
 				case S_CONNECTED:
 					gpio_set_pin(GPIO_PORT_1, GPIO_PIN_4);
-					next_state_time = timer_overflow_counts[TIMER_0] + 10;
+					next_state_time = 10;
 					usb_state = S_GET_DEV_DESCR;
 					break;
 				case S_GET_DEV_DESCR:
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					copy_request(usb_request_dev_descr);
 					response = usbh_control_transfer(&ep0_info, transfer_buf);
 				
@@ -427,7 +467,7 @@ int main()
 					gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_5);
 					break;
 				case S_SET_ADDR:
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					copy_request(usb_request_set_addr);
 					response = usbh_control_transfer(&ep0_info, transfer_buf);
 					
@@ -448,7 +488,7 @@ int main()
 					}
 					break;
 				case S_CONFIGURE:
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					copy_request(usb_request_set_config);
 					response = usbh_control_transfer(&ep0_info, transfer_buf);
 				
@@ -468,13 +508,16 @@ int main()
 					}				
 					break;
 				case S_IDLE, S_RUN:
-					next_state_time = timer_overflow_counts[TIMER_0] + 1;
+					next_state_time = 1;
 					if(!usbh_port0_is_attached())
 					{
 						uart_write_string(UART_0, str_detached);
 						gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, 0);
 						usb_state = S_DISCONNECTED;
 					}
+					break;
+				case S_BYPASS:
+					next_state_time = 0;
 					break;
 				default:
 					break;
