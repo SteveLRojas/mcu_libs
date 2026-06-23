@@ -290,7 +290,10 @@ int main()
 						timer_long_delay(TIMER_2, 50);
 						usbh_end_port0_reset();
 					}
-					break;			
+					break;
+				case 0x20:
+					usbh_set_address(datagram[1]);
+					break;
 			}
 		}
 		if(bytes_available && !(temp & 0x80))	//handle read datagram
@@ -392,6 +395,12 @@ int main()
 					break;
 				case 0x1E:
 					datagram[0] = (USB_CTRL & bUC_LOW_SPEED) ? 0x01 : 0x00;
+					break;
+				case 0x20:
+					datagram[0] = USB_DEV_AD;
+					break;
+				case 0x21:
+					datagram[0] = USB_HUB_ST;
 					break;
 			}
 			uart_write_byte(UART_1, datagram[0]);
