@@ -90,7 +90,7 @@
     <sActiveDebugView></sActiveDebugView>
     <WindowPosition>
       <length>44</length>
-      <flags>2</flags>
+      <flags>0</flags>
       <showCmd>1</showCmd>
       <MinPosition>
         <xPos>-32000</xPos>
@@ -1865,27 +1865,27 @@
       <ActiveTab>0</ActiveTab>
       <Doc>
         <Name>.\main.c</Name>
-        <ColumnNumber>50</ColumnNumber>
-        <TopLine>245</TopLine>
-        <CurrentLine>295</CurrentLine>
+        <ColumnNumber>72</ColumnNumber>
+        <TopLine>224</TopLine>
+        <CurrentLine>244</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
         <Name>.\CH559_USB_HOST.c</Name>
-        <ColumnNumber>0</ColumnNumber>
-        <TopLine>1</TopLine>
-        <CurrentLine>1</CurrentLine>
+        <ColumnNumber>36</ColumnNumber>
+        <TopLine>103</TopLine>
+        <CurrentLine>140</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
       </Doc>
       <Doc>
         <Name>.\CH559_USB_HOST.h</Name>
-        <ColumnNumber>44</ColumnNumber>
-        <TopLine>3</TopLine>
-        <CurrentLine>56</CurrentLine>
+        <ColumnNumber>0</ColumnNumber>
+        <TopLine>1</TopLine>
+        <CurrentLine>11</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
         <PaneID>0</PaneID>
@@ -1893,7 +1893,7 @@
       <Doc>
         <Name>.\CH559_TIMER.c</Name>
         <ColumnNumber>55</ColumnNumber>
-        <TopLine>214</TopLine>
+        <TopLine>213</TopLine>
         <CurrentLine>266</CurrentLine>
         <Folding>1</Folding>
         <ContractedFolders></ContractedFolders>
