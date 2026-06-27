@@ -1,12 +1,12 @@
 #include "ch32v20x.h"
 #include "ch32v203_afio.h"
 #include "ch32v203_core.h"
-#include "debug.h"
-#include "fifo.h"
-#include "ch32v203_uart.h"
+#include "ch32v203_dma.h"
 #include "ch32v203_gpio.h"
 #include "ch32v203_rcc.h"
+#include "ch32v203_uart_dma.h"
 #include "ch32v203_adc.h"
+#include "debug.h"
 
 //Pins:
 // ADC0 = PA0
@@ -27,16 +27,16 @@ int main(void)
 {
 	rcc_apb2_clk_enable(RCC_AFIOEN | RCC_IOPAEN | RCC_IOPBEN | RCC_IOPCEN | RCC_ADC1EN | RCC_ADC2EN | RCC_TIM1EN | RCC_SPI1EN | RCC_USART1EN);
 	rcc_apb1_clk_enable(RCC_TIM2EN | RCC_USBEN);
+	rcc_ahb_clk_enable(RCC_DMA1EN);
 	afio_pcfr1_remap(AFIO_PCFR1_SWJ_CFG_DISABLE);
 
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_PP_OUT, GPIO_PIN_8 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15);	//LED0, LED1, LED2, LED3
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_OUT_50MHZ | GPIO_MODE_AFIO_PP, GPIO_PIN_9);	//TXD
 	gpio_set_mode(GPIOA, GPIO_DIR_SPD_IN | GPIO_MODE_FLOAT_IN, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_10);		//ADC0, ADC1, RXD
 
-    core_delay_init();
-    core_delay_ms(1);
-    uart_init(USART1, 115200);
-    core_enable_irq(USART1_IRQn);
+	core_delay_init();
+	dma_init();
+	uart_dma_init(USART1, 115200);
 
     printf("SYSCLK: %u\n", rcc_compute_sysclk_freq());
 	printf("HCLK: %u\n", rcc_compute_hclk_freq());
