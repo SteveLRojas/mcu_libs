@@ -1,7 +1,7 @@
 #include "CH552.H"
-#include "System.h"
+#include "CH552_RCC.h"
 #include "CH552_GPIO.h"
-#include "CH552_UART.h"
+#include "CH552_USB_CDC.h"
 #include "CH552_TIMER.h"
 #include "CH552_TKEY.h"
 
@@ -46,7 +46,7 @@ void print_bytes_as_hex(UINT8* source, UINT8 num_bytes)
 		line_buf[5] = hex_table[source[idx] & 0x0F];
 		line_buf[6] = '\n';
 		line_buf[7] = '\0';
-		uart_write_string(UART_0, line_buf);
+		cdc_write_string(line_buf);
 	}
 }
 
@@ -66,32 +66,38 @@ void print_words_as_hex(UINT16* source, UINT8 num_words)
 		line_buf[7] = hex_table[source[idx] & 0x0F];
 		line_buf[8] = '\n';
 		line_buf[9] = '\0';
-		uart_write_string(UART_0, line_buf);
+		cdc_write_string(line_buf);
 	}
 }
 
 int main()
 {
 	char last_keep_str[4];
+	UINT8 prev_control_line_state;
 	
-	CfgFsys();
+	rcc_set_clk_freq(RCC_CLK_FREQ_24M);
 	
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_1, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7);
 	gpio_set_mode(GPIO_MODE_PP, GPIO_PORT_3, GPIO_PIN_1);
 	gpio_set_mode(GPIO_MODE_INPUT, GPIO_PORT_3, GPIO_PIN_0);
 	
-	uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
+	//uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
 	timer_init(TIMER_0, NULL);
 	timer_set_period(TIMER_0, FREQ_SYS / 1000ul);	//period is 1ms
 	EA = 1;	//enable interupts
 	E_DIS = 0;
 	
+	cdc_init();
+	cdc_set_serial_state(CDC_SS_TXCARRIER | CDC_SS_RXCARRIER);
+	prev_control_line_state = cdc_control_line_state;
+	while(!cdc_config);
 	timer_long_delay(TIMER_0, 250);
-	uart_write_string(UART_0, test_string);
+	cdc_write_string(test_string);
+	
 	byte_to_hex(RESET_KEEP, last_keep_str);
 	last_keep_str[2] = '\n';
 	last_keep_str[3] = '\0';
-	uart_write_string(UART_0, last_keep_str);
+	cdc_write_string(last_keep_str);
 	
 	tkey_init(TKEY_FAST);
 	tkey_schedule[0] = TKEY_TIN2_P14;
@@ -102,17 +108,23 @@ int main()
 	tkey_init_schedule();
 	tkey_calibrate();
 	
-	uart_write_string(UART_0, str_offsets);
+	cdc_write_string(str_offsets);
 	print_words_as_hex((UINT16*)tkey_offsets, 6);
 	
 	while(TRUE)
 	{
 		tkey_run_schedule(4);
 		timer_long_delay(TIMER_0, 250);
-		uart_write_string(UART_0, str_keys_raw);
+		cdc_write_string(str_keys_raw);
 		print_words_as_hex(tkey_results_raw, 4);
-		uart_write_string(UART_0, str_keys);
+		cdc_write_string(str_keys);
 		print_bytes_as_hex(tkey_results, 4);
+		
+		if(prev_control_line_state != cdc_control_line_state)
+		{
+			cdc_set_serial_state(cdc_control_line_state & 3);
+			prev_control_line_state = cdc_control_line_state;
+		}
 	}
 }
 

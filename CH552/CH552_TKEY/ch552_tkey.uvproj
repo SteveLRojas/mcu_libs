@@ -206,7 +206,7 @@
             <Mode2>0</Mode2>
             <useCB>0</useCB>
             <useXB>0</useXB>
-            <useL251>0</useL251>
+            <useL251>1</useL251>
             <useA251>0</useA251>
             <Mx51>0</Mx51>
             <ModC812>0</ModC812>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xffff</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -346,14 +346,15 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
-            <MiscControls></MiscControls>
-            <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <OverlayString>?PR?CDC_INIT?CH552_USB_CDC ~ (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC), ?PR?USB_ISR?CH552_USB ! (?PR?CDC_ON_SOF?CH552_USB_CDC, ?PR?_CDC_ON_OUT?CH552_USB_CDC, ?PR?_CDC_ON_IN?CH552_USB_CDC, ?PR?_CDC_ON_SETUP?CH552_USB_CDC, ?PR?CDC_ON_RST?CH552_USB_CDC)</OverlayString>
+            <MiscControls>REMOVEUNUSED</MiscControls>
+            <DisableWarningNumbers></DisableWarningNumbers>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
-            <UserClasses></UserClasses>
+            <UserClasses>XDATA (X:0x0-X:0x3FF), HDATA (X:0x0-X:0x3FF), CODE (C:0x0-C:0x37FF), CONST (C:0x0-C:0x37FF), 
+ECODE (C:0x0-C:0x37FF), HCONST (C:0x0-C:0x37FF)</UserClasses>
             <CSection></CSection>
             <UserSection></UserSection>
             <CodeBaseAddress>0X0000-0X37FF</CodeBaseAddress>
@@ -387,16 +388,6 @@
               <FilePath>.\CH552.H</FilePath>
             </File>
             <File>
-              <FileName>CH552_FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_FIFO.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_FIFO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_FIFO.h</FilePath>
-            </File>
-            <File>
               <FileName>CH552_GPIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH552_GPIO.c</FilePath>
@@ -417,29 +408,9 @@
               <FilePath>.\CH552_TIMER.h</FilePath>
             </File>
             <File>
-              <FileName>CH552_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH552_UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH552_UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH552_UART.h</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>System.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\System.c</FilePath>
-            </File>
-            <File>
-              <FileName>System.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\System.h</FilePath>
             </File>
             <File>
               <FileName>CH552_TKEY.c</FileName>
@@ -450,6 +421,36 @@
               <FileName>CH552_TKEY.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH552_TKEY.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_USB_CDC.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH552_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH552_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH552_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

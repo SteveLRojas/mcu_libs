@@ -1,5 +1,4 @@
 #include "CH552.H"
-#include "System.h"
 #include "CH552_TKEY.h"
 
 volatile UINT16 tkey_results_raw[6];
@@ -12,7 +11,7 @@ signed short tkey_threshold = TKEY_DEFAULT_THRESHOLD;
 
 UINT8 tkey_sample_index;
 UINT8 tkey_result_index;
-signed short tkey_offsets[6];
+UINT16 tkey_offsets[6];
 
 void tkey_isr(void) interrupt INT_NO_TKEY
 {
@@ -23,7 +22,7 @@ void tkey_isr(void) interrupt INT_NO_TKEY
 	
 	channel = tkey_schedule[tkey_result_index] - 1;
 	tkey_results_raw[tkey_result_index] = sample & 0x3FFF;
-	tkey_results[tkey_result_index] = (tkey_offsets[channel] - ((signed short)(sample & 0x3FFF))) > tkey_threshold;
+	tkey_results[tkey_result_index] = ((signed short)tkey_offsets[channel] - ((signed short)(sample & 0x3FFF))) > tkey_threshold;
 	tkey_result_index = tkey_sample_index;
 	
 	if(--tkey_pending_samples)
@@ -66,7 +65,7 @@ void tkey_calibrate(void)
 	{
 		tkey_run_schedule(tkey_schedule_len);
 		while(tkey_pending_samples);
-		for(i = 0; i < 6; ++i)
+		for(i = 0; i < tkey_schedule_len; ++i)
 		{
 			channel = tkey_schedule[i] - 1;
 			tkey_offsets[channel] += tkey_results_raw[i];
@@ -75,7 +74,7 @@ void tkey_calibrate(void)
 	
 	for(d = 0; d < 6; ++d)
 	{
-		tkey_offsets[d] = (UINT16)tkey_offsets[d] >> 2;
+		tkey_offsets[d] = tkey_offsets[d] >> 2;
 	}
 }
 
@@ -84,6 +83,8 @@ void tkey_run_schedule(UINT8 num_samples)
 	TKEY_CTRL &= ~(bTKC_CHAN2 | bTKC_CHAN1 | bTKC_CHAN0);
 	TKEY_CTRL |= tkey_schedule[tkey_sample_index];
 	++tkey_sample_index;
+	if(tkey_sample_index == tkey_schedule_len)
+		tkey_sample_index = 0;
 	tkey_pending_samples = num_samples;
 	IE_TKEY = 1;
 }
@@ -101,7 +102,7 @@ UINT8 tkey_finish_single(void)
 	UINT8 channel = (TKEY_CTRL & (bTKC_CHAN2 | bTKC_CHAN1 | bTKC_CHAN0)) - 1;
 	while(!(TKEY_CTRL & bTKC_IF));
 	sample = (TKEY_DAT & 0x3FFF);
-	return (tkey_offsets[channel] - sample) > tkey_threshold;
+	return ((signed short)tkey_offsets[channel] - sample) > tkey_threshold;
 }
 
 UINT8 tkey_read_single(UINT8 channel)
