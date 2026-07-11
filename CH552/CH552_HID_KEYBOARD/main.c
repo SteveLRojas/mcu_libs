@@ -3,7 +3,7 @@
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
 #include "CH552_TIMER.h"
-#include "usb_hid_keyboard.h"
+#include "CH552_USB_HID_KB.h"
 
 #define  BAUD_RATE  125000ul
 
@@ -42,6 +42,8 @@ int main()
 	uart0_init(TIMER_1, BAUD_RATE, UART_0_P30_P31);
 	timer_init(TIMER_0, NULL);
 	timer_set_period(TIMER_0, FREQ_SYS / 1000ul);	//period is 1ms
+	timer_init(TIMER_2, NULL);
+	timer_set_period(TIMER_2, 4ul * FREQ_SYS / 1000ul);	//period is 4ms
 	EA = 1;	//enable interupts
 	E_DIS = 0;
 	
@@ -58,6 +60,7 @@ int main()
 	uart_write_string(UART_0, last_keep_str);
 	
 	hid_kb_init();
+	timer_start(TIMER_2);
 	
 	while(TRUE)
 	{
@@ -101,6 +104,12 @@ int main()
 				hid_kb_release_key(RESET_KEEP);
 			}
 			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_6, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_7));
+		}
+		
+		if(hid_kb_idle_rate && ((UINT8)timer_overflow_counts[TIMER_2] >= hid_kb_idle_rate))
+		{
+			hid_kb_send_report();
+			timer_overflow_counts[TIMER_2] = 0;
 		}
 	}
 }

@@ -1,6 +1,33 @@
 #include "CH552.H"
 #include "CH552_FLASH.h"
 
+//HINT: setting both start and end to 0 will clear the entire flash
+void flash_clear_range(UINT8 start, UINT8 end, UINT8 val)
+{
+	E_DIS = 1;
+	SAFE_MOD = 0x55;
+	SAFE_MOD = 0xAA;
+	GLOBAL_CFG |= bDATA_WE;
+	SAFE_MOD = 0x00;
+	
+	ROM_ADDR_H = 0xC0;
+	start = start << 1;
+	end = end << 1;
+	do
+	{
+		ROM_ADDR_L = start;
+		ROM_DATA_L = val;
+		ROM_CTRL = ROM_CMD_WRITE;
+		start += 2;
+	} while(start != end);
+	
+	SAFE_MOD = 0x55;
+	SAFE_MOD = 0xAA;
+	GLOBAL_CFG &= ~bDATA_WE;
+	SAFE_MOD = 0x00;
+	E_DIS = 0;
+}
+
 void flash_write_byte(UINT8 offset, UINT8 val)
 {
 	E_DIS = 1;

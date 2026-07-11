@@ -1,6 +1,8 @@
 #ifndef _USB_HID_KEYBOARD_H_
 #define _USB_HID_KEYBOARD_H_
 
+#define HID_USE_UNIQUE_ID 1
+
 #define HID_ENDP0_SIZE 8
 #define HID_ENDP1_SIZE 8
 
@@ -28,6 +30,7 @@
 #define HID_KB_LED_COMPOSE		0x08
 #define HID_KB_LED_KANA			0x10
 
+extern volatile UINT8 hid_kb_config;
 extern volatile UINT8 hid_kb_report_pending;
 extern volatile UINT8 hid_kb_idle_rate;
 extern volatile UINT8 hid_kb_indicators;

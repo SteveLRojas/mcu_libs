@@ -3,6 +3,7 @@
 
 #define KEEP_ENDIANNESS 1
 
+void flash_clear_range(UINT8 start, UINT8 end, UINT8 val);
 void flash_write_byte(UINT8 offset, UINT8 val);
 void flash_write(UINT8 offset, UINT8* src, UINT8 num_bytes);
 UINT8 flash_read_byte(UINT8 offset);

@@ -39,8 +39,15 @@ void tkey_isr(void) interrupt INT_NO_TKEY
 
 void tkey_init(UINT8 tkey_speed)
 {
+	UINT8 d;
+	
 	IE_TKEY = 0;
 	TKEY_CTRL = tkey_speed;
+	for(d = 0; d < 6; ++d)
+	{
+		tkey_results_raw[d] = 0;
+		tkey_results[d] = 0;
+	}
 }
 
 void tkey_init_schedule(void)

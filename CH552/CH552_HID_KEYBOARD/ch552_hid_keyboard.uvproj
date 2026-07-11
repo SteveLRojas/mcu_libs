@@ -346,7 +346,7 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?HID_KB_INIT?USB_HID_KEYBOARD ~ (?PR?_HID_KB_ON_OUT?USB_HID_KEYBOARD, ?PR?_HID_KB_ON_IN?USB_HID_KEYBOARD, ?PR?_HID_KB_ON_SETUP?USB_HID_KEYBOARD, ?PR?HID_KB_ON_RST?USB_HID_KEYBOARD), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_KB_ON_OUT?USB_HID_KEYBOARD, ?PR?_HID_KB_ON_IN?USB_HID_KEYBOARD, ?PR?_HID_KB_ON_SETUP?USB_HID_KEYBOARD, ?PR?HID_KB_ON_RST?USB_HID_KEYBOARD)</OverlayString>
+            <OverlayString>?PR?HID_KB_INIT?CH552_USB_HID_KB ~ (?PR?_HID_KB_ON_OUT?CH552_USB_HID_KB, ?PR?_HID_KB_ON_IN?CH552_USB_HID_KB, ?PR?_HID_KB_ON_SETUP?CH552_USB_HID_KB, ?PR?HID_KB_ON_RST?CH552_USB_HID_KB), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_KB_ON_OUT?CH552_USB_HID_KB, ?PR?_HID_KB_ON_IN?CH552_USB_HID_KB, ?PR?_HID_KB_ON_SETUP?CH552_USB_HID_KB, ?PR?HID_KB_ON_RST?CH552_USB_HID_KB)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile>.\link.lin</LinkerCmdFile>
@@ -452,14 +452,14 @@
               <FilePath>.\main.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_keyboard.c</FileName>
+              <FileName>CH552_USB_HID_KB.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\usb_hid_keyboard.c</FilePath>
+              <FilePath>.\CH552_USB_HID_KB.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_keyboard.h</FileName>
+              <FileName>CH552_USB_HID_KB.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\usb_hid_keyboard.h</FilePath>
+              <FilePath>.\CH552_USB_HID_KB.h</FilePath>
             </File>
           </Files>
         </Group>
