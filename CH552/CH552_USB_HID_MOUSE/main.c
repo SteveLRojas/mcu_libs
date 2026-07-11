@@ -3,7 +3,7 @@
 #include "CH552_GPIO.h"
 #include "CH552_UART.h"
 #include "CH552_TIMER.h"
-#include "usb_hid_mouse.h"
+#include "CH552_USB_HID_MS.h"
 	
 char code test_string[] = "Unicorn\n";
 

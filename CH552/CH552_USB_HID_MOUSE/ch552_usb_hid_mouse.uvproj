@@ -346,7 +346,7 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString>?PR?HID_INIT?USB_HID_MOUSE ~ (?PR?_HID_ON_OUT?USB_HID_MOUSE, ?PR?_HID_ON_IN?USB_HID_MOUSE, ?PR?_HID_ON_SETUP?USB_HID_MOUSE, ?PR?HID_ON_RST?USB_HID_MOUSE), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?USB_HID_MOUSE, ?PR?_HID_ON_IN?USB_HID_MOUSE, ?PR?_HID_ON_SETUP?USB_HID_MOUSE, ?PR?HID_ON_RST?USB_HID_MOUSE)</OverlayString>
+            <OverlayString>?PR?HID_INIT?CH552_USB_HID_MS ~ (?PR?_HID_ON_OUT?CH552_USB_HID_MS, ?PR?_HID_ON_IN?CH552_USB_HID_MS, ?PR?_HID_ON_SETUP?CH552_USB_HID_MS, ?PR?HID_ON_RST?CH552_USB_HID_MS), ?PR?USB_ISR?CH552_USB ! (?PR?_HID_ON_OUT?CH552_USB_HID_MS, ?PR?_HID_ON_IN?CH552_USB_HID_MS, ?PR?_HID_ON_SETUP?CH552_USB_HID_MS, ?PR?HID_ON_RST?CH552_USB_HID_MS)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
             <LinkerCmdFile>.\link.lin</LinkerCmdFile>
@@ -452,14 +452,14 @@
               <FilePath>.\System.h</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_mouse.c</FileName>
+              <FileName>CH552_USB_HID_MS.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\usb_hid_mouse.c</FilePath>
+              <FilePath>.\CH552_USB_HID_MS.c</FilePath>
             </File>
             <File>
-              <FileName>usb_hid_mouse.h</FileName>
+              <FileName>CH552_USB_HID_MS.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\usb_hid_mouse.h</FilePath>
+              <FilePath>.\CH552_USB_HID_MS.h</FilePath>
             </File>
           </Files>
         </Group>

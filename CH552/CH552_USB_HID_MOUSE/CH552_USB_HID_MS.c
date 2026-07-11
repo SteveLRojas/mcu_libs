@@ -1,24 +1,27 @@
 #include "CH552.H"
 #include "CH552_USB.h"
-#include "usb_hid_mouse.h"
+#include "CH552_USB_HID_MS.h"
 
 #define HID_DEV_DESCR_SIZE 18
 #define HID_CONF_DESCR_SIZE 34
 #define HID_REPORT_DESCR_SIZE 52
 #define HID_MOUSE_REPORT_SIZE 4
 
-UINT8 xdata ep0_buffer[HID_ENDP0_BUF_SIZE];
-UINT8 xdata ep1_buffer[HID_ENDP1_BUF_SIZE];
+UINT8 xdata hid_ep0_buf[HID_ENDP0_BUF_SIZE];
+UINT8 xdata hid_ep1_buf[HID_ENDP1_BUF_SIZE];
 
-#define hid_setup_buf ((PUSB_SETUP_REQ)ep0_buffer)
+#define hid_setup_buf ((PUSB_SETUP_REQ)hid_ep0_buf)
 
 UINT8 hid_setup_req;
 UINT8 hid_setup_type;
 UINT16 hid_setup_len;
+UINT8 code* hid_descriptor_ptr;
+#if HID_USE_UNIQUE_ID
+UINT8 hid_string_serial_offset;
+#endif
 
-UINT8 code* descriptor_ptr;
 UINT8 hid_address;
-UINT8 hid_config;
+volatile UINT8 hid_config;
 
 volatile UINT8 hid_report_pending;
 volatile UINT8 hid_idle_rate;
@@ -143,24 +146,69 @@ UINT8 code hid_string_product[] =
 };
 
 /* USB Device String Serial */
+#if HID_USE_UNIQUE_ID
+UINT8 code hid_string_serial[] = {22, 0x03};
+#else
 UINT8 code hid_string_serial[] =
 {
-	22,          
-	0x03,                   
+	22,
+	0x03,
 	'D', 0, 'E', 0, 'A', 0, 'D', 0, 'B', 0, 'E', 0 , 'E', 0, 'F', 0, '0', 0, '2', 0
 };
+#endif
 
-void hid_copy_descriptor(UINT8 len)
+void hid_ms_copy_descriptor(UINT8 len)
 {
-	UINT8* dest = ep0_buffer;
+	UINT8* dest = hid_ep0_buf;
 	while(len)
 	{
-		*dest = *descriptor_ptr;
+		*dest = *hid_descriptor_ptr;
 		++dest;
-		++descriptor_ptr;
+		++hid_descriptor_ptr;
 		--len;
 	}
 }
+
+#if HID_USE_UNIQUE_ID
+void hid_gen_string_serial(UINT8 len)
+{
+	UINT8* dest = hid_ep0_buf;
+	UINT16 chip_id;
+	UINT8 id_hex;
+	while(len && (hid_string_serial_offset < 2))
+	{
+		*dest = hid_string_serial[hid_string_serial_offset];
+		dest += 1;
+		hid_string_serial_offset += 1;
+		len -= 1;
+	}
+	
+	while(len)
+	{
+		if(hid_string_serial_offset & 0x01)
+		{
+			*dest = 0x00;
+		}
+		else
+		{
+			chip_id = ROM_CHIP_ID_HX | 0x01;	//The LSB is set here and byte order reversed later to skip constant at 0x3FFB
+			chip_id = (chip_id + ((hid_string_serial_offset - 2) >> 2)) ^ 0x01;
+			id_hex = *((UINT8 code*)chip_id);
+			if((hid_string_serial_offset >> 1) & 0x01)
+				id_hex = id_hex >> 4;
+			id_hex &= 0x0F;
+			if(id_hex < 10)
+				id_hex += '0';
+			else
+				id_hex += 'A' - 10;
+			*dest = id_hex;
+		}
+		dest += 1;
+		hid_string_serial_offset += 1;
+		len -= 1;
+	}
+}
+#endif
 
 void hid_on_out(UINT8 ep)
 {
@@ -183,7 +231,14 @@ void hid_on_in(UINT8 ep)
 			{
 				case USB_GET_DESCRIPTOR:
 					len = hid_setup_len >= HID_ENDP0_SIZE ? HID_ENDP0_SIZE : hid_setup_len;
-					hid_copy_descriptor(len);
+#if HID_USE_UNIQUE_ID
+					if(hid_string_serial_offset)
+						hid_gen_string_serial(len);
+					else
+						hid_ms_copy_descriptor(len);
+#else
+					hid_ms_copy_descriptor(len);
+#endif
 					hid_setup_len -= len;
 					usb_set_ep0_tx_len(len);
 					usb_toggle_ep0_in_toggle();
@@ -210,9 +265,9 @@ void hid_on_in(UINT8 ep)
 		usb_set_ep1_tx_len(0);
 		usb_set_ep1_in_res(USB_IN_RES_NAK);
 		
-		ep1_buffer[1] = 0;	//clear movement and scrolling
-		ep1_buffer[2] = 0;
-		ep1_buffer[3] = 0;
+		hid_ep1_buf[1] = 0;	//clear movement and scrolling
+		hid_ep1_buf[2] = 0;
+		hid_ep1_buf[3] = 0;
 		hid_report_pending = 0;
 	}
 }
@@ -227,7 +282,10 @@ void hid_on_setup(UINT8 ep)
 		hid_setup_len = ((UINT16)hid_setup_buf->wLengthH<<8) | (hid_setup_buf->wLengthL);
 		hid_setup_req = hid_setup_buf->bRequest;
 		hid_setup_type = hid_setup_buf->bRequestType;
-		descriptor_ptr = (UINT8 code*)NULL;
+		hid_descriptor_ptr = (UINT8 code*)NULL;
+#if HID_USE_UNIQUE_ID
+		hid_string_serial_offset = 0;
+#endif
 		len = 0;
 		
 		if((hid_setup_type & USB_REQ_TYP_MASK) == USB_REQ_TYP_STANDARD)
@@ -235,8 +293,8 @@ void hid_on_setup(UINT8 ep)
 			switch(hid_setup_req)
 			{
 				case USB_GET_STATUS:
-					ep0_buffer[0] = 0x00;
-					ep0_buffer[1] = 0x00;
+					hid_ep0_buf[0] = 0x00;
+					hid_ep0_buf[1] = 0x00;
 					len = 2;
 					break;
 				case USB_CLEAR_FEATURE:
@@ -292,41 +350,44 @@ void hid_on_setup(UINT8 ep)
 					switch(hid_setup_buf->wValueH)
 					{
 						case USB_DESCR_TYP_DEVICE:
-							descriptor_ptr = hid_device_descriptor;
+							hid_descriptor_ptr = hid_device_descriptor;
 							len = HID_DEV_DESCR_SIZE;
 							break;
 						case USB_DESCR_TYP_CONFIG:
-							descriptor_ptr = hid_config_descriptor;
+							hid_descriptor_ptr = hid_config_descriptor;
 							len = HID_CONF_DESCR_SIZE;
 							break;
 						case USB_DESCR_TYP_STRING:
 							switch(hid_setup_buf->wValueL)
 							{
 								case 0:
-									descriptor_ptr = hid_string_lang_id;
+									hid_descriptor_ptr = hid_string_lang_id;
 									break;
 								case 1:
-									descriptor_ptr = hid_string_vendor;
+									hid_descriptor_ptr = hid_string_vendor;
 									break;
 								case 2:
-									descriptor_ptr = hid_string_product;
+									hid_descriptor_ptr = hid_string_product;
 									break;
 								case 3:
-									descriptor_ptr = hid_string_serial;
+									hid_descriptor_ptr = hid_string_serial;
+#if HID_USE_UNIQUE_ID
+									hid_string_serial_offset = 0xFF;
+#endif
 									break;
 								case 4:
-									descriptor_ptr = hid_string_product;
+									hid_descriptor_ptr = hid_string_product;
 									break;
 								default:
-									descriptor_ptr = hid_string_serial;
+									hid_descriptor_ptr = hid_string_product;
 									break;
 							}
-							len = descriptor_ptr[0];
+							len = hid_descriptor_ptr[0];
 							break;
 						case USB_DESCR_TYP_REPORT:
 							if(hid_setup_buf->wValueL == 0)
 							{
-								descriptor_ptr = hid_report_descriptor;
+								hid_descriptor_ptr = hid_report_descriptor;
 								len = HID_REPORT_DESCR_SIZE;
 							}
 							else
@@ -338,14 +399,14 @@ void hid_on_setup(UINT8 ep)
 					}
 					break;
 				case USB_GET_CONFIGURATION:
-					ep0_buffer[0] = hid_config;
+					hid_ep0_buf[0] = hid_config;
 					len = 1;
 					break;
 				case USB_SET_CONFIGURATION:
 					hid_config = hid_setup_buf->wValueL;
 					break;
 				case USB_GET_INTERFACE:
-					ep0_buffer[0] = 0;
+					hid_ep0_buf[0] = 0;
 					len = 1;
 					break;
 				case USB_SET_INTERFACE:
@@ -363,16 +424,16 @@ void hid_on_setup(UINT8 ep)
 				case HID_GET_REPORT:
 					for(idx = 0; idx < HID_MOUSE_REPORT_SIZE; ++idx)
 					{
-						ep0_buffer[idx] = ep1_buffer[idx];	//the report does not have its own buffer, it stays in ep1
+						hid_ep0_buf[idx] = hid_ep1_buf[idx];	//the report does not have its own buffer, it stays in ep1
 					}
 					len = HID_MOUSE_REPORT_SIZE;
 					break;
 				case HID_GET_IDLE:
-					ep0_buffer[0] = hid_idle_rate;
+					hid_ep0_buf[0] = hid_idle_rate;
 					len = 1;
 					break;
 				case HID_GET_PROTOCOL:
-					ep0_buffer[0] = hid_protocol;
+					hid_ep0_buf[0] = hid_protocol;
 					len = 1;
 					break;
 				case HID_SET_REPORT:
@@ -404,9 +465,19 @@ void hid_on_setup(UINT8 ep)
 			if(hid_setup_len > len)
 				hid_setup_len = len;
 			len = (hid_setup_len > HID_ENDP0_SIZE) ? HID_ENDP0_SIZE : hid_setup_len;
-			
-			if(descriptor_ptr != (UINT8 code*)NULL)
-				hid_copy_descriptor(len);
+
+#if HID_USE_UNIQUE_ID			
+			if(hid_string_serial_offset)
+			{
+				hid_string_serial_offset = 0;
+				hid_gen_string_serial(len);
+			}
+			else if(hid_descriptor_ptr != (UINT8 code*)NULL)
+				hid_ms_copy_descriptor(len);
+#else
+			if(hid_descriptor_ptr != (UINT8 code*)NULL)
+				hid_ms_copy_descriptor(len);
+#endif
 			
 			hid_setup_len -= len;
 			usb_set_ep0_tx_len(len);
@@ -420,10 +491,10 @@ void hid_on_rst(void)
 	usb_set_ep0_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0);
 	usb_set_ep1_tog_res(USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_1);
 	
-	ep1_buffer[0] = 0;
-	ep1_buffer[1] = 0;
-	ep1_buffer[2] = 0;
-	ep1_buffer[3] = 0;
+	hid_ep1_buf[0] = 0;
+	hid_ep1_buf[1] = 0;
+	hid_ep1_buf[2] = 0;
+	hid_ep1_buf[3] = 0;
 	hid_report_pending = 0;
 	hid_idle_rate = 0;
 	hid_protocol = 0x01;	//default to report protocol
@@ -431,8 +502,8 @@ void hid_on_rst(void)
 
 usb_config_t code usb_config = 
 {
-	(UINT16)ep0_buffer,
-	(UINT16)ep1_buffer,
+	(UINT16)hid_ep0_buf,
+	(UINT16)hid_ep1_buf,
 	0x0000,
 	0x0000,
 	USB_OUT_RES_ACK | USB_IN_RES_NAK | EP_OUT_TOG_0 | EP_IN_TOG_0 | EP_AUTOTOG_0,
@@ -466,25 +537,25 @@ void hid_mouse_send_report(void)
 
 void hid_mouse_press(UINT8 buttons)
 {
-	ep1_buffer[0] = ep1_buffer[0] | buttons;
+	hid_ep1_buf[0] = hid_ep1_buf[0] | buttons;
 	hid_mouse_send_report();
 }
 
 void hid_mouse_release(UINT8 buttons)
 {
-	ep1_buffer[0] = ep1_buffer[0] & ~buttons;
+	hid_ep1_buf[0] = hid_ep1_buf[0] & ~buttons;
 	hid_mouse_send_report();
 }
 
 void hid_mouse_move(UINT8 x_rel, UINT8 y_rel)
 {
-	ep1_buffer[1] += x_rel;
-	ep1_buffer[2] += y_rel;
+	hid_ep1_buf[1] += x_rel;
+	hid_ep1_buf[2] += y_rel;
 	hid_mouse_send_report();
 }
 
 void hid_mouse_scroll(UINT8 scroll_rel)
 {
-	ep1_buffer[3] += scroll_rel;
+	hid_ep1_buf[3] += scroll_rel;
 	hid_mouse_send_report();
 }

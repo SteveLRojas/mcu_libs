@@ -1,6 +1,8 @@
 #ifndef _USB_HID_MOUSE_H_
 #define _USB_HID_MOUSE_H_
 
+#define HID_USE_UNIQUE_ID 1
+
 #define HID_ENDP0_SIZE 8
 #define HID_ENDP1_SIZE 4
 
@@ -12,6 +14,7 @@
 #define HID_MOUSE_BTN_RIGHT 0x02
 #define HID_MOUSE_BTN_WHEEL 0x04
 
+extern volatile UINT8 hid_config;
 extern volatile UINT8 hid_report_pending;
 extern volatile UINT8 hid_idle_rate;
 
