@@ -3,12 +3,12 @@
 #include "ch32v203_rcc.h"
 #include "debug.h"
 
-#if(DEBUG == DEBUG_CDC)
+#if(DEBUG_TYP == DEBUG_TYP_CDC_USBD)
 #include "ch32v203_usbd_cdc.h"
-#elif DEBUG_UART_TYP == DEBUG_UART_TYP_INTERRUPT
+#elif(DEBUG_TYP == DEBUG_TYP_UART_INT)
 #include "fifo.h"
 #include "ch32v203_uart.h"
-#elif DEBUG_UART_TYP == DEBUG_UART_TYP_DMA
+#elif((DEBUG_TYP == DEBUG_TYP_UART_DMA) || (DEBUG_TYP == DEBUG_TYP_UART_DBG))
 #include "ch32v203_uart_dma.h"
 #endif
 
@@ -16,23 +16,13 @@
 __attribute__((used))
 int _write(int fd, char* buf, int size)
 {
-#if(DEBUG == DEBUG_UART_1)
-	uart_write_bytes(USART1, uart1_tx_fifo, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_2)
-	uart_write_bytes(USART2, uart2_tx_fifo, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_3)
-	uart_write_bytes(USART3, uart3_tx_fifo, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_4)
-	uart_write_bytes(USART4, uart4_tx_fifo, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_DMA_1)
-	uart_write_bytes(uart_dma_1, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_DMA_2)
-	uart_write_bytes(uart_dma_2, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_DMA_3)
-	uart_write_bytes(uart_dma_3, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_UART_DMA_4)
-	uart_write_bytes(uart_dma_4, (uint8_t*)buf, (uint16_t)size);
-#elif(DEBUG == DEBUG_CDC)
+#if(DEBUG_TYP == DEBUG_TYP_UART_INT)
+	uart_write_bytes(DEBUG_UART, DEBUG_TX_FIFO, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG_TYP == DEBUG_TYP_UART_DMA)
+	uart_dma_write_bytes(DEBUG_UART_DMA, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG_TYP == DEBUG_TYP_UART_DBG)
+	uart_dma_debug_write(DEBUG_UART, (uint8_t*)buf, (uint16_t)size);
+#elif(DEBUG_TYP == DEBUG_TYP_CDC_USBD)
 	cdc_write_bytes((uint8_t*)buf, (uint16_t)size);
 #endif
 	return size;

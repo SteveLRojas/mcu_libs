@@ -4,27 +4,20 @@
 #include "stdio.h"
 
 // Debug interface options
-#define DEBUG_UART_1		1
-#define DEBUG_UART_2		2
-#define DEBUG_UART_3		3
-#define DEBUG_UART_4		4
-#define DEBUG_UART_DMA_1	5
-#define DEBUG_UART_DMA_2	6
-#define DEBUG_UART_DMA_3	7
-#define DEBUG_UART_DMA_4	8
-#define DEBUG_CDC			9
+#define DEBUG_TYP_UART_INT	1
+#define DEBUG_TYP_UART_DMA	2
+#define DEBUG_TYP_UART_DBG	3
+#define DEBUG_TYP_CDC_USBD	4
 
 //UART type options
-#define DEBUG_UART_TYP_INTERRUPT	0
-#define DEBUG_UART_TYP_DMA			1
+#define DEBUG_UART		USART1
+#define DEBUG_TX_FIFO	uart1_tx_fifo
+#define DEBUG_UART_DMA	uart_dma_1
 
 // Select the debug interface
-#ifndef DEBUG
-#define DEBUG   DEBUG_UART_1
+#ifndef DEBUG_TYP
+#define DEBUG_TYP   DEBUG_TYP_UART_INT
 #endif
-
-// Select the UART type
-#define DEBUG_UART_TYP	DEBUG_UART_TYP_INTERRUPT
 
 #if(DEBUG)
   #define PRINT(format, ...)    printf(format, ##__VA_ARGS__)
