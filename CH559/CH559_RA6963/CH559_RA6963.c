@@ -99,7 +99,7 @@ UINT8 code ra6963_8x8_font[1024] = {
 void ra6963_init(void)
 {
 	ra6963_status_mask = 0x03;
-	gpio_set_port_mode(RA6963_PORT_SD, GPIO_PORT_MODE_PP);
+	gpio_set_port_mode(GPIO_PORT_MODE_PP, RA6963_PORT_SD);
 	gpio_set_pin_mode(GPIO_MODE_INPUT, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
 	
 	ra6963_send_data(0x00);

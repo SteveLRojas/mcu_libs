@@ -61,7 +61,7 @@ int main()
 	// Configure display pins
 	gpio_set_port_strength(GPIO_PORT_STRENGTH_5, GPIO_PORT_2);
 	gpio_set_port_mode(GPIO_PORT_MODE_PP, GPIO_PORT_4);
-	gpio_set_port_strength(GPIO_PORT_STRENGTH_20, GPIO_PORT_4);
+	gpio_set_p4_strength(GPIO_PORT_STRENGTH_20);
 	gpio_set_pin_mode(GPIO_MODE_OUTPUT_PP, GPIO_PORT_4, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 	gpio_set_pin(GPIO_PORT_4, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
 	
