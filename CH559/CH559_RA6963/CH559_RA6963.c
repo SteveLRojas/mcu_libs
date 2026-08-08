@@ -2,12 +2,12 @@
 #include "CH559.H"
 #include "CH559_GPIO.h"
 #include "CH559_RCC.h"
-#include "CH559_SPI.h"
-#include "CH559_ST7920.h"
+#include "CH559_RA6963.h"
 
-UINT8 st7920_frame_buf[ST7920_BUF_SIZE];
+UINT8 ra6963_status_mask;
+UINT8 ra6963_frame_buf[RA6963_BUF_SIZE];
 
-UINT8 code st7920_8x8_font[1024] = {
+UINT8 code ra6963_8x8_font[1024] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -96,141 +96,167 @@ UINT8 code st7920_8x8_font[1024] = {
 	0x00, 0x00, 0x00, 0x00
 };
 
-void st7920_init(void)
+void ra6963_init(void)
 {
-	gpio_clear_pin(ST7920_PORT_CS, ST7920_PIN_CS);
-	spi_init(ST7920_SPI_MODULE, ST7920_SPI_CLK_DIV, SPI_MODE_3);
-
-	st7920_send_command(ST7920_COM_FUNCTION_SET | ST7920_FUNCTION_SET_8_BIT);
-	rcc_delay_us(ST7920_FN_SET_INIT0_TIM);
-	st7920_send_command(ST7920_COM_FUNCTION_SET | ST7920_FUNCTION_SET_8_BIT);
-	rcc_delay_us(ST7920_FN_SET_INIT1_TIM);
-	st7920_send_command(ST7920_COM_DISP_ON_OFF | ST7920_DISP_ON_OFF_DISP_ON);
-	rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-	st7920_send_command(ST7920_COM_FUNCTION_SET | ST7920_FUNCTION_SET_8_BIT | ST7920_FUNCTION_SET_EXT);
-	rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-	st7920_send_command(ST7920_COM_FUNCTION_SET | ST7920_FUNCTION_SET_8_BIT | ST7920_FUNCTION_SET_EXT | ST7920_FUNCTION_SET_GRAPHIC);
-	rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-
-	st7920_clear_display(0x00);
-	st7920_update_display();
+	ra6963_status_mask = 0x03;
+	gpio_set_port_mode(RA6963_PORT_SD, GPIO_PORT_MODE_PP);
+	gpio_set_pin_mode(GPIO_MODE_INPUT, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+	
+	ra6963_send_data(0x00);
+	ra6963_send_data(0x00);
+	ra6963_send_command(RA6963_COM_SET_GRAPHIC_HOME_ADDR);
+	
+	ra6963_send_data(RA6963_ROW_SIZE);
+	ra6963_send_data(0x00);
+	ra6963_send_command(RA6963_COM_SET_GRAPHIC_AREA);
+	
+	ra6963_send_command(RA6963_COM_SET_DISPLAY_MODE | RA6963_DISPLAY_MODE_GRAPHIC_ON);
+	
+	ra6963_clear_display(0x00);
+	ra6963_update_display();
 }
 
-void st7920_send_command(UINT8 command)
+void ra6963_send_command(UINT8 command)
 {
-	gpio_set_pin(ST7920_PORT_CS, ST7920_PIN_CS);
-	spi_transfer(ST7920_SPI_MODULE, 0xF8);
-	spi_transfer(ST7920_SPI_MODULE, command & 0xF0);
-	spi_transfer(ST7920_SPI_MODULE, command << 4);
-	gpio_clear_pin(ST7920_PORT_CS, ST7920_PIN_CS);
+	UINT8 status = 0;
+	
+	gpio_set_pin_mode(GPIO_MODE_INPUT, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+	gpio_set_pin(RA6963_PORT_CD, RA6963_PIN_CD);
+	gpio_set_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_clear_pin(RA6963_PORT_CE, RA6963_PIN_CE);
+	do
+	{
+		gpio_clear_pin(RA6963_PORT_RD, RA6963_PIN_RD);
+		status = gpio_read_port(RA6963_PORT_SD);
+		gpio_set_pin(RA6963_PORT_RD, RA6963_PIN_RD);
+	} while((status & ra6963_status_mask) != ra6963_status_mask);
+	
+	gpio_set_pin_mode(GPIO_MODE_OUTPUT_PP, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+	gpio_write_port(RA6963_PORT_SD, command);
+	gpio_clear_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_set_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_set_pin(RA6963_PORT_CE, RA6963_PIN_CE);
 }
 
-void st7920_send_data(UINT8 val)
+void ra6963_send_data(UINT8 val)
 {
-	gpio_set_pin(ST7920_PORT_CS, ST7920_PIN_CS);
-	spi_transfer(ST7920_SPI_MODULE, 0xFA);
-	spi_transfer(ST7920_SPI_MODULE, val & 0xF0);
-	spi_transfer(ST7920_SPI_MODULE, val << 4);
-	gpio_clear_pin(ST7920_PORT_CS, ST7920_PIN_CS);
+	UINT8 status = 0;
+	
+	gpio_set_pin_mode(GPIO_MODE_INPUT, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+	gpio_set_pin(RA6963_PORT_CD, RA6963_PIN_CD);
+	gpio_set_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_clear_pin(RA6963_PORT_CE, RA6963_PIN_CE);
+	do
+	{
+		gpio_clear_pin(RA6963_PORT_RD, RA6963_PIN_RD);
+		status = gpio_read_port(RA6963_PORT_SD);
+		gpio_set_pin(RA6963_PORT_RD, RA6963_PIN_RD);
+	} while((status & ra6963_status_mask) != ra6963_status_mask);
+	
+	gpio_set_pin_mode(GPIO_MODE_OUTPUT_PP, RA6963_PORT_SD, GPIO_PIN_7 | GPIO_PIN_6 | GPIO_PIN_5 | GPIO_PIN_4 | GPIO_PIN_3 | GPIO_PIN_2 | GPIO_PIN_1 | GPIO_PIN_0);
+	gpio_clear_pin(RA6963_PORT_CD, RA6963_PIN_CD);
+	gpio_write_port(RA6963_PORT_SD, val);
+	gpio_clear_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_set_pin(RA6963_PORT_WR, RA6963_PIN_WR);
+	gpio_set_pin(RA6963_PORT_CE, RA6963_PIN_CE);
 }
 
-void st7920_set_pixel(UINT8 row, UINT8 col, UINT8 state)
+void ra6963_set_pixel(UINT8 row, UINT8 col, UINT8 state)
 {
 	UINT8 mask;
 	UINT16 idx;
 	
 	mask = 0x80 >> (col & 0x07);
-	idx = row * ST7920_ROW_SIZE + (col >> 3);
+	idx = row * RA6963_ROW_SIZE + (col >> 3);
 	if(state)
-		st7920_frame_buf[idx] |= mask;
+		ra6963_frame_buf[idx] |= mask;
 	else
-		st7920_frame_buf[idx] &= ~mask;
+		ra6963_frame_buf[idx] &= ~mask;
 }
 
 //HINT: Text must be aligned to 8-pixel text columns, but can start on any row.
-void st7920_draw_text(UINT8 row, UINT8 text_col, char* str)
+void ra6963_draw_text(UINT8 row, UINT8 text_col, char* str)
 {
 	UINT8 font_line;
 	UINT16 buf_idx;
 	UINT16 font_idx;
 	
-	buf_idx = row * ST7920_ROW_SIZE + text_col;
-	while((buf_idx < (ST7920_BUF_SIZE - 7 * ST7920_ROW_SIZE)) && *str)
+	buf_idx = row * RA6963_ROW_SIZE + text_col;
+	while((buf_idx < (RA6963_BUF_SIZE - 7 * RA6963_ROW_SIZE)) && *str)
 	{
 		if(*str == '\n')
 		{
 			row += 8;
-			buf_idx = row * ST7920_ROW_SIZE;
+			buf_idx = row * RA6963_ROW_SIZE;
 		}
 		else
 		{
 			font_idx = (*str) << 3;
 			for(font_line = 0; font_line < 8; ++font_line)
 			{
-				st7920_frame_buf[buf_idx] = st7920_8x8_font[font_idx++];
-				buf_idx += ST7920_ROW_SIZE;
+				ra6963_frame_buf[buf_idx] = ra6963_8x8_font[font_idx++];
+				buf_idx += RA6963_ROW_SIZE;
 			}
-			buf_idx -= 8 * ST7920_ROW_SIZE - 1;
+			buf_idx -= 8 * RA6963_ROW_SIZE - 1;
 		}
 
 		++str;
 	}
 }
 
-void st7920_scroll_up(UINT8 num_rows)
+void ra6963_scroll_up(UINT8 num_rows)
 {
 	UINT16 read_idx;
 	UINT16 write_idx;
 	
-	read_idx = num_rows * ST7920_ROW_SIZE;
+	read_idx = num_rows * RA6963_ROW_SIZE;
 	write_idx = 0;
-	while(read_idx < ST7920_BUF_SIZE)
+	while(read_idx < RA6963_BUF_SIZE)
 	{
-		st7920_frame_buf[write_idx] = st7920_frame_buf[read_idx];
+		ra6963_frame_buf[write_idx] = ra6963_frame_buf[read_idx];
 		read_idx += 1;
 		write_idx += 1;
 	}
 }
 
-void st7920_clear_display(UINT8 fill)
+void ra6963_clear_display(UINT8 fill)
 {
 	UINT16 idx;
 	
-	for(idx = 0; idx < ST7920_BUF_SIZE; ++idx)
+	for(idx = 0; idx < RA6963_BUF_SIZE; ++idx)
 	{
-		st7920_frame_buf[idx] = fill;
+		ra6963_frame_buf[idx] = fill;
 	}
 }
 
-void st7920_clear_rows(UINT8 start, UINT8 end, UINT8 fill)
+void ra6963_clear_rows(UINT8 start, UINT8 end, UINT8 fill)
 {
 	UINT16 buf_idx;
 	
-	for(buf_idx = start * ST7920_ROW_SIZE; buf_idx < end * ST7920_ROW_SIZE; ++buf_idx)
+	for(buf_idx = start * RA6963_ROW_SIZE; buf_idx < end * RA6963_ROW_SIZE; ++buf_idx)
 	{
-		st7920_frame_buf[buf_idx] = fill;
+		ra6963_frame_buf[buf_idx] = fill;
 	}
 }
 
-void st7920_update_rows(UINT8 start, UINT8 end)
+void ra6963_update_rows(UINT8 start, UINT8 end)
 {
-	UINT8 row;
-	UINT8 col;
-	UINT16 buf_idx;
+	UINT16 idx;
+	UINT16 stop;
 
-	buf_idx = start * ST7920_ROW_SIZE;
-	for(row = start; row < end; ++row)
+	idx  = (UINT16)start * RA6963_ROW_SIZE;
+	stop = (UINT16)end * RA6963_ROW_SIZE;
+
+	ra6963_status_mask = 0x03;
+	ra6963_send_data((UINT8)idx);
+	ra6963_send_data((UINT8)(idx >> 8));
+	ra6963_send_command(RA6963_COM_SET_ADDRESS_POINTER);
+
+	ra6963_send_command(RA6963_COM_DATA_AUTO_WRITE);
+	ra6963_status_mask = 0x08;
+	while(idx < stop)
 	{
-		st7920_send_command(ST7920_EXT_COM_GDRAM_ADDR | (row & 0x1F));
-		rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-
-		st7920_send_command(ST7920_EXT_COM_GDRAM_ADDR | ((row & 0xE0) >> 2));
-		rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-
-		for(col = 0; col < ST7920_ROW_SIZE; ++col)
-		{
-			st7920_send_data(st7920_frame_buf[buf_idx++]);
-			rcc_delay_us(ST7920_DEFAULT_CMD_TIM);
-		}
+		ra6963_send_data(ra6963_frame_buf[idx++]);
 	}
+	ra6963_send_command(RA6963_COM_AUTO_RESET);
 }

@@ -137,7 +137,7 @@ UINT8 gpio_read_port(UINT8 port)
 		case GPIO_PORT_4:
 			return P4_IN;
 		default:
-			return;
+			return 0;
 	}
 }
 #endif
