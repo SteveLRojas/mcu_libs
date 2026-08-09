@@ -32,8 +32,13 @@ int main()
 	UINT8 prev_control_line_state;
 	UINT8 reset_type;
 	UINT8 datagram[2];
+	UINT16 bytes_available;
 	UINT8 temp;
 	UINT8 count;
+	UINT8 row;
+	UINT8 col;
+	UINT8 start;
+	UINT8 end;
 	
 	rcc_set_clk_freq(RCC_CLK_FREQ_48M);
 	reset_type = rcc_get_rst_typ();
@@ -86,159 +91,191 @@ int main()
 
 	while(TRUE)
 	{
-		if(cdc_bytes_available() >= 2)
+		bytes_available = cdc_bytes_available();
+		temp = cdc_peek();
+		if((bytes_available >= 2) && (temp & 0x80))	//Handle write datagram
 		{
-			temp = cdc_peek();
-			if((temp == '\r') || (temp == '\n'))
-			{
-				(void)cdc_read_byte();
-				continue;
-			}
-			
 			cdc_read_bytes(datagram, 2);
-			for(count = 0; count < 2; ++count)
-			{
-				temp = datagram[count];
-				if(temp >= '0' && temp <= '9')  //convert numbers
-					temp = temp - '0';
-				else if(temp >= 'A' && temp <= 'F')   //convert uppercase letters
-					temp = temp - 'A' + 10;
-				else if(temp >= 'a' && temp <= 'f')   //convert the annoying lowercase letters
-					temp = temp - 'a' + 10;
-				else
-					continue;
-
-				RESET_KEEP = RESET_KEEP << 4;
-				RESET_KEEP = RESET_KEEP | temp;
-			}
 			
 			gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_5);
-			switch(RESET_KEEP)
+			switch(datagram[0] & 0x7F)
 			{
-				case 0x00:
-					ra6963_update_display();
-					break;
-				case 0x01:
-					ra6963_clear_display(0x00);
-					break;
-				case 0x02:
-					ra6963_clear_display(0xAA);
-					break;
-				case 0x03:
-					ra6963_clear_display(0x55);
-					break;
-				case 0x04:
-					ra6963_clear_display(0xFF);
-					break;
-				case 0x05:
-					ra6963_set_pixel(20, 20, 0x01);
-					break;
-				case 0x06:
-					ra6963_set_pixel(20, 20, 0x00);
-					break;
-				case 0x07:
-					ra6963_draw_text(0, 0, str_unicorn);
-					break;
 				case 0x08:
-					ra6963_draw_text(8, 0, str_dragon);
+					row = datagram[1];
 					break;
 				case 0x09:
-					ra6963_draw_text(16, 0, str_wolf);
+					col = datagram[1];
 					break;
 				case 0x0A:
-					ra6963_draw_text(24, 0, str_horse);
+					start = datagram[1];
 					break;
 				case 0x0B:
-					ra6963_draw_text(16, 8, str_lion);
+					end = datagram[1];
 					break;
 				case 0x0C:
-					ra6963_draw_text(24, 12, str_bear);
-					break;
-				case 0x0D:
-					ra6963_clear_rows(0, 8, 0x00);
-					break;
-				case 0x0E:
-					ra6963_clear_rows(8, 16, 0x00);
-					break;
-				case 0x0F:
-					ra6963_clear_rows(16, 24, 0x00);
-					break;
-				case 0x10:
-					ra6963_clear_rows(24, 32, 0x00);
-					break;
-				case 0x11:
-					ra6963_clear_rows(8, 24, 0x00);
-					break;
-				case 0x12:
-					ra6963_clear_rows(0, 32, 0x00);
-					break;
-				case 0x13:
-					ra6963_update_rows(0, 8);
-					break;
-				case 0x14:
-					ra6963_update_rows(8, 16);
-					break;
-				case 0x15:
-					ra6963_update_rows(16, 24);
-					break;
-				case 0x16:
-					ra6963_update_rows(24, 32);
-					break;
-				case 0x17:
-					ra6963_update_rows(8, 24);
-					break;
-				case 0x18:
-					ra6963_update_rows(0, 32);
-					break;
-				case 0x19:
-					ra6963_scroll_up(8);
-					ra6963_clear_rows(24, 32, 0x00);
-					break;
-				case 0x1A:
-					ra6963_scroll_up(16);
-					ra6963_clear_rows(16, 32, 0x00);
-					break;
-				case 0x1B:
 					ra6963_init();
 					break;
-				case 0x1C:
+				case 0x0D:
+					ra6963_update_display();
+					break;
+				case 0x0E:
+					ra6963_clear_display(datagram[1]);
+					break;
+				case 0x0F:
+					ra6963_set_pixel(row, col, datagram[1]);
+					break;
+				case 0x10:
+					ra6963_draw_text(row, datagram[1], str_unicorn);
+					break;
+				case 0x11:
+					ra6963_draw_text(row, datagram[1], str_dragon);
+					break;
+				case 0x12:
+					ra6963_draw_text(row, datagram[1], str_wolf);
+					break;
+				case 0x13:
+					ra6963_draw_text(row, datagram[1], str_horse);
+					break;
+				case 0x14:
+					ra6963_draw_text(row, datagram[1], str_lion);
+					break;
+				case 0x15:
+					ra6963_draw_text(row, datagram[1], str_bear);
+					break;
+				case 0x16:
+					ra6963_clear_rows(start, end, datagram[1]);
+					break;
+				case 0x17:
+					ra6963_update_rows(start, end);
+					break;
+				case 0x18:
+					ra6963_scroll_up(datagram[1]);
+					ra6963_clear_rows(RA6963_NUM_ROWS - datagram[1], RA6963_NUM_ROWS, 0x00);
+					break;		
+				case 0x19:
 					ra6963_clear_display(0x00);
-					ra6963_set_pixel(4,   4, 1);
-					ra6963_set_pixel(4,  12, 1);
-					ra6963_set_pixel(4,  20, 1);
-					ra6963_set_pixel(4,  28, 1);
-					ra6963_set_pixel(4,  36, 1);
-					ra6963_set_pixel(4,  44, 1);
-					ra6963_set_pixel(4,  52, 1);
-					ra6963_set_pixel(4,  60, 1);
+					ra6963_set_pixel(row, col + 4, 1);
+					ra6963_set_pixel(row, col + 12, 1);
+					ra6963_set_pixel(row, col + 20, 1);
+					ra6963_set_pixel(row, col + 28, 1);
+					ra6963_set_pixel(row, col + 36, 1);
+					ra6963_set_pixel(row, col + 44, 1);
+					ra6963_set_pixel(row, col + 52, 1);
+					ra6963_set_pixel(row, col + 60, 1);
+					ra6963_update_display();
+					break;
+				case 0x1A:
+					for(count = start; count < end; ++count)
+					{
+						ra6963_set_pixel(count, count, 0x01);
+					}
+					ra6963_update_display();
+					break;
+				case 0x1B:
+					for(count = start; count < end; ++count)
+					{
+						ra6963_set_pixel(count >> 1, count, 0x01);
+					}
+					ra6963_update_display();
+					break;
+				case 0x1C:
+					for(count = start; count < end; ++count)
+					{
+						ra6963_set_pixel(count >> 2, count, 0x01);
+					}
 					ra6963_update_display();
 					break;
 				case 0x1D:
-					for(temp = 0; temp < 32; ++temp)
+					for(count = start; count < end; ++count)
 					{
-						ra6963_set_pixel(temp, temp, 0x01);
+						ra6963_set_pixel(count, datagram[1], 0x01);
 					}
 					ra6963_update_display();
 					break;
 				case 0x1E:
-					for(temp = 0; temp < 128; ++temp)
+					for(count = start; count < end; ++count)
 					{
-						ra6963_set_pixel(temp >> 2, temp, 0x01);
+						ra6963_set_pixel(datagram[1], count, 0x01);
 					}
 					ra6963_update_display();
 					break;
 				case 0x1F:
-					for(temp = 0; temp < 128; ++temp)
-					{
-						ra6963_set_pixel(temp >> 1, temp, 0x01);
-					}
-					ra6963_update_display();
+					ra6963_status_mask = 0x03;
+					ra6963_send_data(datagram[1]);
+					ra6963_send_data(0x00);
+					ra6963_send_command(RA6963_COM_SET_GRAPHIC_HOME_ADDR);
+					break;
+				case 0x20:
+					ra6963_status_mask = 0x03;
+					ra6963_send_data(datagram[1]);
+					ra6963_send_data(0x00);
+					ra6963_send_command(RA6963_COM_SET_GRAPHIC_AREA);
 					break;
 				default:
 					cdc_write_string(str_bad_command);
 					break;
 			}
 			gpio_write_pin(GPIO_PORT_1, GPIO_PIN_4, gpio_read_pin(GPIO_PORT_1, GPIO_PIN_5));
+		}
+		else if(bytes_available && !(temp & 0x80))	//handle read datagram
+		{
+			datagram[0] = cdc_read_byte();
+			
+			switch(datagram[0])
+			{
+				case 0x00:	//device_id[0]
+					datagram[0] = '6';
+					break;
+				case 0x01:	//device_id[1]
+					datagram[0] = '9';
+					break;
+				case 0x02:	//device_id[2]
+					datagram[0] = '6';
+					break;
+				case 0x03:	//device_id[3]
+					datagram[0] = '3';
+					break;
+				
+				case 0x04:	//unique_id[0]
+					E_DIS = 1;
+					datagram[0] = *(UINT8 code*)0x0020;
+					E_DIS = 0;
+					break;
+				case 0x05:	//unique_id[1]
+					E_DIS = 1;
+					datagram[0] = *(UINT8 code*)0x0021;
+					E_DIS = 0;
+					break;
+				case 0x06:	//unique_id[2]
+					E_DIS = 1;
+					datagram[0] = *(UINT8 code*)0x0022;
+					E_DIS = 0;
+					break;
+				case 0x07:	//unique_id[3]
+					E_DIS = 1;
+					datagram[0] = *(UINT8 code*)0x0023;
+					E_DIS = 0;
+					break;
+				
+				case 0x08:
+					datagram[0] = row;
+					break;
+				case 0x09:
+					datagram[0] = col;
+					break;
+				case 0x0A:
+					datagram[0] = start;
+					break;
+				case 0x0B:
+					datagram[0] = end;
+					break;
+			}
+			
+			cdc_write_byte(datagram[0]);
+		}
+		else if(bytes_available)	//datagrams not received in a single transfer are ignored
+		{
+			cdc_read_bytes(datagram, bytes_available);	//get rid of the extra bytes
 		}
 		
 		if(prev_control_line_state != cdc_control_line_state)

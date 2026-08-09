@@ -12,6 +12,7 @@
 #define RA6963_PIN_CE	GPIO_PIN_1
 #define RA6963_PIN_CD	GPIO_PIN_0
 
+//HINT: If your module has a font selection pin be sure to set it for 8x8 font size.
 #define RA6963_NUM_COLUMNS	128
 #define RA6963_NUM_ROWS		64
 #define RA6963_ROW_SIZE		((RA6963_NUM_COLUMNS + 7) / 8)
