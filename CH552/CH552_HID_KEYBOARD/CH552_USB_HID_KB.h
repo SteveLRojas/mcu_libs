@@ -35,6 +35,9 @@ extern volatile UINT8 hid_kb_report_pending;
 extern volatile UINT8 hid_kb_idle_rate;
 extern volatile UINT8 hid_kb_indicators;
 
+#define hid_kb_is_modifier(key) ((key >= 0xE0) && (key <= 0xE7))
+#define hid_kb_get_mod_bit(key) (HID_KB_MOD_LEFT_CONTROL << ((key) & 0x07))
+
 void hid_kb_init(void);
 void hid_kb_send_report(void);
 void hid_kb_press_modifier(UINT8 modifiers);
