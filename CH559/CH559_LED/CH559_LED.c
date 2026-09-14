@@ -2,6 +2,18 @@
 #include "CH559.H"
 #include "CH559_LED.h"
 
+#if LED_ENCODER_MSB_FIRST
+#define led_encode_bit_h(val) ((val) ? 0xE0 : 0x80)
+#define led_encode_bit_l(val) ((val) ? 0x0E : 0x08)
+#define led_decode_bit_h(val) (((val) & 0xF0) == 0xE0)
+#define led_decode_bit_l(val) (((val) & 0x0F) == 0x0E)
+#else
+#define led_encode_bit_h(val) ((val) ? 0x07 : 0x01)
+#define led_encode_bit_l(val) ((val) ? 0x70 : 0x10)
+#define led_decode_bit_h(val) (((val) & 0x0F) == 0x07)
+#define led_decode_bit_l(val) (((val) & 0xF0) == 0x70)
+#endif
+
 UINT8 xdata led_buf[LED_BUF_SIZE] _at_ 0x0180;	//must be placed at an even address
 volatile UINT8 led_transfering;
 
@@ -27,14 +39,14 @@ void led_init(UINT8 clk_div, UINT8 led_mode)
 	LED_DMA_AL = (UINT8)led_buf;
 	led_transfering = 0;
 	EX0 = 1;
+	
+	led_buf[0] = 0x00;
+	led_buf[LED_BUF_SIZE - 1] = 0x00;	//to make line idle low
+	led_send_bytes(1);
 }
 
-void led_update(UINT8 num_leds)
+void led_send_bytes(UINT8 num_bytes)
 {
-	UINT8 num_bytes;
-	num_bytes = (num_leds << 1) + num_leds;
-	num_bytes = num_bytes << 2;
-	
 	LED_DMA_AH = (UINT8)((UINT16)led_buf >> 8);
 	LED_DMA_AL = (UINT8)led_buf;
 	led_transfering = 1;
@@ -54,8 +66,8 @@ void led_set_color(UINT8 led, UINT8 red, UINT8 green, UINT8 blue)
 	//Process green
 	for(count = 0; count < 4; ++count)
 	{
-		symbol_pair = (green & 0x80) ? 0xE0 : 0x80;
-		symbol_pair |= (green & 0x40) ? 0x0E : 0x08;
+		symbol_pair = led_encode_bit_h(green & 0x80);
+		symbol_pair |= led_encode_bit_l(green & 0x40);
 		
 		led_buf[idx] = symbol_pair;
 		++idx;
@@ -65,8 +77,8 @@ void led_set_color(UINT8 led, UINT8 red, UINT8 green, UINT8 blue)
 	//Process red
 	for(count = 0; count < 4; ++count)
 	{
-		symbol_pair = (red & 0x80) ? 0xE0 : 0x80;
-		symbol_pair |= (red & 0x40) ? 0x0E : 0x08;
+		symbol_pair = led_encode_bit_h(red & 0x80);
+		symbol_pair |= led_encode_bit_l(red & 0x40);
 		
 		led_buf[idx] = symbol_pair;
 		++idx;
@@ -76,8 +88,8 @@ void led_set_color(UINT8 led, UINT8 red, UINT8 green, UINT8 blue)
 	//Process blue
 	for(count = 0; count < 4; ++count)
 	{
-		symbol_pair = (blue & 0x80) ? 0xE0 : 0x80;
-		symbol_pair |= (blue & 0x40) ? 0x0E : 0x08;
+		symbol_pair = led_encode_bit_h(blue & 0x80);
+		symbol_pair |= led_encode_bit_l(blue & 0x40);
 		
 		led_buf[idx] = symbol_pair;
 		++idx;
@@ -96,8 +108,8 @@ void led_set_color_single(UINT8 led, UINT8 channel, UINT8 value)
 	
 	for(count = 0; count < 4; ++count)
 	{
-		symbol_pair = (value & 0x80) ? 0xE0 : 0x80;
-		symbol_pair |= (value & 0x40) ? 0x0E : 0x08;
+		symbol_pair = led_encode_bit_h(value & 0x80);
+		symbol_pair |= led_encode_bit_l(value & 0x40);
 		
 		led_buf[idx] = symbol_pair;
 		++idx;
@@ -121,9 +133,9 @@ UINT8 led_get_color_single(UINT8 led, UINT8 channel)
 		++idx;
 		color = color << 2;
 		
-		if((symbol_pair & 0xF0) == 0xE0)
+		if(led_decode_bit_h(symbol_pair))
 			color |= 0x02;
-		if((symbol_pair & 0x0F) == 0x0E)
+		if(led_decode_bit_l(symbol_pair))
 			color |= 0x01;
 	}
 	

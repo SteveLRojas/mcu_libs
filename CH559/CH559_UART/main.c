@@ -1,14 +1,14 @@
 #include "CH559.H"
-#include "DEBUG.H"
+#include "CH559_RCC.h"
 #include "CH559_GPIO.h"
 #include "CH559_TIMER.h"
 #include "CH559_UART.h"
 #include "CH559_FIFO.h"
 
-extern volatile fifo_t uart0_rx_fifo;
-extern volatile fifo_t uart0_tx_fifo;
+#define USE_EXT_CLK 0
+#define BAUD_RATE 125000ul
 
-char code test_string[] = "Booba";
+char code str_unicorn[] = "Unicorn\n";
 
 //Pins:
 // RXD0 = P02
@@ -21,10 +21,19 @@ char code test_string[] = "Booba";
 
 int main()
 {
+	UINT8 reset_type;
 	UINT8 time = 0;
 	UINT8 temp = 0;
 	
-	CfgFsys();	//CH559 clock selection configuration
+	rcc_set_clk_freq(RCC_CLK_FREQ_24M);
+
+	reset_type = rcc_get_rst_typ();
+	
+#if USE_EXT_CLK	
+	rcc_set_clk_src(RCC_CLK_OSC_EN);
+	rcc_delay_ms(30);
+	rcc_set_clk_src(RCC_CLK_SRC_EXT);
+#endif
 	
 	gpio_set_port_mode(GPIO_PORT_MODE_OC, GPIO_PORT_0);
 	gpio_set_port_strength(GPIO_PORT_STRENGTH_20, GPIO_PORT_0);
@@ -51,7 +60,7 @@ int main()
 	timer_long_delay(TIMER_0, 250);
 	gpio_set_pin(GPIO_PORT_1, GPIO_PIN_4);
 	timer_long_delay(TIMER_0, 250);
-	uart_write_string(UART_0, test_string);
+	uart_write_string(UART_0, str_unicorn);
 
 	while(TRUE)
 	{

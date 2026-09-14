@@ -6,7 +6,7 @@
 //For WS2811 the order of the color channels may be wrong, as the encoder assumes GRB order.
 //Set the encoder bit order and the peripheral bit order to match. Either order works.
 #define LED_ENCODER_MSB_FIRST 0
-#define LED_NUM_LEDS 8
+#define LED_NUM_LEDS 3
 #define LED_BUF_SIZE (LED_NUM_LEDS * 3 * 4 + 1)
 
 #define LED_MODE_1_CHANNEL 0x00

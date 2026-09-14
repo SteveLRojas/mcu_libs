@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ch559_led</OutputName>
+          <OutputName>ch559_uc1701</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -233,7 +233,7 @@
               <RCB>
                 <Type>0</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x10000</Size>
+                <Size>0xffff</Size>
               </RCB>
               <RXB>
                 <Type>0</Type>
@@ -346,10 +346,10 @@
             <CaseSensitiveSymbols>0</CaseSensitiveSymbols>
             <WarningLevel>2</WarningLevel>
             <DataOverlaying>1</DataOverlaying>
-            <OverlayString></OverlayString>
+            <OverlayString>?PR?CDC_INIT?CH559_USB_CDC ~ (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC), ?PR?USB_ISR?CH559_USB ! (?PR?CDC_ON_SOF?CH559_USB_CDC, ?PR?_CDC_ON_OUT?CH559_USB_CDC, ?PR?_CDC_ON_IN?CH559_USB_CDC, ?PR?_CDC_ON_SETUP?CH559_USB_CDC, ?PR?CDC_ON_RST?CH559_USB_CDC)</OverlayString>
             <MiscControls></MiscControls>
             <DisableWarningNumbers>16</DisableWarningNumbers>
-            <LinkerCmdFile></LinkerCmdFile>
+            <LinkerCmdFile>.\link.lin</LinkerCmdFile>
             <Assign></Assign>
             <ReserveString></ReserveString>
             <CClasses></CClasses>
@@ -382,21 +382,6 @@
               <FilePath>.\STARTUP.A51</FilePath>
             </File>
             <File>
-              <FileName>CH559.H</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559.H</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_FIFO.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_FIFO.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_FIFO.h</FilePath>
-            </File>
-            <File>
               <FileName>CH559_GPIO.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\CH559_GPIO.c</FilePath>
@@ -405,31 +390,6 @@
               <FileName>CH559_GPIO.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH559_GPIO.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_TIMER.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_TIMER.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_TIMER.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_TIMER.h</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_UART.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\CH559_UART.c</FilePath>
-            </File>
-            <File>
-              <FileName>CH559_UART.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\CH559_UART.h</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\main.c</FilePath>
             </File>
             <File>
               <FileName>CH559_LED.c</FileName>
@@ -442,6 +402,61 @@
               <FilePath>.\CH559_LED.h</FilePath>
             </File>
             <File>
+              <FileName>CH559_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_RCC.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_SPI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_SPI.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_SPI.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_SPI.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_TIMER.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_TIMER.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_TIMER.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_TIMER.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_USB_CDC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_USB_CDC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_USB_CDC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_USB_CDC.h</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_USB.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_USB.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_USB.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_USB.h</FilePath>
+            </File>
+            <File>
               <FileName>pseudo_random.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\pseudo_random.c</FilePath>
@@ -452,14 +467,14 @@
               <FilePath>.\pseudo_random.h</FilePath>
             </File>
             <File>
-              <FileName>CH559_RCC.c</FileName>
+              <FileName>CH559_UC1701.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\CH559_RCC.c</FilePath>
+              <FilePath>.\CH559_UC1701.c</FilePath>
             </File>
             <File>
-              <FileName>CH559_RCC.h</FileName>
+              <FileName>CH559_UC1701.h</FileName>
               <FileType>5</FileType>
-              <FilePath>.\CH559_RCC.h</FilePath>
+              <FilePath>.\CH559_UC1701.h</FilePath>
             </File>
           </Files>
         </Group>

@@ -1,6 +1,6 @@
 #define NO_XSFR_DEFINE
 #include "CH559.H"
-#include "DEBUG.H"
+#include "CH559_RCC.h"
 #include "CH559_FIFO.h"
 #include "CH559_UART.h"
 

@@ -407,16 +407,6 @@
               <FilePath>.\CH559_TIMER.h</FilePath>
             </File>
             <File>
-              <FileName>DEBUG.C</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\DEBUG.C</FilePath>
-            </File>
-            <File>
-              <FileName>DEBUG.H</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\DEBUG.H</FilePath>
-            </File>
-            <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
@@ -440,6 +430,16 @@
               <FileName>CH559_FIFO.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\CH559_FIFO.h</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_RCC.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\CH559_RCC.c</FilePath>
+            </File>
+            <File>
+              <FileName>CH559_RCC.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\CH559_RCC.h</FilePath>
             </File>
           </Files>
         </Group>

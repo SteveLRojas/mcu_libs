@@ -1,10 +1,13 @@
 #include "CH559.H"
-#include "DEBUG.H"
+#include "CH559_RCC.h"
 #include "CH559_GPIO.h"
 #include "CH559_TIMER.h"
 #include "CH559_UART.h"
 #include "CH559_LED.h"
 #include "pseudo_random.h"
+
+#define BAUD_RATE 125000ul
+#define USE_EXT_CLK 0
 
 char code test_string[] = "Unicorn\n";
 
@@ -52,10 +55,18 @@ void print_bytes_as_hex(UINT8* source, UINT8 num_bytes)
 
 int main()
 {
+	UINT8 reset_type;
 	UINT8 temp;
 	UINT8 idx;
 	
-	CfgFsys();	//CH559 clock selection configuration
+	rcc_set_clk_freq(RCC_CLK_FREQ_48M);
+	reset_type = rcc_get_rst_typ();
+	
+#if USE_EXT_CLK	
+	rcc_set_clk_src(RCC_CLK_OSC_EN);
+	rcc_delay_ms(30);
+	rcc_set_clk_src(RCC_CLK_SRC_EXT);
+#endif
 	
 	// Configure UART pins
 	gpio_set_port_mode(GPIO_PORT_MODE_OC, GPIO_PORT_0);
@@ -75,6 +86,22 @@ int main()
 	gpio_set_port_mode(GPIO_PORT_MODE_PP, GPIO_PORT_4);
 	gpio_set_port_strength(GPIO_PORT_STRENGTH_20, GPIO_PORT_4);
 	gpio_set_pin_mode(GPIO_MODE_OUTPUT_PP, GPIO_PORT_4, GPIO_PIN_0 | GPIO_PIN_4);
+
+	led_init(15, LED_MODE_1_CHANNEL | LED_POL_NORMAL | LED_ORDER_LSB_FIRST);
+	for(idx = 0; idx < LED_NUM_LEDS; ++idx)
+	{
+		led_set_color(idx, 0x20, 0x00, 0x00);
+	}
+	led_update();
+	
+	if((reset_type == RCC_RST_TYP_WDOG) || (reset_type == RCC_RST_TYP_SOFT))
+	{
+		rcc_delay_ms(500);
+	}
+	else
+	{
+		rcc_delay_ms(50);
+	}
 	
 	uart0_init(TIMER_1, BAUD_RATE, UART_0_P02_P03);
 	timer_init(TIMER_0, NULL);
@@ -95,13 +122,12 @@ int main()
 	line_buf[3] = '\0';
 	uart_write_string(UART_0, line_buf);
 	
-	led_init(15, LED_MODE_1_CHANNEL | LED_POL_NORMAL | LED_ORDER_MSB_FIRST);
 	pseudo_random_seed(0xDEADBEEF);
-	for(idx = 0; idx < 8; ++idx)
+	for(idx = 0; idx < LED_NUM_LEDS; ++idx)
 	{
 		led_set_color(idx, 0x20, 0x00, 0x00);
 	}
-	led_update(8);
+	led_update();
 	timer_long_delay(TIMER_0, 250);
 	idx = 0;
 	
@@ -111,7 +137,7 @@ int main()
 		{
 			gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_5);
 			temp = uart_read_byte(UART_0);
-			led_init(temp, LED_MODE_1_CHANNEL | LED_POL_NORMAL | LED_ORDER_MSB_FIRST);
+			led_init(temp, LED_MODE_1_CHANNEL | LED_POL_NORMAL | LED_ORDER_LSB_FIRST);
 		}
 		
 		pseudo_random_generate(8);
@@ -127,10 +153,10 @@ int main()
 		temp = temp >> 2;
 		led_set_color_single(idx, LED_CHANNEL_BLUE, temp);
 		
-		led_update(8);
+		led_update();
 		while(led_transfering);
 		++idx;
-		if(idx == 8)
+		if(idx == LED_NUM_LEDS)
 			idx = 0;
 		
 		gpio_toggle_pin(GPIO_PORT_1, GPIO_PIN_4);
