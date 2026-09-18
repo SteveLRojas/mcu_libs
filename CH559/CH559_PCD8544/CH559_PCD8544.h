@@ -2,16 +2,16 @@
 #define _CH559_PCD8544_H_
 
 //HINT: Pin options. Use defines from GPIO and SPI libraries.
-#define PCD8544_PORT_RST	GPIO_PORT_0
-#define PCD8544_PORT_CE		GPIO_PORT_1
-#define PCD8544_PORT_DC		GPIO_PORT_0
-#define PCD8544_PIN_RST		GPIO_PIN_4
+#define PCD8544_PORT_RST	GPIO_PORT_2
+#define PCD8544_PORT_CE		GPIO_PORT_2
+#define PCD8544_PORT_DC		GPIO_PORT_2
+#define PCD8544_PIN_RST		GPIO_PIN_0
 #define PCD8544_PIN_CE		GPIO_PIN_4
-#define PCD8544_PIN_DC		GPIO_PIN_5
+#define PCD8544_PIN_DC		GPIO_PIN_2
 
 //HINT: The maximum clock speed is 4 MHz.
 #define PCD8544_SPI_CLK_DIV	12
-#define PCD8544_SPI_MODULE	SPI_0
+#define PCD8544_SPI_MODULE	SPI_1
 
 //HINT: Default settings
 #define PCD8544_DEF_CONTRAST	0x31
@@ -41,6 +41,8 @@ void pcd8544_init(void);
 void pcd8544_send_command(UINT8 command);
 void pcd8544_send_data(UINT8 val);
 void pcd8544_set_pixel(UINT8 row, UINT8 col, UINT8 state);
+void pcd8544_set_rect(UINT8 row, UINT8 col, UINT8 width, UINT8 height, UINT8 state);
+void pcd8544_draw_bitmap(UINT8* bitmap, UINT8 row, UINT8 col, UINT8 width, UINT8 height);
 void pcd8544_draw_text(UINT8 line, UINT8 col, char* str);
 void pcd8544_scroll_text_up(UINT8 num_lines);
 void pcd8544_clear_display(UINT8 fill);

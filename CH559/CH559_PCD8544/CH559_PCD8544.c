@@ -144,6 +144,103 @@ void pcd8544_set_pixel(UINT8 row, UINT8 col, UINT8 state)
 		pcd8544_frame_buf[idx] &= ~mask;
 }
 
+void pcd8544_set_rect(UINT8 row, UINT8 col, UINT8 width, UINT8 height, UINT8 state)
+{
+	UINT8 data mask;
+	UINT8 data page;
+	UINT8 data end_page;
+	UINT8 data disp_col;
+	UINT16 data disp_row_idx;
+	
+	width += col;
+	height += row;
+	end_page = height >> 3;
+	disp_row_idx = (row >> 3) * PCD8544_NUM_COLUMNS;
+	
+	if(row & 0x07)	//Handle first page
+	{
+		mask = 0xFF << (row & 0x07);
+		if((row >> 3) == end_page)	//In case the rectangle does not reach the end of the page
+		{
+			mask &= ~(0xFF << (height & 0x07));
+		}
+		if(state)
+		{
+			for(disp_col = col; disp_col < width; ++disp_col)
+			{
+				pcd8544_frame_buf[disp_row_idx + disp_col] |= mask;
+			}
+		}
+		else
+		{
+			for(disp_col = col; disp_col < width; ++disp_col)
+			{
+				pcd8544_frame_buf[disp_row_idx + disp_col] &= ~mask;
+			}
+		}
+		disp_row_idx += PCD8544_NUM_COLUMNS;
+	}
+	
+	mask = state ? 0xFF : 0x00;
+	for(page = (row + 0x07) >> 3; page < end_page; ++page)	//Handle whole pages
+	{
+		for(disp_col = col; disp_col < width; ++disp_col)
+		{
+			pcd8544_frame_buf[disp_row_idx + disp_col] = mask;
+		}
+		disp_row_idx += PCD8544_NUM_COLUMNS;
+	}
+	
+	if((height & 0x07) && ((row >> 3) != end_page))	//The first page is already handled, should not be touched here.
+	{
+		mask = ~(0xFF << (height & 0x07));
+		if(state)
+		{
+			for(disp_col = col; disp_col < width; ++disp_col)
+			{
+				pcd8544_frame_buf[disp_row_idx + disp_col] |= mask;
+			}
+		}
+		else
+		{
+			for(disp_col = col; disp_col < width; ++disp_col)
+			{
+				pcd8544_frame_buf[disp_row_idx + disp_col] &= ~mask;
+			}
+		}
+	}
+}
+
+//HINT: Can place bitmap anywhere, but does no bounds checking. Do not draw outside display area.
+void pcd8544_draw_bitmap(UINT8* bitmap, UINT8 row, UINT8 col, UINT8 width, UINT8 height)
+{
+	UINT8 data disp_row;
+	UINT8 data bm_col;
+	UINT8 data bm_row_size;
+	UINT16 data bm_row_idx;
+	UINT16 data disp_base_idx;
+	
+	bm_row_size = (width + 7) >> 3;
+	bm_row_idx = 0;	
+	disp_base_idx = (row >> 3) * PCD8544_NUM_COLUMNS + col;
+	height += row;
+	for(disp_row = row; disp_row < height; ++disp_row)
+	{
+		for(bm_col = 0; bm_col < width; ++bm_col)
+		{
+			if(bitmap[bm_row_idx + (bm_col >> 3)] & (0x80 >> (bm_col & 0x07)))
+			{
+				pcd8544_frame_buf[disp_base_idx + bm_col] |= (0x01 << (disp_row & 0x07));
+			}
+		}
+		bm_row_idx += bm_row_size;
+		if((disp_row & 0x07) == 0x07)
+		{
+			disp_base_idx += PCD8544_NUM_COLUMNS;
+		}
+	}
+}
+
 //HINT: Text must be aligned to 8-pixel text lines, but can start on any column.
 void pcd8544_draw_text(UINT8 line, UINT8 col, char* str)
 {
@@ -212,23 +309,17 @@ void pcd8544_clear_page(UINT8 page, UINT8 fill)
 
 void pcd8544_update_display(void)
 {
-	UINT16 idx;
-	
 	pcd8544_send_command(PCD8544_COM_SET_COLUMN | PCD8544_DEF_COL_START);
 	pcd8544_send_command(PCD8544_COM_SET_PAGE | PCD8544_DEF_PAGE_START);
 	
 	gpio_set_pin(PCD8544_PORT_DC, PCD8544_PIN_DC);
 	gpio_clear_pin(PCD8544_PORT_CE, PCD8544_PIN_CE);
-	for(idx = 0; idx < PCD8544_BUF_SIZE; ++idx)
-	{
-		spi_transfer(PCD8544_SPI_MODULE, pcd8544_frame_buf[idx]);
-	}
+	spi_bulk_out(PCD8544_SPI_MODULE, pcd8544_frame_buf, PCD8544_BUF_SIZE);
 	gpio_set_pin(PCD8544_PORT_CE, PCD8544_PIN_CE);
 }
 
 void pcd8544_update_page(UINT8 page)
 {
-	UINT8 count;
 	UINT16 buf_idx;
 	
 	buf_idx = page * PCD8544_NUM_COLUMNS;
@@ -238,9 +329,6 @@ void pcd8544_update_page(UINT8 page)
 	
 	gpio_set_pin(PCD8544_PORT_DC, PCD8544_PIN_DC);
 	gpio_clear_pin(PCD8544_PORT_CE, PCD8544_PIN_CE);
-	for(count = 0; count < PCD8544_NUM_COLUMNS; ++count)
-	{
-		spi_transfer(PCD8544_SPI_MODULE, pcd8544_frame_buf[buf_idx++]);
-	}
+	spi_bulk_out(PCD8544_SPI_MODULE, pcd8544_frame_buf + buf_idx, PCD8544_NUM_COLUMNS);
 	gpio_set_pin(PCD8544_PORT_CE, PCD8544_PIN_CE);
 }
