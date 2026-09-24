@@ -1,7 +1,7 @@
 #ifndef _CH547_GPIO_H_
 #define _CH547_GPIO_H_
 
-#define USE_PORT_FUNCS 0
+#define USE_PORT_FUNCS 1
 #define USE_GPIO_INTERRUPTS 1
 
 #define GPIO_MODE_INPUT 0

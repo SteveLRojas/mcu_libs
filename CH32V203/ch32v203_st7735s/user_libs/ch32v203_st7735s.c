@@ -187,11 +187,11 @@ void st7735s_send_command(uint8_t command)
 	gpio_set_pin(ST7735S_PORT_CS, ST7735S_PIN_CS);
 }
 
-void st7735s_send_data(uint8_t command)
+void st7735s_send_data(uint8_t val)
 {
 	gpio_set_pin(ST7735S_PORT_DC, ST7735S_PIN_DC);
 	gpio_clear_pin(ST7735S_PORT_CS, ST7735S_PIN_CS);
-	(void)spi_transfer(ST7735S_SPI_MODULE, command);
+	(void)spi_transfer(ST7735S_SPI_MODULE, val);
 	gpio_set_pin(ST7735S_PORT_CS, ST7735S_PIN_CS);
 }
 

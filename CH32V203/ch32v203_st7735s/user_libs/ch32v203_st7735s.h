@@ -96,7 +96,7 @@ extern const uint8_t st7735s_8x8_font[1024];
 
 void st7735s_init(void);
 void st7735s_send_command(uint8_t command);
-void st7735s_send_data(uint8_t command);
+void st7735s_send_data(uint8_t val);
 void st7735s_set_pixel(uint8_t row, uint8_t col, uint32_t color);
 uint8_t st7735s_draw_text(uint8_t row, uint8_t col, const char* str);
 void st7735s_fill_display(void);
